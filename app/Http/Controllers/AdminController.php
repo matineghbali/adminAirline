@@ -17,6 +17,7 @@ class AdminController extends Controller
     public function getFlight2(Request $request){
 //        $validation
         // "2018-04-16T00:00:00"
+
         $json=[
             "POS"=> [
                 "Source"=> [
@@ -84,9 +85,12 @@ class AdminController extends Controller
         if ($err) {
             echo "cURL Error #:" ;
         } else {
-            $res=json_decode($response,true);
+            return json_decode($response,true);
+//            $r['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment']
+////    [0]['ArrivalAirport']['LocationCode']
+//            return view('Panel.flight2',compact('responses'));
+
         }
-        return view('Panel.flight2',compact('res'));
 
     }
 }

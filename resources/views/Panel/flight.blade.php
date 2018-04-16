@@ -15,13 +15,56 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-select.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+
     <script>
-        // $(document).ready(function(){
-        //     $("#originSelect").hover(function(){
-        //         // $("#firstOpt").text('tehran');
-        //         alert('iuuik');
-        //     });
-        // });
+        $(document).ready(function () {
+            $('#form').on('submit',function (e) {
+                // $("#table").style.visibility="hidden";
+
+                e.preventDefault();
+
+                var OriginLocation=$('#OriginLocation').val();
+                var DestinationLocation=$('#DestinationLocation').val();
+                var DepartureDateTime=$('#DepartureDateTime').val();
+                var adult=$('#adult').val();
+                var child=$('#child').val();
+                var baby=$('#baby').val();
+                var _token=$('input[name="_token"]').val();
+
+
+                var formData=new  FormData();
+                formData.append('OriginLocation',OriginLocation);
+                formData.append('DestinationLocation',DestinationLocation);
+                formData.append('DepartureDateTime',DepartureDateTime);
+                formData.append('adult',adult);
+                formData.append('child',child);
+                formData.append('baby',baby);
+                // console.log(formData);
+                $.ajax({
+                    method: 'POST',
+                    url: '/admin/getFlight2',
+                    data: formData,
+                    contentType : false,
+                    processData: false,
+                    headers: {
+                        'X_CSRF-TOKEN': _token
+                    },
+
+                }).done(function (data) {
+                    var i=0;
+                    for(i in data['PricedItineraries']){
+                        $("td:eq( "+i+" )").text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            [0]['FlightSegment'][0]['MarketingAirline']['Value']);
+
+                    }
+                   // alert(data['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode']);
+
+                });
+
+            })
+        })
     </script>
 
 </head>
@@ -93,13 +136,13 @@
 
             {{--<div class="container">--}}
                 <div class="col-sm-9" id="content" >
-                    <form class="form-inline" action="{{route('getFlight2')}}" method="post">
+                    <form class="form-inline" id="form">
                         {{csrf_field()}}
-                        <input type="text" tabindex="2" name="DepartureDateTime" class="form-control mb-2 col-sm-2" id="inlineFormInputName2" placeholder="تاریخ پرواز">
+                        <input type="text" tabindex="2" id="DepartureDateTime" class="form-control mb-2 col-sm-2" id="inlineFormInputName2" placeholder="تاریخ پرواز">
 
-                        <select data-live-search="true" name="OriginLocation" tabindex="0" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
+                        <select data-live-search="true" id="OriginLocation" tabindex="0" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
                             <option id="firstOpt" value="" data-iata="" disabled="" selected="" >مبدأ را مشخص کنید</option>
-                            <option value="THR">تهران</option>
+                            <option value="THR" selected>تهران</option>
                             <option value="MHD">مشهد</option>
                             <option value="3" data-iata="KIH">کیش</option>
                             <option value="2" data-iata="AWZ">اهواز</option>
@@ -225,10 +268,10 @@
                         </select>
 
 
-                        <select data-live-search="true" name="DestinationLocation" tabindex="1" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker  pt-24" >
+                        <select data-live-search="true" id="DestinationLocation" tabindex="1" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker  pt-24" >
                             <option id="firstOpt" value="" data-iata="" disabled="" selected="" >مقصد را مشخص کنید</option>
                             <option value="THR">تهران</option>
-                            <option value="MHD">مشهد</option>
+                            <option value="MHD" selected>مشهد</option>
                             <option value="3" data-iata="KIH">کیش</option>
                             <option value="2" data-iata="AWZ">اهواز</option>
                             <option value="10" data-iata="SYZ">شیراز</option>
@@ -353,7 +396,7 @@
                         </select>
 
 
-                        <select data-live-search="true" name="adult" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
+                        <select data-live-search="true" id="adult" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
                                     <option id="firstOpt" value="" data-iata="" disabled="" selected="" >12 سال به بالا</option>
                                     <option value="1" >1 بزرگسال</option>
                                     <option value="2">2 بزرگسال</option>
@@ -366,7 +409,7 @@
                                     <option value="9">9 بزرگسال</option>
                         </select>
 
-                        <select data-live-search="true" name="child" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
+                        <select data-live-search="true" id="child" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
                                     <option id="firstOpt" value="" data-iata="" disabled="" selected="" >2 تا 12 سال</option>
                                      <option value="0">0 کودک</option>
                                     <option value="1">1 کودک</option>
@@ -380,7 +423,7 @@
                                     <option value="9">9 کودک</option>
                         </select>
 
-                        <select data-live-search="true" name="baby" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
+                        <select data-live-search="true" id="baby" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
                                     <option id="firstOpt" value="" data-iata="" disabled="" selected="" >0 تا 2 سال</option>
                                     <option value="0">0 نوزاد</option>
                                     <option value="1">1 نوزاد</option>
@@ -395,7 +438,7 @@
                         </select>
 
 
-                        <button tabindex="6" type="submit" class="btn btn-danger mb-2">جستجو</button>
+                        <button tabindex="6" id="search" type="submit" class="btn btn-danger mb-2">جستجو</button>
                     </form>
 
 
@@ -403,7 +446,31 @@
 
                 {{--</div>--}}
 
-                <div style="min-height:600px;">
+                <div id="result" style="max-height:600px;margin-top: 100px">
+                    <table id="table" class="table" style="visibility: visible">
+                        <thead>
+                        <tr>
+                            <th scope="col">شماره ستون</th>
+                            <th scope="col">شرکت هواپیمایی</th>
+                            <th scope="col">شماره پرواز</th>
+                            <th scope="col">زمان حرکت</th>
+                            <th scope="col">زمان رسیدن به مقصد</th>
+                            <th scope="col">ظرفیت</th>
+                            <th scope="col">نوع بلیط</th>
+                        </tr>
+                        </thead>
+
+
+                        <tr id="trContent">
+                            <td id="1"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
 
                 </div>
 
