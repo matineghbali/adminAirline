@@ -20,11 +20,32 @@
 
     <script>
         $(document).ready(function () {
+            function toPersianNum( num, dontTrim ) {
+
+                var i = 0,
+
+                    dontTrim = dontTrim || false,
+
+                    num = dontTrim ? num.toString() : num.toString().trim(),
+                    len = num.length,
+
+                    res = '',
+                    pos,
+
+                    persianNumbers = typeof persianNumber == 'undefined' ?
+                        ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'] :
+                        persianNumbers;
+
+                for (; i < len; i++)
+                    if (( pos = persianNumbers[num.charAt(i)] ))
+                        res += pos;
+                    else
+                        res += num.charAt(i);
+
+                return res;
+            }
             $('#form').on('submit',function (e) {
-                // $("#table").style.visibility="hidden";
-
                 e.preventDefault();
-
                 var OriginLocation=$('#OriginLocation').val();
                 var DestinationLocation=$('#DestinationLocation').val();
                 var DepartureDateTime=$('#DepartureDateTime').val();
@@ -41,7 +62,6 @@
                 formData.append('adult',adult);
                 formData.append('child',child);
                 formData.append('baby',baby);
-                // console.log(formData);
                 $.ajax({
                     method: 'POST',
                     url: '/admin/getFlight2',
@@ -53,13 +73,85 @@
                     },
 
                 }).done(function (data) {
-                    var i=0;
-                    for(i in data['PricedItineraries']){
-                        $("td:eq( "+i+" )").text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
-                            [0]['FlightSegment'][0]['MarketingAirline']['Value']);
+                    if (data['PricedItineraries']==null){
+                        $('#result').text('هیچ پروازی وجود ندارد:|');
+                    }
+                    else{
+                        $('#result').text('');
+                        var tbl = $(
+
+                            '                    <table id="table" class="table" style="visibility: visible">\n' +
+                            '                        <thead >\n' +
+                            '                        <tr>\n' +
+                            '                            <th scope="col">شماره ستون</th>\n' +
+                            '                            <th scope="col">شرکت هواپیمایی</th>\n' +
+                            '                            <th scope="col">شماره پرواز</th>\n' +
+                            '                            <th scope="col">زمان حرکت</th>\n' +
+                            '                            <th scope="col">زمان رسیدن به مقصد</th>\n' +
+                            '                            <th scope="col">ظرفیت</th>\n' +
+                            '                            <th scope="col">نوع بلیط</th>\n' +
+                            '                        </tr>\n' +
+                            '                        </thead>\n' +
+                            '                        <tbody id="tbody">\n' +
+                            '\n' +
+                            '                        </tbody>\n'
+                        ).attr({ id: "bob" });
+
+
+
+                        var i=0,n=0,j=0;
+                        for(i in data['PricedItineraries']){
+                            var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(tbl);
+
+                            $('<td></td>').text(toPersianNum(++n)).appendTo(row);
+
+                            // شرکت هواپیمایی
+                            MarketingAirline=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['MarketingAirline']['Value'];
+                            if (MarketingAirline=="QESHM AIR")
+                                $('<td></td>').text('قشم ایر').appendTo(row);
+                            else if (MarketingAirline=="MERAJ")
+                                $('<td></td>').text('معراج').appendTo(row);
+                            else if (MarketingAirline=="TABAN")
+                                $('<td></td>').text('تابان').appendTo(row);
+                            else if (MarketingAirline=="ZAGROS")
+                                $('<td></td>').text('زاگرس').appendTo(row);
+                            else
+                                $('<td></td>').text(MarketingAirline).appendTo(row);
+
+                            // شماره پرواز
+                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['FlightNumber'])).appendTo(row);
+
+                            // زمان حرکت
+                            $('<td></td>').text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['DepartureDateTime']).appendTo(row);
+
+                            // زمان رسیدن به مقصد
+                            $('<td></td>').text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['ArrivalDateTime']).appendTo(row);
+
+
+                            // ظرفیت
+                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['AvailableSeatQuantity'])).appendTo(row);
+
+                            // نوع بلیط
+                            var cabinType=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['CabinType'];
+
+                            if (cabinType=="Economy")
+                                $('<td></td>').text('اکونومی').appendTo(row);
+                            else
+                                $('<td></td>').text(cabinType).appendTo(row);
+
+
+                        }
+                        tbl.appendTo($("#result"));
+
 
                     }
-                   // alert(data['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode']);
+
 
                 });
 
@@ -87,7 +179,9 @@
             <div style="color: white;
             padding: 15px 50px 5px 50px;
             float: left;
-            font-size: 16px;" > {{jdate()->format('%B %d، %Y')}} &nbsp; <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
+            font-size: 16px;" >
+                {{toPersianNum(jdate()->format('%d %B، %Y'))}}
+                <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
             </div>
 
         </div>
@@ -134,7 +228,6 @@
                 </div>
             </div>
 
-            {{--<div class="container">--}}
                 <div class="col-sm-9" id="content" >
                     <form class="form-inline" id="form">
                         {{csrf_field()}}
@@ -444,33 +537,7 @@
 
 
 
-                {{--</div>--}}
-
                 <div id="result" style="max-height:600px;margin-top: 100px">
-                    <table id="table" class="table" style="visibility: visible">
-                        <thead>
-                        <tr>
-                            <th scope="col">شماره ستون</th>
-                            <th scope="col">شرکت هواپیمایی</th>
-                            <th scope="col">شماره پرواز</th>
-                            <th scope="col">زمان حرکت</th>
-                            <th scope="col">زمان رسیدن به مقصد</th>
-                            <th scope="col">ظرفیت</th>
-                            <th scope="col">نوع بلیط</th>
-                        </tr>
-                        </thead>
-
-
-                        <tr id="trContent">
-                            <td id="1"></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
 
                 </div>
 
