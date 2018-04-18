@@ -24,6 +24,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('panel','AdminController@index')->name('adminPanel');
     $this->get('getFlight','AdminController@getFlight')->name('getFlight');
     $this->post('getFlight2','AdminController@getFlight2' )->name('getFlight2');
+    $this->get('getdate','AdminController@getDate' )->name('getDate');
 
 
 

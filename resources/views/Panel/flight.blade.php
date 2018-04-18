@@ -17,11 +17,6 @@
     <script type="text/javascript" src="/js/persianDatepicker.min.js"></script>
 
 
-    {{--<link rel="stylesheet" href="https://cdn.rawgit.com/behzadi/persianDatepicker/master/css/persianDatepicker-default.css">--}}
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
-    {{--<script src="https://cdn.rawgit.com/behzadi/persianDatepicker/master/js/persianDatepicker.min.js"></script>--}}
-
-
     {{--<script src="/js/jquery.min.js"></script>--}}
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-select.js"></script>
@@ -29,19 +24,13 @@
 
 
 
+
+
+
     <script>
         $(document).ready(function () {
 
             $('#datepicker').persianDatepicker({
-                onShow: function() {
-                    $('#converted').text('');
-                },
-                onSelect: function () {
-                    var pd = new persianDate();
-                    var value = pd.parse($("#datepicker").val());
-                    var jdf = new jDateFunctions();
-                    $('#converted').text(jdf.getGDate(value));
-                },
                 startDate: 'today',
                 endDate: '1400/2/2'
             });
@@ -75,7 +64,7 @@
                 e.preventDefault();
                 var OriginLocation=$('#OriginLocation').val();
                 var DestinationLocation=$('#DestinationLocation').val();
-                var DepartureDateTime=$('#converted').text();
+                var DepartureDateTime=$('#datepicker').val();
                 var adult=$('#adult').val();
                 var child=$('#child').val();
                 var baby=$('#baby').val();
@@ -102,9 +91,22 @@
                 }).done(function (data) {
                     $('#converted').text(jdf.getGDate('today'));
                     console.log(data);
+                    if (data['date']!= 'false')
+                        $('#datepicker').val(data['date']);
 
-                    if (data['PricedItineraries']==null){
-                        $('#result').text('هیچ پروازی وجود ندارد:|');
+
+                    if (data['DepartureDateTime']!=null){
+                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
+                    }
+                    else if (data['OriginLocation']!=null){
+                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
+                    }
+                    else if (data['DestinationLocation']!=null){
+                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
+                    }
+                    else if(data['response']['PricedItineraries'] == null){
+                        $('#result').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
+
                     }
                     else{
                         $('#result').text('');
@@ -130,7 +132,7 @@
 
 
                         var i=0,j=0;
-                        for(j in data['PricedItineraries']) {
+                        for(j in data['response']['PricedItineraries']) {
                             if (j=='_indexOf')
                                 break;
                             var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(tbl);
@@ -138,7 +140,7 @@
                             $('<td></td>').text(toPersianNum(++i)).appendTo(row);
 
                             // شرکت هواپیمایی
-                            MarketingAirline=data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['MarketingAirline']['Value'];
                             if (MarketingAirline=="QESHM AIR")
                                 $('<td></td>').text('قشم ایر').appendTo(row);
@@ -152,15 +154,15 @@
                                 $('<td></td>').text(MarketingAirline).appendTo(row);
 
                             // شماره پرواز
-                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['FlightNumber'])).appendTo(row);
 
                             // زمان حرکت
 
-                            $('<td></td>').text(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['DepartureDateTime']).appendTo(row);
 
-                            // var DepartureDateTime=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            // var DepartureDateTime=data['response']['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
                             //     [0]['FlightSegment'][0]['DepartureDateTime'];
                             // var myarr=DepartureDateTime.split("T");
                             // alert(myarr[0]+ '     ' +myarr[1]);
@@ -168,16 +170,16 @@
                             // $('<td></td>').text().appendTo(row);
 
                             // زمان رسیدن به مقصد
-                            $('<td></td>').text(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['ArrivalDateTime']).appendTo(row);
 
 
                             // ظرفیت
-                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['AvailableSeatQuantity'])).appendTo(row);
 
                             // نوع بلیط
-                            var cabinType=data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['CabinType'];
 
                             if (cabinType=="Economy")
@@ -187,14 +189,11 @@
 
 
 
-                        }
-                        //     alert(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                        //         [0]['FlightSegment'][0]['FlightNumber']));
-                        //
+                        } //end forin
                         tbl.appendTo($("#result"));
 
 
-                    }
+                    } //end else
 
 
                 });
@@ -224,7 +223,7 @@
             padding: 15px 50px 5px 50px;
             float: left;
             font-size: 16px;" >
-                {{toPersianNum(jdate()->format('%d %B، %Y'))}}
+                {{toPersianNum(jdate('')->format('%d %B، %Y'))}}
                 <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
             </div>
 
@@ -277,267 +276,267 @@
                     <form class="form-inline" id="form">
                         {{csrf_field()}}
                         <input type="text"  id="datepicker" class="form-control mb-2 col-sm-2"  placeholder="تاریخ پرواز">
-                        <div id="converted" hidden></div>
 
 
                         <select data-live-search="true" id="OriginLocation" tabindex="0" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
-                            <option id="firstOpt" value="" data-iata="" disabled="" selected="" >مبدأ را مشخص کنید</option>
-                            <option value="THR" selected>تهران</option>
+                            <option id="firstOpt" value="" data-iata=""  disabled selected=""  style="visibility: hidden">مبدأ را مشخص کنید</option>
+                            <option value="THR" >تهران</option>
                             <option value="MHD">مشهد</option>
-                            <option value="3" data-iata="KIH">کیش</option>
-                            <option value="2" data-iata="AWZ">اهواز</option>
-                            <option value="10" data-iata="SYZ">شیراز</option>
-                            <option value="32" data-iata="IFN">اصفهان</option>
-                            <option value="4" data-iata="GSM">قشم</option>
-                            <option value="25" data-iata="TBZ">تبریز</option>
-                            <option value="12" data-iata="ADU">اردبیل</option>
-                            <option value="33" data-iata="BND">بندرعباس</option>
-                            <option value="16" data-iata="OMH">ارومیه</option>
-                            <option value="5" data-iata="QKC">کرج</option>
-                            <option value="6" data-iata="NSH">نوشهر</option>
-                            <option value="7" data-iata="QOM">قم</option>
-                            <option value="8" data-iata="ABD">آبادان</option>
-                            <option value="9" data-iata="AEU">جزیره ابوموسی</option>
-                            <option value="11" data-iata="KER">کرمان</option>
-                            <option value="13" data-iata="HDM">همدان</option>
-                            <option value="15" data-iata="SRY">ساری</option>
-                            <option value="17" data-iata="AZD">یزد</option>
-                            <option value="18" data-iata="SDG">سنندج</option>
-                            <option value="19" data-iata="PGU">عسلویه</option>
-                            <option value="20" data-iata="KSH">کرمانشاه</option>
-                            <option value="21" data-iata="AFZ">سبزوار</option>
-                            <option value="22" data-iata="RAS">رشت</option>
-                            <option value="23" data-iata="RZR">رامسر</option>
-                            <option value="24" data-iata="DEF">دزفول</option>
-                            <option value="26" data-iata="BJB">بجنورد</option>
-                            <option value="27" data-iata="YES">یاسوج</option>
-                            <option value="28" data-iata="KHY">خوی</option>
-                            <option value="29" data-iata="PFQ">پارس آباد</option>
-                            <option value="30" data-iata="BXR">بم</option>
-                            <option value="34" data-iata="IIL">ایلام</option>
-                            <option value="35" data-iata="KHK">خارک</option>
-                            <option value="36" data-iata="BUZ">بوشهر</option>
-                            <option value="37" data-iata="JWN">زنجان</option>
-                            <option value="38" data-iata="TCX">طبس</option>
-                            <option value="39" data-iata="GBT">گرگان</option>
-                            <option value="40" data-iata="NJF">نجف</option>
-                            <option value="41" data-iata="BGW">بغداد</option>
-                            <option value="42" data-iata="IST">استانبول</option>
-                            <option value="43" data-iata="KWI">کویت</option>
-                            <option value="44" data-iata="KHD">خرم آباد</option>
-                            <option value="45" data-iata="ZAH">زاهدان</option>
-                            <option value="1168" data-iata="JAR">جهرم</option>
-                            <option value="46" data-iata="MRX">ماهشهر</option>
-                            <option value="47" data-iata="DXB">دبی</option>
-                            <option value="48" data-iata="ISU">سلیمانیه</option>
-                            <option value="49" data-iata="ISE">اسپارتا</option>
-                            <option value="50" data-iata="ZBR">چابهار</option>
-                            <option value="51" data-iata="AYT">آنتالیا</option>
-                            <option value="52" data-iata="TBS">تفلیس</option>
-                            <option value="53" data-iata="ADB">ازمیر</option>
-                            <option value="54" data-iata="KUL">کوالالامپور</option>
-                            <option value="55" data-iata="CAN">گوانجو</option>
-                            <option value="56" data-iata="EVN">ایروان</option>
-                            <option value="57" data-iata="SAW">سابیها</option>
-                            <option value="58" data-iata="BOM">بمبئی</option>
-                            <option value="59" data-iata="ACZ">زابل</option>
-                            <option value="60" data-iata="BSR">بصره</option>
-                            <option value="61" data-iata="BEY">بیروت</option>
-                            <option value="1065" data-iata="XBJ">بیرجند</option>
-                            <option value="1066" data-iata="BKK">بانکوک</option>
-                            <option value="1076" data-iata="CQD">شهرکرد</option>
-                            <option value="1077" data-iata="PEK">پکن</option>
-                            <option value="1078" data-iata="EBL">اربیل</option>
-                            <option value="1080" data-iata="RJN">رفسنجان</option>
-                            <option value="1081" data-iata="GCH">گچساران</option>
-                            <option value="1082" data-iata="IHR">ایرانشهر</option>
-                            <option value="1085" data-iata="BDH">بندر لنگه</option>
-                            <option value="1087" data-iata="JYR">جیرفت</option>
-                            <option value="1092" data-iata="SYJ">سیرجان</option>
-                            <option value="1093" data-iata="AJK">اراک</option>
-                            <option value="1094" data-iata="DYU">دوشنبه</option>
-                            <option value="1095" data-iata="KBL">کابل</option>
-                            <option value="1096" data-iata="LRR">لار</option>
-                            <option value="1097" data-iata="ACP">مراغه</option>
-                            <option value="1098" data-iata="RUD">شاهرود</option>
-                            <option value="1099" data-iata="BAK">باکو</option>
-                            <option value="1100" data-iata="ASF">آستراخان</option>
-                            <option value="1101" data-iata="BUS">باتومی</option>
-                            <option value="1102" data-iata="MOW">مسکو</option>
-                            <option value="1103" data-iata="IEV">کی یف</option>
-                            <option value="1104" data-iata="ANK">آنکارا</option>
-                            <option value="1106" data-iata="KSN">کاشان</option>
-                            <option value="1107" data-iata="ADA">آدنا</option>
-                            <option value="1108" data-iata="LFM">لامرد</option>
-                            <option value="1109" data-iata="MCT">مسقط</option>
-                            <option value="1110" data-iata="TSE">آستانه</option>
-                            <option value="1111" data-iata="AMS">آمستردام</option>
-                            <option value="1112" data-iata="BAH">بحرین</option>
-                            <option value="1114" data-iata="CGN">کلن</option>
-                            <option value="1115" data-iata="CPH">کپنهاگ</option>
-                            <option value="1116" data-iata="DAM">دمشق</option>
-                            <option value="1117" data-iata="DOH">دوحه</option>
-                            <option value="1118" data-iata="ROM">رم</option>
-                            <option value="1119" data-iata="FRA">فرانکفورت</option>
-                            <option value="1120" data-iata="GOT">گوتنبرگ</option>
-                            <option value="1121" data-iata="HAM">هامبورگ</option>
-                            <option value="1122" data-iata="KHI">کراچی</option>
-                            <option value="1123" data-iata="MIL">میلان</option>
-                            <option value="1124" data-iata="PAR">پاریس</option>
-                            <option value="1125" data-iata="STO">استکهلم</option>
-                            <option value="1126" data-iata="TAS">تاشکند</option>
-                            <option value="1127" data-iata="VIE">وین</option>
-                            <option value="1128" data-iata="VIL">داخله</option>
-                            <option value="1129" data-iata="LED">سنت پترزبورگ</option>
-                            <option value="1130" data-iata="VAR">وارنا</option>
-                            <option value="1131" data-iata="LON">لندن</option>
-                            <option value="1132" data-iata="DNZ">دنیزلی</option>
-                            <option value="1137" data-iata="AKW">امیدیه</option>
-                            <option value="1149" data-iata="PVG">شانگهای</option>
-                            <option value="1148" data-iata="MUC">مونیخ</option>
-                            <option value="1147" data-iata="MLE">ماله</option>
-                            <option value="1145" data-iata="HKT">پوکت</option>
-                            <option value="1144" data-iata="GOI">گوا</option>
-                            <option value="1143" data-iata="DUS">دوسلدورف</option>
-                            <option value="1142" data-iata="DEL">دهلی</option>
-                            <option value="1141" data-iata="COK">کوچی</option>
-                            <option value="1140" data-iata="CMB">کلمبو</option>
-                            <option value="1139" data-iata="ALA">آلماتی</option>
-                            <option value="1150" data-iata="IAQ">بهرگان</option>
-                            <option value="1154" data-iata="MKU">ماکو</option>
+                            <option value="KIH">کیش</option>
+                            <option value="AWZ">اهواز</option>
+                            <option value="SYZ">شیراز</option>
+                            <option value="IFN">اصفهان</option>
+                            <option value="GSM">قشم</option>
+                            <option value="TBZ">تبریز</option>
+                            <option value="ADU">اردبیل</option>
+                            <option value="BND">بندرعباس</option>
+                            <option value="OMH">ارومیه</option>
+                            <option value="QKC">کرج</option>
+                            <option value="NSH">نوشهر</option>
+                            <option value="QOM">قم</option>
+                            <option value="ABD">آبادان</option>
+                            <option value="AEU">جزیره ابوموسی</option>
+                            <option value="KER">کرمان</option>
+                            <option value="HDM">همدان</option>
+                            <option value="SRY">ساری</option>
+                            <option value="AZD">یزد</option>
+                            <option value="SDG">سنندج</option>
+                            <option value="PGU">عسلویه</option>
+                            <option value="KSH">کرمانشاه</option>
+                            <option value="AFZ">سبزوار</option>
+                            <option value="RAS">رشت</option>
+                            <option value="RZR">رامسر</option>
+                            <option value="DEF">دزفول</option>
+                            <option value="BJB">بجنورد</option>
+                            <option value="YES">یاسوج</option>
+                            <option value="KHY">خوی</option>
+                            <option value="PFQ">پارس آباد</option>
+                            <option value="BXR">بم</option>
+                            <option value="IIL">ایلام</option>
+                            <option value="KHK">خارک</option>
+                            <option value="BUZ">بوشهر</option>
+                            <option value="JWN">زنجان</option>
+                            <option value="TCX">طبس</option>
+                            <option value="GBT">گرگان</option>
+                            <option value="NJF">نجف</option>
+                            <option value="BGW">بغداد</option>
+                            <option value="IST">استانبول</option>
+                            <option value="KWI">کویت</option>
+                            <option value="KHD">خرم آباد</option>
+                            <option value="ZAH">زاهدان</option>
+                            <option value="JAR">جهرم</option>
+                            <option value="MRX">ماهشهر</option>
+                            <option value="DXB">دبی</option>
+                            <option value="ISU">سلیمانیه</option>
+                            <option value="ISE">اسپارتا</option>
+                            <option value="ZBR">چابهار</option>
+                            <option value="AYT">آنتالیا</option>
+                            <option value="TBS">تفلیس</option>
+                            <option value="ADB">ازمیر</option>
+                            <option value="KUL">کوالالامپور</option>
+                            <option value="CAN">گوانجو</option>
+                            <option value="EVN">ایروان</option>
+                            <option value="SAW">سابیها</option>
+                            <option value="BOM">بمبئی</option>
+                            <option value="ACZ">زابل</option>
+                            <option value="BSR">بصره</option>
+                            <option value="BEY">بیروت</option>
+                            <option value="XBJ">بیرجند</option>
+                            <option value="BKK">بانکوک</option>
+                            <option value="CQD">شهرکرد</option>
+                            <option value="PEK">پکن</option>
+                            <option value="EBL">اربیل</option>
+                            <option value="RJN">رفسنجان</option>
+                            <option value="GCH">گچساران</option>
+                            <option value="IHR">ایرانشهر</option>
+                            <option value="BDH">بندر لنگه</option>
+                            <option value="JYR">جیرفت</option>
+                            <option value="SYJ">سیرجان</option>
+                            <option value="AJK">اراک</option>
+                            <option value="DYU">دوشنبه</option>
+                            <option value="KBL">کابل</option>
+                            <option value="LRR">لار</option>
+                            <option value="ACP">مراغه</option>
+                            <option value="RUD">شاهرود</option>
+                            <option value="BAK">باکو</option>
+                            <option value="ASF">آستراخان</option>
+                            <option value="BUS">باتومی</option>
+                            <option value="MOW">مسکو</option>
+                            <option value="IEV">کی یف</option>
+                            <option value="ANK">آنکارا</option>
+                            <option value="KSN">کاشان</option>
+                            <option value="ADA">آدنا</option>
+                            <option value="LFM">لامرد</option>
+                            <option value="MCT">مسقط</option>
+                            <option value="TSE">آستانه</option>
+                            <option value="AMS">آمستردام</option>
+                            <option value="BAH">بحرین</option>
+                            <option value="CGN">کلن</option>
+                            <option value="CPH">کپنهاگ</option>
+                            <option value="DAM">دمشق</option>
+                            <option value="DOH">دوحه</option>
+                            <option value="ROM">رم</option>
+                            <option value="FRA">فرانکفورت</option>
+                            <option value="GOT">گوتنبرگ</option>
+                            <option value="HAM">هامبورگ</option>
+                            <option value="KHI">کراچی</option>
+                            <option value="MIL">میلان</option>
+                            <option value="PAR">پاریس</option>
+                            <option value="STO">استکهلم</option>
+                            <option value="TAS">تاشکند</option>
+                            <option value="VIE">وین</option>
+                            <option value="VIL">داخله</option>
+                            <option value="LED">سنت پترزبورگ</option>
+                            <option value="VAR">وارنا</option>
+                            <option value="LON">لندن</option>
+                            <option value="DNZ">دنیزلی</option>
+                            <option value="AKW">امیدیه</option>
+                            <option value="PVG">شانگهای</option>
+                            <option value="MUC">مونیخ</option>
+                            <option value="MLE">ماله</option>
+                            <option value="HKT">پوکت</option>
+                            <option value="GOI">گوا</option>
+                            <option value="DUS">دوسلدورف</option>
+                            <option value="DEL">دهلی</option>
+                            <option value="COK">کوچی</option>
+                            <option value="CMB">کلمبو</option>
+                            <option value="ALA">آلماتی</option>
+                            <option value="IAQ">بهرگان</option>
+                            <option value="MKU">ماکو</option>
+
                         </select>
 
 
                         <select data-live-search="true" id="DestinationLocation" tabindex="1" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker  pt-24" >
-                            <option id="firstOpt" value="" data-iata="" disabled="" selected="" >مقصد را مشخص کنید</option>
-                            <option value="THR">تهران</option>
-                            <option value="MHD" selected>مشهد</option>
-                            <option value="3" data-iata="KIH">کیش</option>
-                            <option value="2" data-iata="AWZ">اهواز</option>
-                            <option value="10" data-iata="SYZ">شیراز</option>
-                            <option value="32" data-iata="IFN">اصفهان</option>
-                            <option value="4" data-iata="GSM">قشم</option>
-                            <option value="25" data-iata="TBZ">تبریز</option>
-                            <option value="12" data-iata="ADU">اردبیل</option>
-                            <option value="33" data-iata="BND">بندرعباس</option>
-                            <option value="16" data-iata="OMH">ارومیه</option>
-                            <option value="5" data-iata="QKC">کرج</option>
-                            <option value="6" data-iata="NSH">نوشهر</option>
-                            <option value="7" data-iata="QOM">قم</option>
-                            <option value="8" data-iata="ABD">آبادان</option>
-                            <option value="9" data-iata="AEU">جزیره ابوموسی</option>
-                            <option value="11" data-iata="KER">کرمان</option>
-                            <option value="13" data-iata="HDM">همدان</option>
-                            <option value="15" data-iata="SRY">ساری</option>
-                            <option value="17" data-iata="AZD">یزد</option>
-                            <option value="18" data-iata="SDG">سنندج</option>
-                            <option value="19" data-iata="PGU">عسلویه</option>
-                            <option value="20" data-iata="KSH">کرمانشاه</option>
-                            <option value="21" data-iata="AFZ">سبزوار</option>
-                            <option value="22" data-iata="RAS">رشت</option>
-                            <option value="23" data-iata="RZR">رامسر</option>
-                            <option value="24" data-iata="DEF">دزفول</option>
-                            <option value="26" data-iata="BJB">بجنورد</option>
-                            <option value="27" data-iata="YES">یاسوج</option>
-                            <option value="28" data-iata="KHY">خوی</option>
-                            <option value="29" data-iata="PFQ">پارس آباد</option>
-                            <option value="30" data-iata="BXR">بم</option>
-                            <option value="34" data-iata="IIL">ایلام</option>
-                            <option value="35" data-iata="KHK">خارک</option>
-                            <option value="36" data-iata="BUZ">بوشهر</option>
-                            <option value="37" data-iata="JWN">زنجان</option>
-                            <option value="38" data-iata="TCX">طبس</option>
-                            <option value="39" data-iata="GBT">گرگان</option>
-                            <option value="40" data-iata="NJF">نجف</option>
-                            <option value="41" data-iata="BGW">بغداد</option>
-                            <option value="42" data-iata="IST">استانبول</option>
-                            <option value="43" data-iata="KWI">کویت</option>
-                            <option value="44" data-iata="KHD">خرم آباد</option>
-                            <option value="45" data-iata="ZAH">زاهدان</option>
-                            <option value="1168" data-iata="JAR">جهرم</option>
-                            <option value="46" data-iata="MRX">ماهشهر</option>
-                            <option value="47" data-iata="DXB">دبی</option>
-                            <option value="48" data-iata="ISU">سلیمانیه</option>
-                            <option value="49" data-iata="ISE">اسپارتا</option>
-                            <option value="50" data-iata="ZBR">چابهار</option>
-                            <option value="51" data-iata="AYT">آنتالیا</option>
-                            <option value="52" data-iata="TBS">تفلیس</option>
-                            <option value="53" data-iata="ADB">ازمیر</option>
-                            <option value="54" data-iata="KUL">کوالالامپور</option>
-                            <option value="55" data-iata="CAN">گوانجو</option>
-                            <option value="56" data-iata="EVN">ایروان</option>
-                            <option value="57" data-iata="SAW">سابیها</option>
-                            <option value="58" data-iata="BOM">بمبئی</option>
-                            <option value="59" data-iata="ACZ">زابل</option>
-                            <option value="60" data-iata="BSR">بصره</option>
-                            <option value="61" data-iata="BEY">بیروت</option>
-                            <option value="1065" data-iata="XBJ">بیرجند</option>
-                            <option value="1066" data-iata="BKK">بانکوک</option>
-                            <option value="1076" data-iata="CQD">شهرکرد</option>
-                            <option value="1077" data-iata="PEK">پکن</option>
-                            <option value="1078" data-iata="EBL">اربیل</option>
-                            <option value="1080" data-iata="RJN">رفسنجان</option>
-                            <option value="1081" data-iata="GCH">گچساران</option>
-                            <option value="1082" data-iata="IHR">ایرانشهر</option>
-                            <option value="1085" data-iata="BDH">بندر لنگه</option>
-                            <option value="1087" data-iata="JYR">جیرفت</option>
-                            <option value="1092" data-iata="SYJ">سیرجان</option>
-                            <option value="1093" data-iata="AJK">اراک</option>
-                            <option value="1094" data-iata="DYU">دوشنبه</option>
-                            <option value="1095" data-iata="KBL">کابل</option>
-                            <option value="1096" data-iata="LRR">لار</option>
-                            <option value="1097" data-iata="ACP">مراغه</option>
-                            <option value="1098" data-iata="RUD">شاهرود</option>
-                            <option value="1099" data-iata="BAK">باکو</option>
-                            <option value="1100" data-iata="ASF">آستراخان</option>
-                            <option value="1101" data-iata="BUS">باتومی</option>
-                            <option value="1102" data-iata="MOW">مسکو</option>
-                            <option value="1103" data-iata="IEV">کی یف</option>
-                            <option value="1104" data-iata="ANK">آنکارا</option>
-                            <option value="1106" data-iata="KSN">کاشان</option>
-                            <option value="1107" data-iata="ADA">آدنا</option>
-                            <option value="1108" data-iata="LFM">لامرد</option>
-                            <option value="1109" data-iata="MCT">مسقط</option>
-                            <option value="1110" data-iata="TSE">آستانه</option>
-                            <option value="1111" data-iata="AMS">آمستردام</option>
-                            <option value="1112" data-iata="BAH">بحرین</option>
-                            <option value="1114" data-iata="CGN">کلن</option>
-                            <option value="1115" data-iata="CPH">کپنهاگ</option>
-                            <option value="1116" data-iata="DAM">دمشق</option>
-                            <option value="1117" data-iata="DOH">دوحه</option>
-                            <option value="1118" data-iata="ROM">رم</option>
-                            <option value="1119" data-iata="FRA">فرانکفورت</option>
-                            <option value="1120" data-iata="GOT">گوتنبرگ</option>
-                            <option value="1121" data-iata="HAM">هامبورگ</option>
-                            <option value="1122" data-iata="KHI">کراچی</option>
-                            <option value="1123" data-iata="MIL">میلان</option>
-                            <option value="1124" data-iata="PAR">پاریس</option>
-                            <option value="1125" data-iata="STO">استکهلم</option>
-                            <option value="1126" data-iata="TAS">تاشکند</option>
-                            <option value="1127" data-iata="VIE">وین</option>
-                            <option value="1128" data-iata="VIL">داخله</option>
-                            <option value="1129" data-iata="LED">سنت پترزبورگ</option>
-                            <option value="1130" data-iata="VAR">وارنا</option>
-                            <option value="1131" data-iata="LON">لندن</option>
-                            <option value="1132" data-iata="DNZ">دنیزلی</option>
-                            <option value="1137" data-iata="AKW">امیدیه</option>
-                            <option value="1149" data-iata="PVG">شانگهای</option>
-                            <option value="1148" data-iata="MUC">مونیخ</option>
-                            <option value="1147" data-iata="MLE">ماله</option>
-                            <option value="1145" data-iata="HKT">پوکت</option>
-                            <option value="1144" data-iata="GOI">گوا</option>
-                            <option value="1143" data-iata="DUS">دوسلدورف</option>
-                            <option value="1142" data-iata="DEL">دهلی</option>
-                            <option value="1141" data-iata="COK">کوچی</option>
-                            <option value="1140" data-iata="CMB">کلمبو</option>
-                            <option value="1139" data-iata="ALA">آلماتی</option>
-                            <option value="1150" data-iata="IAQ">بهرگان</option>
-                            <option value="1154" data-iata="MKU">ماکو</option>
+                            <option id="firstOpt" value="" data-iata="" disabled="" selected="" style="visibility: hidden">مقصد را مشخص کنید</option>
+                            <option value="THR" >تهران</option>
+                            <option value="MHD">مشهد</option>
+                            <option value="KIH">کیش</option>
+                            <option value="AWZ">اهواز</option>
+                            <option value="SYZ">شیراز</option>
+                            <option value="IFN">اصفهان</option>
+                            <option value="GSM">قشم</option>
+                            <option value="TBZ">تبریز</option>
+                            <option value="ADU">اردبیل</option>
+                            <option value="BND">بندرعباس</option>
+                            <option value="OMH">ارومیه</option>
+                            <option value="QKC">کرج</option>
+                            <option value="NSH">نوشهر</option>
+                            <option value="QOM">قم</option>
+                            <option value="ABD">آبادان</option>
+                            <option value="AEU">جزیره ابوموسی</option>
+                            <option value="KER">کرمان</option>
+                            <option value="HDM">همدان</option>
+                            <option value="SRY">ساری</option>
+                            <option value="AZD">یزد</option>
+                            <option value="SDG">سنندج</option>
+                            <option value="PGU">عسلویه</option>
+                            <option value="KSH">کرمانشاه</option>
+                            <option value="AFZ">سبزوار</option>
+                            <option value="RAS">رشت</option>
+                            <option value="RZR">رامسر</option>
+                            <option value="DEF">دزفول</option>
+                            <option value="BJB">بجنورد</option>
+                            <option value="YES">یاسوج</option>
+                            <option value="KHY">خوی</option>
+                            <option value="PFQ">پارس آباد</option>
+                            <option value="BXR">بم</option>
+                            <option value="IIL">ایلام</option>
+                            <option value="KHK">خارک</option>
+                            <option value="BUZ">بوشهر</option>
+                            <option value="JWN">زنجان</option>
+                            <option value="TCX">طبس</option>
+                            <option value="GBT">گرگان</option>
+                            <option value="NJF">نجف</option>
+                            <option value="BGW">بغداد</option>
+                            <option value="IST">استانبول</option>
+                            <option value="KWI">کویت</option>
+                            <option value="KHD">خرم آباد</option>
+                            <option value="ZAH">زاهدان</option>
+                            <option value="JAR">جهرم</option>
+                            <option value="MRX">ماهشهر</option>
+                            <option value="DXB">دبی</option>
+                            <option value="ISU">سلیمانیه</option>
+                            <option value="ISE">اسپارتا</option>
+                            <option value="ZBR">چابهار</option>
+                            <option value="AYT">آنتالیا</option>
+                            <option value="TBS">تفلیس</option>
+                            <option value="ADB">ازمیر</option>
+                            <option value="KUL">کوالالامپور</option>
+                            <option value="CAN">گوانجو</option>
+                            <option value="EVN">ایروان</option>
+                            <option value="SAW">سابیها</option>
+                            <option value="BOM">بمبئی</option>
+                            <option value="ACZ">زابل</option>
+                            <option value="BSR">بصره</option>
+                            <option value="BEY">بیروت</option>
+                            <option value="XBJ">بیرجند</option>
+                            <option value="BKK">بانکوک</option>
+                            <option value="CQD">شهرکرد</option>
+                            <option value="PEK">پکن</option>
+                            <option value="EBL">اربیل</option>
+                            <option value="RJN">رفسنجان</option>
+                            <option value="GCH">گچساران</option>
+                            <option value="IHR">ایرانشهر</option>
+                            <option value="BDH">بندر لنگه</option>
+                            <option value="JYR">جیرفت</option>
+                            <option value="SYJ">سیرجان</option>
+                            <option value="AJK">اراک</option>
+                            <option value="DYU">دوشنبه</option>
+                            <option value="KBL">کابل</option>
+                            <option value="LRR">لار</option>
+                            <option value="ACP">مراغه</option>
+                            <option value="RUD">شاهرود</option>
+                            <option value="BAK">باکو</option>
+                            <option value="ASF">آستراخان</option>
+                            <option value="BUS">باتومی</option>
+                            <option value="MOW">مسکو</option>
+                            <option value="IEV">کی یف</option>
+                            <option value="ANK">آنکارا</option>
+                            <option value="KSN">کاشان</option>
+                            <option value="ADA">آدنا</option>
+                            <option value="LFM">لامرد</option>
+                            <option value="MCT">مسقط</option>
+                            <option value="TSE">آستانه</option>
+                            <option value="AMS">آمستردام</option>
+                            <option value="BAH">بحرین</option>
+                            <option value="CGN">کلن</option>
+                            <option value="CPH">کپنهاگ</option>
+                            <option value="DAM">دمشق</option>
+                            <option value="DOH">دوحه</option>
+                            <option value="ROM">رم</option>
+                            <option value="FRA">فرانکفورت</option>
+                            <option value="GOT">گوتنبرگ</option>
+                            <option value="HAM">هامبورگ</option>
+                            <option value="KHI">کراچی</option>
+                            <option value="MIL">میلان</option>
+                            <option value="PAR">پاریس</option>
+                            <option value="STO">استکهلم</option>
+                            <option value="TAS">تاشکند</option>
+                            <option value="VIE">وین</option>
+                            <option value="VIL">داخله</option>
+                            <option value="LED">سنت پترزبورگ</option>
+                            <option value="VAR">وارنا</option>
+                            <option value="LON">لندن</option>
+                            <option value="DNZ">دنیزلی</option>
+                            <option value="AKW">امیدیه</option>
+                            <option value="PVG">شانگهای</option>
+                            <option value="MUC">مونیخ</option>
+                            <option value="MLE">ماله</option>
+                            <option value="HKT">پوکت</option>
+                            <option value="GOI">گوا</option>
+                            <option value="DUS">دوسلدورف</option>
+                            <option value="DEL">دهلی</option>
+                            <option value="COK">کوچی</option>
+                            <option value="CMB">کلمبو</option>
+                            <option value="ALA">آلماتی</option>
+                            <option value="IAQ">بهرگان</option>
+                            <option value="MKU">ماکو</option>
                         </select>
 
 
                         <select data-live-search="true" id="adult" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
-                                    <option id="firstOpt" value="" data-iata="" disabled="" selected="" >12 سال به بالا</option>
+                                    <option id="firstOpt" value="1" data-iata="" disabled="" selected="" >12 سال به بالا</option>
                                     <option value="1" >1 بزرگسال</option>
                                     <option value="2">2 بزرگسال</option>
                                     <option value="3">3 بزرگسال</option>
@@ -550,7 +549,7 @@
                         </select>
 
                         <select data-live-search="true" id="child" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
-                                    <option id="firstOpt" value="" data-iata="" disabled="" selected="" >2 تا 12 سال</option>
+                                    <option id="firstOpt" value="0" data-iata="" disabled="" selected="" >2 تا 12 سال</option>
                                      <option value="0">0 کودک</option>
                                     <option value="1">1 کودک</option>
                                     <option value="2">2 کودک</option>
@@ -564,7 +563,7 @@
                         </select>
 
                         <select data-live-search="true" id="baby" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-1 selectpicker" >
-                                    <option id="firstOpt" value="" data-iata="" disabled="" selected="" >0 تا 2 سال</option>
+                                    <option id="firstOpt" value="0" data-iata="" disabled="" selected="" >0 تا 2 سال</option>
                                     <option value="0">0 نوزاد</option>
                                     <option value="1">1 نوزاد</option>
                                     <option value="2">2 نوزاد</option>
@@ -584,6 +583,9 @@
 
 
 
+
+
+
                 <div id="result" style="max-height:600px;margin-top: 100px">
 
                 </div>
@@ -598,6 +600,11 @@
 <script src="/assets/js/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.metisMenu.js"></script>
 <script src="/assets/js/custom.js"></script>
+
+
+
+
+
 
 
 </body>
