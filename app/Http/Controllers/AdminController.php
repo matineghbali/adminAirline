@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    public $date="";
+    public $date="false";
     public function index(){
         return view('Panel/panel');
 

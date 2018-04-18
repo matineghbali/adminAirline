@@ -30,6 +30,8 @@
     <script>
         $(document).ready(function () {
 
+
+
             $('#datepicker').persianDatepicker({
                 startDate: 'today',
                 endDate: '1400/2/2'
@@ -61,6 +63,9 @@
             }
 
             $('#form').on('submit',function (e) {
+                // if ($()==$())
+                //     $('#result').html('<div class="alert alert-danger" role="alert">مبدا و مقصد برابر است</div>');
+
                 e.preventDefault();
                 var OriginLocation=$('#OriginLocation').val();
                 var DestinationLocation=$('#DestinationLocation').val();
@@ -89,10 +94,10 @@
                     },
 
                 }).done(function (data) {
-                    $('#converted').text(jdf.getGDate('today'));
+                    // if (data['response']['Errors']['ShortText']=="IP is not trusted: 5.161.108.59")
+                    //     $('#result').html('<div class="alert alert-danger" role="alert">IP معتبر نیست</div>');
+
                     console.log(data);
-                    if (data['date']!= 'false')
-                        $('#datepicker').val(data['date']);
 
 
                     if (data['DepartureDateTime']!=null){
@@ -109,6 +114,9 @@
 
                     }
                     else{
+                        if (data['date']!= "false")
+                            $('#datepicker').val(data['date']);
+
                         $('#result').text('');
                         var tbl = $(
 
@@ -275,10 +283,10 @@
 
                     <form class="form-inline" id="form">
                         {{csrf_field()}}
-                        <input type="text"  id="datepicker" class="form-control mb-2 col-sm-2"  placeholder="تاریخ پرواز">
+                        <input type="text"  id="datepicker" class="form-control mb-2 col-sm-2"  placeholder="تاریخ پرواز" >
 
 
-                        <select data-live-search="true" id="OriginLocation" tabindex="0" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
+                        <select data-live-search="true" id="OriginLocation" tabindex="0" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
                             <option id="firstOpt" value="" data-iata=""  disabled selected=""  style="visibility: hidden">مبدأ را مشخص کنید</option>
                             <option value="THR" >تهران</option>
                             <option value="MHD">مشهد</option>
@@ -407,7 +415,7 @@
                         </select>
 
 
-                        <select data-live-search="true" id="DestinationLocation" tabindex="1" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker  pt-24" >
+                        <select data-live-search="true" id="DestinationLocation" tabindex="1" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker  pt-24" >
                             <option id="firstOpt" value="" data-iata="" disabled="" selected="" style="visibility: hidden">مقصد را مشخص کنید</option>
                             <option value="THR" >تهران</option>
                             <option value="MHD">مشهد</option>
