@@ -11,15 +11,41 @@
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
-    <script src="/js/jquery.min.js"></script>
+
+    <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
+    <script type="text/javascript" src="/js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="/js/persianDatepicker.min.js"></script>
+
+
+    {{--<link rel="stylesheet" href="https://cdn.rawgit.com/behzadi/persianDatepicker/master/css/persianDatepicker-default.css">--}}
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>--}}
+    {{--<script src="https://cdn.rawgit.com/behzadi/persianDatepicker/master/js/persianDatepicker.min.js"></script>--}}
+
+
+    {{--<script src="/js/jquery.min.js"></script>--}}
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-select.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
 
 
 
     <script>
         $(document).ready(function () {
+
+            $('#datepicker').persianDatepicker({
+                onShow: function() {
+                    $('#converted').text('');
+                },
+                onSelect: function () {
+                    var pd = new persianDate();
+                    var value = pd.parse($("#datepicker").val());
+                    var jdf = new jDateFunctions();
+                    $('#converted').text(jdf.getGDate(value));
+                },
+                startDate: 'today',
+                endDate: '1400/2/2'
+            });
+
             function toPersianNum( num, dontTrim ) {
 
                 var i = 0,
@@ -44,11 +70,12 @@
 
                 return res;
             }
+
             $('#form').on('submit',function (e) {
                 e.preventDefault();
                 var OriginLocation=$('#OriginLocation').val();
                 var DestinationLocation=$('#DestinationLocation').val();
-                var DepartureDateTime=$('#DepartureDateTime').val();
+                var DepartureDateTime=$('#converted').text();
                 var adult=$('#adult').val();
                 var child=$('#child').val();
                 var baby=$('#baby').val();
@@ -73,6 +100,9 @@
                     },
 
                 }).done(function (data) {
+                    $('#converted').text(jdf.getGDate('today'));
+                    console.log(data);
+
                     if (data['PricedItineraries']==null){
                         $('#result').text('هیچ پروازی وجود ندارد:|');
                     }
@@ -80,7 +110,7 @@
                         $('#result').text('');
                         var tbl = $(
 
-                            '                    <table id="table" class="table" style="visibility: visible">\n' +
+                            '                    <table id="table" class="table" >\n' +
                             '                        <thead >\n' +
                             '                        <tr>\n' +
                             '                            <th scope="col">شماره ستون</th>\n' +
@@ -99,14 +129,16 @@
 
 
 
-                        var i=0,n=0,j=0;
-                        for(i in data['PricedItineraries']){
+                        var i=0,j=0;
+                        for(j in data['PricedItineraries']) {
+                            if (j=='_indexOf')
+                                break;
                             var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(tbl);
 
-                            $('<td></td>').text(toPersianNum(++n)).appendTo(row);
+                            $('<td></td>').text(toPersianNum(++i)).appendTo(row);
 
                             // شرکت هواپیمایی
-                            MarketingAirline=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            MarketingAirline=data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['MarketingAirline']['Value'];
                             if (MarketingAirline=="QESHM AIR")
                                 $('<td></td>').text('قشم ایر').appendTo(row);
@@ -120,24 +152,32 @@
                                 $('<td></td>').text(MarketingAirline).appendTo(row);
 
                             // شماره پرواز
-                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['FlightNumber'])).appendTo(row);
 
                             // زمان حرکت
-                            $('<td></td>').text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+
+                            $('<td></td>').text(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['DepartureDateTime']).appendTo(row);
 
+                            // var DepartureDateTime=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            //     [0]['FlightSegment'][0]['DepartureDateTime'];
+                            // var myarr=DepartureDateTime.split("T");
+                            // alert(myarr[0]+ '     ' +myarr[1]);
+
+                            // $('<td></td>').text().appendTo(row);
+
                             // زمان رسیدن به مقصد
-                            $('<td></td>').text(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['ArrivalDateTime']).appendTo(row);
 
 
                             // ظرفیت
-                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            $('<td></td>').text(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['AvailableSeatQuantity'])).appendTo(row);
 
                             // نوع بلیط
-                            var cabinType=data['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
+                            var cabinType=data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['CabinType'];
 
                             if (cabinType=="Economy")
@@ -146,7 +186,11 @@
                                 $('<td></td>').text(cabinType).appendTo(row);
 
 
+
                         }
+                        //     alert(toPersianNum(data['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                        //         [0]['FlightSegment'][0]['FlightNumber']));
+                        //
                         tbl.appendTo($("#result"));
 
 
@@ -229,9 +273,12 @@
             </div>
 
                 <div class="col-sm-9" id="content" >
+
                     <form class="form-inline" id="form">
                         {{csrf_field()}}
-                        <input type="text" tabindex="2" id="DepartureDateTime" class="form-control mb-2 col-sm-2" id="inlineFormInputName2" placeholder="تاریخ پرواز">
+                        <input type="text"  id="datepicker" class="form-control mb-2 col-sm-2"  placeholder="تاریخ پرواز">
+                        <div id="converted" hidden></div>
+
 
                         <select data-live-search="true" id="OriginLocation" tabindex="0" id="originSelect" data-live-search-style="startsWith" class="form-control mb-2 col-sm-2 selectpicker" >
                             <option id="firstOpt" value="" data-iata="" disabled="" selected="" >مبدأ را مشخص کنید</option>
@@ -547,7 +594,7 @@
 
 </div>
 
-<script src="/assets/js/jquery-1.10.2.js"></script>
+{{--<script src="/assets/js/jquery-1.10.2.js"></script>--}}
 <script src="/assets/js/bootstrap.min.js"></script>
 <script src="/assets/js/jquery.metisMenu.js"></script>
 <script src="/assets/js/custom.js"></script>

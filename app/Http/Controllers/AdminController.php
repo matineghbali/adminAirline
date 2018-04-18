@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -14,9 +15,70 @@ class AdminController extends Controller
         return view('Panel/flight');
 
     }
+
+    public function getDate($date){
+//        2018-04-17T00:00:00
+//        2018-04-16T00:00:00
+        if ($date==null)
+        {
+            $myarray=explode('-',Carbon::now());
+            $day=explode(' ',$myarray[2]);
+            $mydate="$myarray[0]-$myarray[1]-$day[0]T00:00:00";
+            return $mydate;
+
+        }
+        else{
+            $myarray=explode(' ',$date);
+            switch ($myarray[1]){
+                case 'Jan':
+                    $month='01';
+                    break;
+                case 'Feb':
+                    $month='02';
+                    break;
+                case 'Mar':
+                    $month='03';
+                    break;
+
+                case 'Apr':
+                    $month='04';
+                    break;
+                case 'May':
+                    $month='05';
+                    break;
+                case 'Jun':
+                    $month='06';
+                    break;
+                case 'Jul':
+                    $month='07';
+                    break;
+                case 'Aug':
+                    $month='08';
+                    break;
+                case 'Sep':
+                    $month='09';
+                    break;
+                case 'Oct':
+                    $month='10';
+                    break;
+                case 'Nov':
+                    $month='11';
+                    break;
+                case 'Dec':
+                    $month='12';
+                    break;
+
+            }
+            $mydate="$myarray[3]-$month-$myarray[2]T00:00:00";
+            return $mydate;
+
+
+        }
+
+    }
+
     public function getFlight2(Request $request){
 //        $validation
-        // "2018-04-16T00:00:00"
 
         $json=[
             "POS"=> [
@@ -38,7 +100,7 @@ class AdminController extends Controller
                 "DepartureDateTime"=> [
                     "WindowBefore"=> 0,
                     "WindowAfter"=> 0,
-                    "Value"=> $request['DepartureDateTime']
+                    "Value"=> $this->getDate($request['DepartureDateTime'])
                 ]
             ],
             "TravelPreferences"=> null,
@@ -86,11 +148,11 @@ class AdminController extends Controller
             echo "cURL Error #:" ;
         } else {
             return json_decode($response,true);
-//            $r['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment']
-////    [0]['ArrivalAirport']['LocationCode']
-//            return view('Panel.flight2',compact('responses'));
 
         }
+
+
+
 
     }
 }
