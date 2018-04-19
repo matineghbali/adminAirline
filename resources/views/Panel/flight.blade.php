@@ -606,7 +606,7 @@
 
                     </div>
 
-                    <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 8px"">
+                    <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 8px">
                         <div id="result" style="min-height:450px;margin-top: 100px">
 
                         </div>
