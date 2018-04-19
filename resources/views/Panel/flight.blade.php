@@ -13,13 +13,16 @@
     <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
 
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
-    <script type="text/javascript" src="/js/jquery-1.10.1.min.js"></script>
-    <script type="text/javascript" src="/js/persianDatepicker.min.js"></script>
+
+
+
+    <script type="text/javascript" src="/assets/js/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
 
 
     {{--<script src="/js/jquery.min.js"></script>--}}
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-select.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap-select.js"></script>
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
 
 
@@ -231,7 +234,7 @@
             padding: 15px 50px 5px 50px;
             float: left;
             font-size: 16px;" >
-                {{toPersianNum(jdate('')->format('%d %B، %Y'))}}
+                {{toPersianNum(jdate()->format('%d %B، %Y'))}}
                 <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
             </div>
 
@@ -604,10 +607,6 @@
 
 </div>
 
-{{--<script src="/assets/js/jquery-1.10.2.js"></script>--}}
-<script src="/assets/js/bootstrap.min.js"></script>
-<script src="/assets/js/jquery.metisMenu.js"></script>
-<script src="/assets/js/custom.js"></script>
 
 
 

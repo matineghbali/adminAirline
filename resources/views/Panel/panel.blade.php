@@ -11,18 +11,19 @@
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-select.css" />
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-select.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        // $(document).ready(function(){
-        //     $("#originSelect").hover(function(){
-        //         // $("#firstOpt").text('tehran');
-        //         alert('iuuik');
-        //     });
-        // });
-    </script>
+
+
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/bootstrap-select.js"></script>
+    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
+    {{--<script src="/assets/js/jquery-1.10.2.js"></script>--}}
+    {{--<script src="/assets/js/bootstrap.min.js"></script>--}}
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    <script src="/assets/js/custom.js"></script>
+    <script src="/assets/js/morris/morris.js"></script>
+
+
 
 </head>
 <body>
@@ -44,7 +45,9 @@
             <div style="color: white;
             padding: 15px 50px 5px 50px;
             float: left;
-            font-size: 16px;" > {{jdate()->format('%B %d، %Y')}} &nbsp; <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
+            font-size: 16px;" >
+                {{toPersianNum(jdate()->format('%d %B، %Y'))}}
+                <a href="/logout" class="btn btn-danger square-btn-adjust">خروج</a>
             </div>
 
         </div>
@@ -104,10 +107,6 @@
 
 </div>
 
-<script src="/assets/js/jquery-1.10.2.js"></script>
-<script src="/assets/js/bootstrap.min.js"></script>
-<script src="/assets/js/jquery.metisMenu.js"></script>
-<script src="/assets/js/custom.js"></script>
 
 
 </body>
