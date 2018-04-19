@@ -16,9 +16,6 @@
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/bootstrap-select.js"></script>
-    {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
-    {{--<script src="/assets/js/jquery-1.10.2.js"></script>--}}
-    {{--<script src="/assets/js/bootstrap.min.js"></script>--}}
     <script src="/assets/js/jquery.metisMenu.js"></script>
     <script src="/assets/js/custom.js"></script>
     <script src="/assets/js/morris/morris.js"></script>
@@ -27,7 +24,7 @@
 
 </head>
 <body>
-<div id="wrapper"  style="background-color: white">
+<div id="wrapper" >
     <nav class="navbar navbar-default navbar-cls-top row" role="navigation" style="margin-bottom: 0">
         <div class="col-sm-3">
             <div class="navbar-header col-sm-12">

@@ -1,39 +1,11 @@
 
-/*=============================================================
-    Authour URI: www.binarycart.com
-    Version: 1.1
-    License: MIT
-    
-    http://opensource.org/licenses/MIT
-
-    100% To use For Personal And Commercial Use.
-   
-    ========================================================  */
-/*==============================================
-    GENERAL  STYLES    
-    =============================================*/
-body {
-    font-family: 'Open Sans', sans-serif;
-}
-
- #wrapper {
-    width: 100%;
-    background:#202020;
-}
 
 #page-wrapper {
-    padding: 15px 15px;
-    min-height: 600px;
-    background:#F3F3F3;
-   
+    width: 100%;
+    background: #d3d9df;
+
 }
-#page-inner {
-    width:100%;
-    margin:10px 20px 10px 0px;
-    background-color:#fff!important;
-    padding:10px;
-    min-height:1200px;
-}
+
 
 .text-center {
     text-align:center;
@@ -47,13 +19,7 @@ h2 {
 h4 {
     padding-top:10px;
 }
-.square-btn-adjust {
-    border: 0px solid transparent; 
-   -webkit-border-radius: 0px;
--moz-border-radius: 0px;
-border-radius: 0px;
 
-}
 p {
     font-size:16px;
     line-height:25px;
@@ -366,9 +332,9 @@ line-height: 1.428571429;
  
  @media(min-width:768px) {
      #page-wrapper{
-        margin: 0 0 0 260px;
-        padding: 15px 30px;
-        min-height: 1200px;
+        /*margin: 0 0 0 260px;*/
+        /*padding: 15px 30px;*/
+        min-height:760px;
 		
     }
 	
@@ -377,15 +343,23 @@ line-height: 1.428571429;
         z-index: 1;
         position: absolute;
         min-height: 700px;
-
-
-        /*min-width: 260px;*/
     }
 
    .navbar {
- border-radius: 0px; 
-}
-   
+        border-radius: 0px;
+    }
+
+
 }
 
+/*@media(max-width: 768px) {*/
+    /*.navbar-side {*/
+        /*z-index: 1;*/
+        /*position: absolute;*/
+        /*min-height: 700px;*/
+    /*}*/
+    /*#menu{*/
+        /*display: none;*/
+    /*}*/
+/*}*/
 
