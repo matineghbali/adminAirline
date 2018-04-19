@@ -599,7 +599,7 @@
                                 </select>
 
 
-                                <button tabindex="6" id="search" type="submit" class="btn" style="background-color:#202020;color: #fff;border-color:black">جستجو</button>
+                                <button tabindex="6" id="search" type="submit" class="btn btn-danger" >جستجو</button>
                             </form>
 
                         </div>
@@ -607,7 +607,7 @@
                     </div>
 
                     <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 8px">
-                        <div id="result" style="min-height:450px;margin-top: 100px">
+                        <div id="result" style="min-height:450px;margin-top: 100px;padding: 10px">
 
                         </div>
 
