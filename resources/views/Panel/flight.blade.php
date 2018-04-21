@@ -175,7 +175,7 @@
                             else if (MarketingAirline=="MERAJ")
                                 $('<td></td>').text('معراج').appendTo(row);
                             else if (MarketingAirline=="TABAN")
-                                $('<td></td>').text('تابان').appendTo(row);
+                                $('<td></td>').text('تابان ایر').appendTo(row);
                             else if (MarketingAirline=="ZAGROS")
                                 $('<td></td>').text('زاگرس').appendTo(row);
                             else
@@ -304,7 +304,7 @@
 
             </div>
             <div class="col-sm-9" id="content" >
-                    <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">
+                    <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px;">
                         <div  style="padding: 20px">
                             <form id="form">
                                 {{csrf_field()}}
@@ -632,10 +632,40 @@
 
                     </div>
 
-                    <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 8px">
-                        <div id="result" style="min-height:450px;margin-top: 100px;padding: 10px">
+                    <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #000;border-width: 1px;margin-top: 20px">
+                            <div id="result" style="text-align: center;visibility: visible">
+                                <div class="col-sm-10" id="row" style="padding: 15px;margin-top: 10px;margin-bottom:10px;border: solid #000;border-width: 1px;min-height: auto">
+                                    <div id="div1" class="col-sm-2 col-xs-6">
+                                        <h5 id="ch1">شرکت هواپیمایی</h5>
+                                        <br>
+                                        <h5 id="ch11">شماره پرواز</h5>
 
-                        </div>
+                                    </div>
+                                    <div id="div2" class="col-sm-2 col-xs-6">
+                                        <h5 id="ch2">زمان حرکت</h5>
+                                        <br>
+                                        <h5 id="ch22">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h5>
+                                    </div>
+                                    <div id="div3" class="col-sm-2 col-xs-6">
+                                        <h5 id="ch3">زمان رسیدن</h5>
+                                        <br>
+                                        <h5 id="ch33">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h5>
+                                    </div>
+                                    <div id="div4" class="col-sm-2 col-xs-6">
+                                        <h5 id="ch4">ظرفیت</h5>
+                                        <br>
+                                        <h5 id="ch44">X نفر</h5>
+                                    </div>
+                                    <div id="div5" class="col-sm-2 col-xs-6">
+                                        <h5 id="ch5">نوع بلیت</h5>
+                                        <br>
+                                        <h5 id="ch55">X تومان</h5>
+                                    </div>
+                                    <button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>
+                                </div>
+
+
+                            </div>
 
                     </div>
 

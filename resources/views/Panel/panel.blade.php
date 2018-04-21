@@ -25,193 +25,15 @@
     <script src="/assets/js/bootstrap-select.js"></script>
     {{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>--}}
 
-
-
-
-
-
     <script>
-        $(document).ready(function () {
+        $('document').ready(function () {
+            $('#b').click(function () {
 
-
-
-            $('#datepicker').persianDatepicker({
-                startDate: 'today',
-                endDate: '1400/2/2'
-            });
-
-            function toPersianNum( num, dontTrim ) {
-
-                var i = 0,
-
-                    dontTrim = dontTrim || false,
-
-                    num = dontTrim ? num.toString() : num.toString().trim(),
-                    len = num.length,
-
-                    res = '',
-                    pos,
-
-                    persianNumbers = typeof persianNumber == 'undefined' ?
-                        ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'] :
-                        persianNumbers;
-
-                for (; i < len; i++)
-                    if (( pos = persianNumbers[num.charAt(i)] ))
-                        res += pos;
-                    else
-                        res += num.charAt(i);
-
-                return res;
-            }
-
-            $('#form').on('submit',function (e) {
-                // if ($()==$())
-                //     $('#result').html('<div class="alert alert-danger" role="alert">مبدا و مقصد برابر است</div>');
-
-                e.preventDefault();
-                var OriginLocation=$('#OriginLocation').val();
-                var DestinationLocation=$('#DestinationLocation').val();
-                var DepartureDateTime=$('#datepicker').val();
-                var adult=$('#adult').val();
-                var child=$('#child').val();
-                var baby=$('#baby').val();
-                var _token=$('input[name="_token"]').val();
-
-
-                var formData=new  FormData();
-                formData.append('OriginLocation',OriginLocation);
-                formData.append('DestinationLocation',DestinationLocation);
-                formData.append('DepartureDateTime',DepartureDateTime);
-                formData.append('adult',adult);
-                formData.append('child',child);
-                formData.append('baby',baby);
-                $.ajax({
-                    method: 'POST',
-                    url: '/admin/getFlight2',
-                    data: formData,
-                    contentType : false,
-                    processData: false,
-                    headers: {
-                        'X_CSRF-TOKEN': _token
-                    },
-
-                }).done(function (data) {
-                    // if (data['response']['Errors']['ShortText']=="IP is not trusted: 5.161.108.59")
-                    //     $('#result').html('<div class="alert alert-danger" role="alert">IP معتبر نیست</div>');
-
-                    console.log(data);
-
-
-                    if (data['DepartureDateTime']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
-                    }
-                    else if (data['OriginLocation']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
-                    }
-                    else if (data['DestinationLocation']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
-                    }
-                    else if(data['response']['PricedItineraries'] == null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
-
-                    }
-                    else{
-                        if (data['date']!= "false")
-                            $('#datepicker').val(data['date']);
-
-                        $('#result').text('');
-                        var tbl = $(
-
-                            '                    <table id="table" class="table" >\n' +
-                            '                        <thead >\n' +
-                            '                        <tr>\n' +
-                            '                            <th scope="col">شماره ستون</th>\n' +
-                            '                            <th scope="col">شرکت هواپیمایی</th>\n' +
-                            '                            <th scope="col">شماره پرواز</th>\n' +
-                            '                            <th scope="col">زمان حرکت</th>\n' +
-                            '                            <th scope="col">زمان رسیدن به مقصد</th>\n' +
-                            '                            <th scope="col">ظرفیت</th>\n' +
-                            '                            <th scope="col">نوع بلیط</th>\n' +
-                            '                        </tr>\n' +
-                            '                        </thead>\n' +
-                            '                        <tbody id="tbody">\n' +
-                            '\n' +
-                            '                        </tbody>\n'
-                        ).attr({ id: "bob" });
-
-
-
-                        var i=0,j=0;
-                        for(j in data['response']['PricedItineraries']) {
-                            if (j=='_indexOf')
-                                break;
-                            var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(tbl);
-
-                            $('<td></td>').text(toPersianNum(++i)).appendTo(row);
-
-                            // شرکت هواپیمایی
-                            MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['MarketingAirline']['Value'];
-                            if (MarketingAirline=="QESHM AIR")
-                                $('<td></td>').text('قشم ایر').appendTo(row);
-                            else if (MarketingAirline=="MERAJ")
-                                $('<td></td>').text('معراج').appendTo(row);
-                            else if (MarketingAirline=="TABAN")
-                                $('<td></td>').text('تابان').appendTo(row);
-                            else if (MarketingAirline=="ZAGROS")
-                                $('<td></td>').text('زاگرس').appendTo(row);
-                            else
-                                $('<td></td>').text(MarketingAirline).appendTo(row);
-
-                            // شماره پرواز
-                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['FlightNumber'])).appendTo(row);
-
-                            // زمان حرکت
-
-                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['DepartureDateTime']).appendTo(row);
-
-                            // var DepartureDateTime=data['response']['PricedItineraries'][i]['AirItinerary']['OriginDestinationOptions']
-                            //     [0]['FlightSegment'][0]['DepartureDateTime'];
-                            // var myarr=DepartureDateTime.split("T");
-                            // alert(myarr[0]+ '     ' +myarr[1]);
-
-                            // $('<td></td>').text().appendTo(row);
-
-                            // زمان رسیدن به مقصد
-                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['ArrivalDateTime']).appendTo(row);
-
-
-                            // ظرفیت
-                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['AvailableSeatQuantity'])).appendTo(row);
-
-                            // نوع بلیط
-                            var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['CabinType'];
-
-                            if (cabinType=="Economy")
-                                $('<td></td>').text('اکونومی').appendTo(row);
-                            else
-                                $('<td></td>').text(cabinType).appendTo(row);
-
-
-
-                        } //end forin
-                        tbl.appendTo($("#result"));
-
-
-                    } //end else
-
-
-                });
-
+                $('#divv').attr('style','visibility:visible')
             })
         })
     </script>
+
 
 </head>
 <body>
@@ -293,17 +115,55 @@
 
             </div>
             <div class="col-sm-9" id="content" >
-                <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">
-                    <h2 style="padding: 10px">
-                        {{\Illuminate\Support\Facades\Auth::user()->name}} عزیز خوش آمدید!
+                {{--<div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">--}}
+                    {{--<h2 style="padding: 10px">--}}
+                        {{--{{\Illuminate\Support\Facades\Auth::user()->name}} عزیز خوش آمدید!--}}
 
-                    </h2>
+                    {{--</h2>--}}
+
+                {{--</div>--}}
+
+                <button id="b">jvgv</button>
+
+                <div id="result" style="visibility: hidden">
+                    <div class="row" id="row" style="background: white;margin-left: 20px;min-height:80px;border-radius: 8px;padding: 5px">
+                        <div id="div1" class="col-sm-2 col-xs-6">
+                            <h4 id="ch1">شرکت هواپیمایی</h4>
+                            <br>
+                            <h4 id="ch11">شماره پرواز</h4>
+
+                        </div>
+                        <div id="div2" class="col-sm-2 col-xs-6">
+                            <h4 id="ch2">زمان حرکت</h4>
+                            <br>
+                            <h4 id="ch22">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h4>
+                        </div>
+                        <div id="div3" class="col-sm-2 col-xs-6">
+                            <h4 id="ch3">زمان رسیدن</h4>
+                            <br>
+                            <h4 id="ch33">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h4>
+                        </div>
+                        <div id="div4" class="col-sm-2 col-xs-6">
+                            <h4 id="ch4">ظرفیت</h4>
+                            <br>
+                            <h4 id="ch44">X نفر</h4>
+                        </div>
+                        <div id="div5" class="col-sm-2 col-xs-6">
+                            <h4 id="ch5">نوع بلیت</h4>
+                            <br>
+                            <h4 id="ch55">X تومان</h4>
+                        </div>
+                        <button id="buy" style="margin-top: 50px" class="btn btn-success col-sm-1 col-xs-12">خرید</button>
+                    </div>
 
                 </div>
 
 
 
+
             </div>
+
+
         </div>
     </div>
 
