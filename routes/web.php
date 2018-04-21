@@ -32,85 +32,95 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
 
     $this->get('getFlight2', function (){
-        $date= \Morilog\Jalali\jDateTime::toJalali(2018,4,17);
-        return $date;
 
 
-//        return jdate()->getDateTime('2018-04-18')->format('%B %d، %Y');
 
 //        "2018-04-16T00:00:00"
-//        $json=[
-//            "POS"=> [
-//                "Source"=> [
-//                    "RequestorID"=> [
-//                        "MessagePassword"=> "6eeb834b13420733904e2ae33b3d8821",
-//                        "Name"=> "ghasedak"
-//                    ],
-//                    "Language"=> null
-//                ]
-//            ],
-//            "OriginDestinationInformation"=> [
-//                "OriginLocation"=> [
-//                    "LocationCode"=> "thr"
-//                ],
-//                "DestinationLocation"=> [
-//                    "LocationCode"=> "mhd"
-//                ],
-//                "DepartureDateTime"=> [
-//                    "WindowBefore"=> 0,
-//                    "WindowAfter"=> 0,
-//                    "Value"=> "2018-04-20T00:00:00"
-//                ]
-//            ],
-//            "TravelPreferences"=> null,
-//            "TravelerInfoSummary"=> [
-//                "AirTravelerAvail"=> [
-//                    "PassengerTypeQuantity"=> [
-//                        [
-//                            "Code"=> "ADT",
-//                            "Quantity"=> 1
-//                        ],
-//                        [
-//                            "Code"=> "CHD",
-//                            "Quantity"=> 0
-//                        ],
-//                        [
-//                            "Code"=> "INF",
-//                            "Quantity"=> 0
-//                        ]
-//                    ]
-//                ]
-//            ]
-//        ];
-//
-//        $curl = curl_init();
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirLowFareSearchV6",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 30,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "POST",
-//            CURLOPT_POSTFIELDS =>json_encode($json),
-//
-//            CURLOPT_HTTPHEADER => array(
-//                "content-type: application/json",
-//            ),
-//        ));
-//        $response = curl_exec($curl);
-//        $err = curl_error($curl);
-//
-//        curl_close($curl);
-//
-//        if ($err) {
-//            echo "cURL Error #:" ;
-//        } else {
-//            return json_decode($response,true);
+        $json=[
+            "POS"=> [
+                "Source"=> [
+                    "RequestorID"=> [
+                        "MessagePassword"=> "6eeb834b13420733904e2ae33b3d8821",
+                        "Name"=> "ghasedak"
+                    ],
+                    "Language"=> null
+                ]
+            ],
+            "OriginDestinationInformation"=> [
+                "OriginLocation"=> [
+                    "LocationCode"=> "thr"
+                ],
+                "DestinationLocation"=> [
+                    "LocationCode"=> "mhd"
+                ],
+                "DepartureDateTime"=> [
+                    "WindowBefore"=> 0,
+                    "WindowAfter"=> 0,
+                    "Value"=> "2018-04-21T00:00:00"
+                ]
+            ],
+            "TravelPreferences"=> null,
+            "TravelerInfoSummary"=> [
+                "AirTravelerAvail"=> [
+                    "PassengerTypeQuantity"=> [
+                        [
+                            "Code"=> "ADT",
+                            "Quantity"=> 1
+                        ],
+                        [
+                            "Code"=> "CHD",
+                            "Quantity"=> 0
+                        ],
+                        [
+                            "Code"=> "INF",
+                            "Quantity"=> 0
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirLowFareSearchV6",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>json_encode($json),
+
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+        $response=json_decode($response,true);
+
+//        if ($response['PricedItineraries'] ==null){
+//            return 'uhkj';
 //        }
-//    $m=new $r;
-//    print_r($r['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment']
-//    [0]['ArrivalAirport']['LocationCode']);
+
+        if ($response['Errors']!=null)
+            return $response['Errors'][0]['ShortText'];
+
+        else if ($response['Warnings']!=null)
+            return $response['Warnings'][0]['ShortText'];
+
+         else {
+             return $response;
+        }
+//        for ($i=0;$i<count($response['PricedItineraries']);$i++){
+//            $response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
+//            [0]['FlightSegment'][0]['ArrivalDateTime']="oijioji";
+//        }
+
+
+
+
 
     });
 

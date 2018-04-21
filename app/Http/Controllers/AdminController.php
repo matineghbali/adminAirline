@@ -130,13 +130,35 @@ class AdminController extends Controller
 
             curl_close($curl);
 
-            if ($err) {
-                echo "cURL Error #:" ;
-            } else {
-                $response=json_decode($response,true);
-                return ['response'=>$response,'date'=> $this->date];
 
+            $response=json_decode($response,true);
+
+            if ($response['PricedItineraries']!= null){
+                for ($i=0;$i<count($response['PricedItineraries']);$i++){
+
+                    $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['DepartureDateTime']);
+                    $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
+                    $time=toPersianNum($arrival[1]);
+                    $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['DepartureDateTime']= $date ." " . $time ;
+
+
+                    $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['ArrivalDateTime']);
+                    $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
+                    $time=toPersianNum($arrival[1]);
+                    $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['ArrivalDateTime']= $date ." " . $time ;
+
+
+                }
             }
+
+
+            return ['response'=>$response,'date'=> $this->date];
+
+
 
         }
 
