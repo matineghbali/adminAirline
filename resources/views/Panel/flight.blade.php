@@ -101,118 +101,104 @@
 
                     console.log(data);
 
-                    //ارورهای ولیدیشن
+                    $('#divError').attr('style','visibility:visible');
+
+
+
+
+                    // ارورهای ولیدیشن
                      if (data['DepartureDateTime']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
+                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
                     }
                     else if (data['OriginLocation']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
+                         $('#divContent').attr('style','visibility:hidden');
+                        $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
                     }
                     else if (data['DestinationLocation']!=null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
+                         $('#divContent').attr('style','visibility:hidden');
+                        $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
                     }
 
 
                     //ارورهای سرور
-                    if (data['response']['Errors']!=null){
+                    else if (data['response']['Errors']!=null){
+                         $('#divContent').attr('style','visibility:hidden');
                          if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")
-                            $('#result').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
+                            $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
                          else
-                             $('#result').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');
+                             $('#divError').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');
 
                     }
-
-                    // else if (data['response']['Warnings']!=null){
-                    //     if(data['response']['Errors'][0]['ShortText']=="No available flight(s) was found. Probably you could find an available flight by changing date or route.")
-                    //         $('#result').html('<div class="alert alert-danger" role="alert">چنین پرواز</div>');
-                    //     else
-                    //         $('#result').html('<div class="alert alert-danger" role="alert">'+data['response']['Warnings'][0]['ShortText']+'</div>');
-                    // }
 
                     else if(data['response']['PricedItineraries'] == null){
-                        $('#result').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
-
+                         $('#divContent').attr('style','visibility:hidden');
+                        $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
                     }
                     else{
-                        if (data['date']!= "false")
+                        $('#divError').html('');
+
+                            if (data['date']!= "false")
                             $('#datepicker').val(data['date']);
 
-                        $('#result').text('');
-                        var tbl = $(
-
-                            '                    <table id="table" class="table" >\n' +
-                            '                        <thead >\n' +
-                            '                        <tr>\n' +
-                            '                            <th scope="col">شماره ستون</th>\n' +
-                            '                            <th scope="col">شرکت هواپیمایی</th>\n' +
-                            '                            <th scope="col">شماره پرواز</th>\n' +
-                            '                            <th scope="col">زمان حرکت</th>\n' +
-                            '                            <th scope="col">زمان رسیدن به مقصد</th>\n' +
-                            '                            <th scope="col">ظرفیت</th>\n' +
-                            '                            <th scope="col">نوع بلیط</th>\n' +
-                            '                        </tr>\n' +
-                            '                        </thead>\n' +
-                            '                        <tbody id="tbody">\n' +
-                            '\n' +
-                            '                        </tbody>\n'
-                        ).attr({ id: "bob" });
+                         $('#divContent').attr('style','visibility:visible');
 
 
-
-                        var i=0,j=0;
+                         var i=0,j=0;
                         for(j in data['response']['PricedItineraries']) {
                             if (j=='_indexOf')
                                 break;
-                            var row = $('<tr></tr>').attr({ class: ["class1", "class2", "class3"].join(' ') }).appendTo(tbl);
 
-                            $('<td></td>').text(toPersianNum(++i)).appendTo(row);
 
-                            // شرکت هواپیمایی
+                        //     // شرکت هواپیمایی
                             MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['MarketingAirline']['Value'];
                             if (MarketingAirline=="QESHM AIR")
-                                $('<td></td>').text('قشم ایر').appendTo(row);
+                                $('#ch1').text('قشم ایر');
                             else if (MarketingAirline=="MERAJ")
-                                $('<td></td>').text('معراج').appendTo(row);
+                                $('#ch1').text('معراج');
                             else if (MarketingAirline=="TABAN")
-                                $('<td></td>').text('تابان ایر').appendTo(row);
+                                $('#ch1').text('تابان ایر');
                             else if (MarketingAirline=="ZAGROS")
-                                $('<td></td>').text('زاگرس').appendTo(row);
+                                $('#ch1').text('زاگرس');
                             else
-                                $('<td></td>').text(MarketingAirline).appendTo(row);
-
-                            // شماره پرواز
-                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['FlightNumber'])).appendTo(row);
-
-                            // زمان حرکت
-
-                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['DepartureDateTime']).appendTo(row);
+                                $('#ch1').text(MarketingAirline);
 
 
-                            // زمان رسیدن به مقصد
-                            $('<td></td>').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['ArrivalDateTime']).appendTo(row);
+                        //     // شماره پرواز
+                            $('#ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['FlightNumber']));
+                        //
+                        //     var div2=$('<div id="div2" class="col-sm-2 col-xs-6"></div>').after('#div1');
+                        //
+                        //
+                        //     // // زمان حرکت
+
+                            $('#ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['DepartureDateTime']);
 
 
-                            // ظرفیت
-                            $('<td></td>').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                                [0]['FlightSegment'][0]['AvailableSeatQuantity'])).appendTo(row);
+                        //     // // زمان رسیدن به مقصد
+                            $('#ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['ArrivalDateTime']);
 
-                            // نوع بلیط
+
+                        //      ظرفیت
+                            $('#ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                                [0]['FlightSegment'][0]['AvailableSeatQuantity']));
+
+                         // نوع بلیط
                             var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['CabinType'];
 
                             if (cabinType=="Economy")
-                                $('<td></td>').text('اکونومی').appendTo(row);
+                                $('#ch5').text('اکونومی');
                             else
-                                $('<td></td>').text(cabinType).appendTo(row);
+                                $('#ch5').text(cabinType);
 
 
 
                         } //end forin
-                        tbl.appendTo($("#result"));
 
 
                     } //end else
@@ -227,6 +213,8 @@
 </head>
 <body>
 <div id="page-wrapper" >
+
+    {{--header--}}
     <div class="container" style="width: 100%">
         <div class="row" >
             <nav class="navbar navbar-default navbar-cls-top" role="navigation" style="margin-bottom: 0">
@@ -261,6 +249,7 @@
 
     <div class="container" style="width: 100%">
         <div class="row">
+            {{--left menu--}}
             <div class="col-sm-3" id="menu" >
                 <div class="row " >
                     <nav class="navbar-default navbar-side col-sm-12" role="navigation" >
@@ -303,7 +292,9 @@
                 </div>
 
             </div>
+            {{--content--}}
             <div class="col-sm-9" id="content" >
+                    {{--search fields--}}
                     <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px;">
                         <div  style="padding: 20px">
                             <form id="form">
@@ -631,43 +622,49 @@
                         </div>
 
                     </div>
+                    {{--result from search--}}
 
-                    <div class="row rounded" style="background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #000;border-width: 1px;margin-top: 20px">
-                            <div id="result" style="text-align: center;visibility: visible">
-                                <div class="col-sm-10" id="row" style="padding: 15px;margin-top: 10px;margin-bottom:10px;border: solid #000;border-width: 1px;min-height: auto">
+                    <div id="result">
+                        <div class="row rounded" style="padding: 20px;background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #000;border-width: 1px;margin-top: 20px">
+                            <div class="col-sm-12" id="contentResult" style="visibility: visible;margin-top: 10px;margin-bottom:10px;min-height: auto">
+                                <div id="divError" style="visibility: hidden"></div>
+                                <div id="divContent" style="visibility: hidden">
                                     <div id="div1" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch1">شرکت هواپیمایی</h5>
+                                        <h5 id="ch1"></h5>
                                         <br>
-                                        <h5 id="ch11">شماره پرواز</h5>
+                                        <h5 id="ch11"></h5>
 
                                     </div>
                                     <div id="div2" class="col-sm-2 col-xs-6">
                                         <h5 id="ch2">زمان حرکت</h5>
                                         <br>
-                                        <h5 id="ch22">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h5>
+                                        <h5 id="ch22"></h5>
                                     </div>
                                     <div id="div3" class="col-sm-2 col-xs-6">
                                         <h5 id="ch3">زمان رسیدن</h5>
                                         <br>
-                                        <h5 id="ch33">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h5>
+                                        <h5 id="ch33"></h5>
                                     </div>
                                     <div id="div4" class="col-sm-2 col-xs-6">
                                         <h5 id="ch4">ظرفیت</h5>
                                         <br>
-                                        <h5 id="ch44">X نفر</h5>
+                                        <h5 id="ch44"></h5>
                                     </div>
                                     <div id="div5" class="col-sm-2 col-xs-6">
                                         <h5 id="ch5">نوع بلیت</h5>
                                         <br>
-                                        <h5 id="ch55">X تومان</h5>
+                                        <h5 id="ch55"></h5>
                                     </div>
                                     <button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>
+
                                 </div>
-
-
                             </div>
 
+
+                        </div>
+
                     </div>
+
 
 
             </div>
@@ -685,3 +682,18 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
