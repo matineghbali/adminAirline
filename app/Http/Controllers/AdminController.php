@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 class AdminController extends Controller
 {
     public $date="false";
+
+
     public function index(){
         return view('Panel/panel');
 
@@ -51,20 +53,22 @@ class AdminController extends Controller
     }
 
     public function getFlight2(Request $request){
+//        session_destroy();
+        session()->forget('Errors');
+        session()->forget('Response');
+
         //$validation
         if ($request['OriginLocation']=='null')
             $request['OriginLocation']='';
         if ($request['DestinationLocation']=='null')
             $request['DestinationLocation']='';
-
         $validation=Validator::make($request->all(),[
             'DepartureDateTime' => 'required',
             'OriginLocation' => 'required',
             'DestinationLocation' => 'required'
         ]);
-
         if ($validation->fails())
-            return $validation->errors();
+            session(['Errors'=>$validation->errors()]);
         else{
             $json=[
                 "POS"=> [
@@ -109,7 +113,6 @@ class AdminController extends Controller
                     ]
                 ]
             ];
-
             $curl = curl_init();
             curl_setopt_array($curl, array(
                 CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirLowFareSearchV6",
@@ -120,51 +123,47 @@ class AdminController extends Controller
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
                 CURLOPT_POSTFIELDS =>json_encode($json),
-
                 CURLOPT_HTTPHEADER => array(
                     "content-type: application/json",
                 ),
             ));
             $response = curl_exec($curl);
             $err = curl_error($curl);
-
             curl_close($curl);
-
-
             $response=json_decode($response,true);
-
             if ($response['PricedItineraries']!= null){
                 for ($i=0;$i<count($response['PricedItineraries']);$i++){
-
                     $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['DepartureDateTime']);
                     $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
                     $time=toPersianNum($arrival[1]);
                     $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['DepartureDateTime']= $date ." " . $time ;
-
-
                     $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['ArrivalDateTime']);
                     $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
                     $time=toPersianNum($arrival[1]);
                     $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['ArrivalDateTime']= $date ." " . $time ;
-
-
                 }
             }
-
-
-            return ['response'=>$response,'date'=> $this->date];
-
+            session(['Response'=>['response'=>$response,'date'=> $this->date]]);
 
 
         }
-
-
-
-
-
     }
+
+
+
+    public function getFlight3(){
+
+        if (session()->has('Errors'))       //error haye validation
+        {
+            return session('Errors');
+        }
+        else
+            return session(('Response'));
+    }
+
+
 }
