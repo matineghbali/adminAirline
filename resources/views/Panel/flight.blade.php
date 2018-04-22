@@ -108,22 +108,22 @@
 
                     // ارورهای ولیدیشن
                      if (data['DepartureDateTime']!=null){
-                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divContents').attr('style','visibility:hidden');
                          $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
                     }
                     else if (data['OriginLocation']!=null){
-                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divContents').attr('style','visibility:hidden');
                         $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
                     }
                     else if (data['DestinationLocation']!=null){
-                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divContents').attr('style','visibility:hidden');
                         $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
                     }
 
 
                     //ارورهای سرور
                     else if (data['response']['Errors']!=null){
-                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divContents').attr('style','visibility:hidden');
                          if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")
                             $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
                          else
@@ -132,7 +132,7 @@
                     }
 
                     else if(data['response']['PricedItineraries'] == null){
-                         $('#divContent').attr('style','visibility:hidden');
+                         $('#divContents').attr('style','visibility:hidden');
                         $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
                     }
                     else{
@@ -141,50 +141,52 @@
                             if (data['date']!= "false")
                             $('#datepicker').val(data['date']);
 
-                         $('#divContent').attr('style','visibility:visible');
+                         $('#divContents').attr('style','visibility:visible');
 
 
                          var i=0,j=0;
                         for(j in data['response']['PricedItineraries']) {
                             if (j=='_indexOf')
                                 break;
+                            if (j>0){
+                                $("#divContent0").clone().attr('id', 'divContent'+j).appendTo("#contentResult");
+                                $("#divContent"+j).text('');
+                            }
 
 
-                        //     // شرکت هواپیمایی
+                            //     // شرکت هواپیمایی
                             MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['MarketingAirline']['Value'];
                             if (MarketingAirline=="QESHM AIR")
-                                $('#ch1').text('قشم ایر');
+                                $('#divContent'+j+ ' #ch1').text('قشم ایر');
                             else if (MarketingAirline=="MERAJ")
-                                $('#ch1').text('معراج');
+                                $('#divContent'+j+ ' #ch1').text('معراج');
                             else if (MarketingAirline=="TABAN")
-                                $('#ch1').text('تابان ایر');
+                                $('#divContent'+j+ ' #ch1').text('تابان ایر');
                             else if (MarketingAirline=="ZAGROS")
-                                $('#ch1').text('زاگرس');
+                                $('#divContent'+j+ ' #ch1').text('زاگرس');
                             else
-                                $('#ch1').text(MarketingAirline);
+                                $('#divContent'+j+ ' #ch1').text(MarketingAirline);
 
 
                         //     // شماره پرواز
-                            $('#ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('#divContent'+j+ ' #ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['FlightNumber']));
-                        //
-                        //     var div2=$('<div id="div2" class="col-sm-2 col-xs-6"></div>').after('#div1');
-                        //
-                        //
+
+
                         //     // // زمان حرکت
 
-                            $('#ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('#divContent'+j+ ' #ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['DepartureDateTime']);
 
 
                         //     // // زمان رسیدن به مقصد
-                            $('#ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('#divContent'+j+ ' #ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['ArrivalDateTime']);
 
 
                         //      ظرفیت
-                            $('#ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+                            $('#divContent'+j+ ' #ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
                                 [0]['FlightSegment'][0]['AvailableSeatQuantity']));
 
                          // نوع بلیط
@@ -192,9 +194,12 @@
                                 [0]['FlightSegment'][0]['CabinType'];
 
                             if (cabinType=="Economy")
-                                $('#ch5').text('اکونومی');
+                                $('#divContent'+j+ ' #ch5').text('اکونومی');
                             else
-                                $('#ch5').text(cabinType);
+                                $('#divContent'+j+ ' #ch5').text(cabinType);
+
+
+
 
 
 
@@ -628,35 +633,37 @@
                         <div class="row rounded" style="padding: 20px;background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #000;border-width: 1px;margin-top: 20px">
                             <div class="col-sm-12" id="contentResult" style="visibility: visible;margin-top: 10px;margin-bottom:10px;min-height: auto">
                                 <div id="divError" style="visibility: hidden"></div>
-                                <div id="divContent" style="visibility: hidden">
-                                    <div id="div1" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch1"></h5>
-                                        <br>
-                                        <h5 id="ch11"></h5>
+                                <div id="divContents" style="visibility: hidden">
+                                    <div id="divContent0" class="col-sm-12" style="padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto">
+                                        <div id="div1" class="col-sm-2 col-xs-6">
+                                            <h5 id="ch1"></h5>
+                                            <br>
+                                            <h5 id="ch11"></h5>
+
+                                        </div>
+                                        <div id="div2" class="col-sm-2 col-xs-6">
+                                            <h5 id="ch2">زمان حرکت</h5>
+                                            <br>
+                                            <h5 id="ch22"></h5>
+                                        </div>
+                                        <div id="div3" class="col-sm-2 col-xs-6">
+                                            <h5 id="ch3">زمان رسیدن</h5>
+                                            <br>
+                                            <h5 id="ch33"></h5>
+                                        </div>
+                                        <div id="div4" class="col-sm-2 col-xs-6">
+                                            <h5 id="ch4">ظرفیت</h5>
+                                            <br>
+                                            <h5 id="ch44"></h5>
+                                        </div>
+                                        <div id="div5" class="col-sm-2 col-xs-6">
+                                            <h5 id="ch5">نوع بلیت</h5>
+                                            <br>
+                                            <h5 id="ch55"></h5>
+                                        </div>
+                                        <button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>
 
                                     </div>
-                                    <div id="div2" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch2">زمان حرکت</h5>
-                                        <br>
-                                        <h5 id="ch22"></h5>
-                                    </div>
-                                    <div id="div3" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch3">زمان رسیدن</h5>
-                                        <br>
-                                        <h5 id="ch33"></h5>
-                                    </div>
-                                    <div id="div4" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch4">ظرفیت</h5>
-                                        <br>
-                                        <h5 id="ch44"></h5>
-                                    </div>
-                                    <div id="div5" class="col-sm-2 col-xs-6">
-                                        <h5 id="ch5">نوع بلیت</h5>
-                                        <br>
-                                        <h5 id="ch55"></h5>
-                                    </div>
-                                    <button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>
-
                                 </div>
                             </div>
 
