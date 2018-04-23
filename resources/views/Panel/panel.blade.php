@@ -183,3 +183,125 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+// // ارورهای ولیدیشن
+//  if (data['DepartureDateTime']!=null){
+//      $('#divContents').attr('style','visibility:hidden');
+//      $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
+// }
+// else if (data['OriginLocation']!=null){
+//      $('#divContents').attr('style','visibility:hidden');
+//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
+// }
+// else if (data['DestinationLocation']!=null){
+//      $('#divContents').attr('style','visibility:hidden');
+//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
+// }
+//
+//
+// //ارورهای سرور
+// else if (data['response']['Errors']!=null){
+//      $('#divContents').attr('style','visibility:hidden');
+//      if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")
+//         $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
+//      else
+//          $('#divError').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');
+//
+// }
+//
+// else if(data['response']['PricedItineraries'] == null){
+//      $('#divContents').attr('style','visibility:hidden');
+//     $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
+// }
+// else{
+//     $('#divError').html('');
+//
+//         if (data['date']!= "false")
+//         $('#datepicker').val(data['date']);
+//
+//      $('#divContents').attr('style','visibility:visible');
+//
+//
+//      var i=0,j=0;
+//     for(j in data['response']['PricedItineraries']) {
+//         if (j=='_indexOf')
+//             break;
+//         if (j>0){
+//             $("#divContent0").clone().attr('id', 'divContent'+j).appendTo("#contentResult");
+//             $("#divContent"+j).text('');
+//         }
+//
+//
+//         //     // شرکت هواپیمایی
+//         MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//             [0]['FlightSegment'][0]['MarketingAirline']['Value'];
+//         if (MarketingAirline=="QESHM AIR")
+//             $('#divContent'+j+ ' #ch1').text('قشم ایر');
+//         else if (MarketingAirline=="MERAJ")
+//             $('#divContent'+j+ ' #ch1').text('معراج');
+//         else if (MarketingAirline=="TABAN")
+//             $('#divContent'+j+ ' #ch1').text('تابان ایر');
+//         else if (MarketingAirline=="ZAGROS")
+//             $('#divContent'+j+ ' #ch1').text('زاگرس');
+//         else
+//             $('#divContent'+j+ ' #ch1').text(MarketingAirline);
+//
+//
+//     //     // شماره پرواز
+//         $('#divContent'+j+ ' #ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//             [0]['FlightSegment'][0]['FlightNumber']));
+//
+//
+//     //     // // زمان حرکت
+//
+//         $('#divContent'+j+ ' #ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//             [0]['FlightSegment'][0]['DepartureDateTime']);
+//
+//
+//     //     // // زمان رسیدن به مقصد
+//     //     $('#divContent'+j+ ' #ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//     //         [0]['FlightSegment'][0]['ArrivalDateTime']);
+//
+//
+//     //      ظرفیت
+//         $('#divContent'+j+ ' #ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//             [0]['FlightSegment'][0]['AvailableSeatQuantity']));
+//
+//      // نوع بلیط
+//         var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
+//             [0]['FlightSegment'][0]['CabinType'];
+//
+//         if (cabinType=="Economy")
+//             $('#divContent'+j+ ' #ch5').text('اکونومی');
+//         else
+//             $('#divContent'+j+ ' #ch5').text(cabinType);
+//
+//
+//
+//
+//
+//
+//     } //end forin
+//
+//
+// } //end else

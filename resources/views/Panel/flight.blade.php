@@ -100,116 +100,25 @@
 
                     }).done(function (response) {
                         console.log(response);
+                        if (response['Error']=='true'){
+                            $('#success').attr('style','visibility:hidden');
+                            $('#danger').attr('style','visibility:visible');
+                            $('#danger').text('');
+                            $('#danger').text(response['response']);
+
+                        }
+                        else {
+                            $('#danger').attr('style','visibility:hidden');
+                            $('#success').attr('style','visibility:visible');
+                            $('#success').text('');
+                            $('#success').text(response['response']);
+
+                        }
+
                     });
 
 
-                    //
-                    // $('#divError').attr('style','visibility:visible');
-                    //
-                    //
-                    //
-                    //
-                    // // ارورهای ولیدیشن
-                    //  if (data['DepartureDateTime']!=null){
-                    //      $('#divContents').attr('style','visibility:hidden');
-                    //      $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
-                    // }
-                    // else if (data['OriginLocation']!=null){
-                    //      $('#divContents').attr('style','visibility:hidden');
-                    //     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
-                    // }
-                    // else if (data['DestinationLocation']!=null){
-                    //      $('#divContents').attr('style','visibility:hidden');
-                    //     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
-                    // }
-                    //
-                    //
-                    // //ارورهای سرور
-                    // else if (data['response']['Errors']!=null){
-                    //      $('#divContents').attr('style','visibility:hidden');
-                    //      if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")
-                    //         $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
-                    //      else
-                    //          $('#divError').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');
-                    //
-                    // }
-                    //
-                    // else if(data['response']['PricedItineraries'] == null){
-                    //      $('#divContents').attr('style','visibility:hidden');
-                    //     $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
-                    // }
-                    // else{
-                    //     $('#divError').html('');
-                    //
-                    //         if (data['date']!= "false")
-                    //         $('#datepicker').val(data['date']);
-                    //
-                    //      $('#divContents').attr('style','visibility:visible');
-                    //
-                    //
-                    //      var i=0,j=0;
-                    //     for(j in data['response']['PricedItineraries']) {
-                    //         if (j=='_indexOf')
-                    //             break;
-                    //         if (j>0){
-                    //             $("#divContent0").clone().attr('id', 'divContent'+j).appendTo("#contentResult");
-                    //             $("#divContent"+j).text('');
-                    //         }
-                    //
-                    //
-                    //         //     // شرکت هواپیمایی
-                    //         MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //             [0]['FlightSegment'][0]['MarketingAirline']['Value'];
-                    //         if (MarketingAirline=="QESHM AIR")
-                    //             $('#divContent'+j+ ' #ch1').text('قشم ایر');
-                    //         else if (MarketingAirline=="MERAJ")
-                    //             $('#divContent'+j+ ' #ch1').text('معراج');
-                    //         else if (MarketingAirline=="TABAN")
-                    //             $('#divContent'+j+ ' #ch1').text('تابان ایر');
-                    //         else if (MarketingAirline=="ZAGROS")
-                    //             $('#divContent'+j+ ' #ch1').text('زاگرس');
-                    //         else
-                    //             $('#divContent'+j+ ' #ch1').text(MarketingAirline);
-                    //
-                    //
-                    //     //     // شماره پرواز
-                    //         $('#divContent'+j+ ' #ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //             [0]['FlightSegment'][0]['FlightNumber']));
-                    //
-                    //
-                    //     //     // // زمان حرکت
-                    //
-                    //         $('#divContent'+j+ ' #ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //             [0]['FlightSegment'][0]['DepartureDateTime']);
-                    //
-                    //
-                    //     //     // // زمان رسیدن به مقصد
-                    //     //     $('#divContent'+j+ ' #ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //     //         [0]['FlightSegment'][0]['ArrivalDateTime']);
-                    //
-                    //
-                    //     //      ظرفیت
-                    //         $('#divContent'+j+ ' #ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //             [0]['FlightSegment'][0]['AvailableSeatQuantity']));
-                    //
-                    //      // نوع بلیط
-                    //         var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-                    //             [0]['FlightSegment'][0]['CabinType'];
-                    //
-                    //         if (cabinType=="Economy")
-                    //             $('#divContent'+j+ ' #ch5').text('اکونومی');
-                    //         else
-                    //             $('#divContent'+j+ ' #ch5').text(cabinType);
-                    //
-                    //
-                    //
-                    //
-                    //
-                    //
-                    //     } //end forin
-                    //
-                    //
-                    // } //end else
+
 
 
                 });//end function of ajax1
@@ -636,59 +545,66 @@
                         <div class="row rounded" style="padding: 20px;background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #6c757d;border-width: 1px;margin-top: 20px">
                             <div class="col-sm-12" id="contentResult" style="visibility: visible;margin-top: 10px;margin-bottom:10px;min-height: auto">
                                 <div id="divError" style="visibility: hidden"></div>
-                                <div id="divContents" style="visibility: visible">
-                                    <div id="divContent0" class="col-sm-12" style="padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border: solid #6c757d;border-width: 1px;">
-                                        <div id="div1" class="col-sm-2 col-xs-6">
-                                            <h5 id="ch1"></h5>
-                                            <br>
-                                            <h5 id="ch11"></h5>
+                                <div id="divContents">
+                                    {{--<div class="btn btn-danger">{{$Errors}}</div>--}}
 
-                                        </div>
-                                        <div id="div2" class="col-sm-4 col-xs-6">
-                                            <h5 id="ch2">تاریخ پرواز</h5>
-                                            <br>
-                                            <h5 id="ch22"></h5>
-                                        </div>
-                                        <div id="div4" class="col-sm-2 col-xs-6">
-                                            <h5 id="ch4">ظرفیت</h5>
-                                            <br>
-                                            <h5 id="ch44"></h5>
-                                        </div>
-                                        <div id="div5" class="col-sm-2 col-xs-6">
-                                            <h5 id="ch5">نوع بلیت</h5>
-                                            <br>
-                                            <h5 id="ch55"></h5>
-                                        </div>
+                                    <div class="btn btn-danger col-sm-12"  style="visibility: hidden" id="danger"></div>
+                                    <div class="btn btn-success col-sm-12"  style="visibility: hidden" id="success"></div>
+
+
+
+                                    {{--<div id="divContent0" class="col-sm-12" style="padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border: solid #6c757d;border-width: 1px;">--}}
+                                        {{--<div id="div1" class="col-sm-2 col-xs-6">--}}
+                                            {{--<h5 id="ch1"></h5>--}}
+                                            {{--<br>--}}
+                                            {{--<h5 id="ch11"></h5>--}}
+
+                                        {{--</div>--}}
+                                        {{--<div id="div2" class="col-sm-4 col-xs-6">--}}
+                                            {{--<h5 id="ch2">تاریخ پرواز</h5>--}}
+                                            {{--<br>--}}
+                                            {{--<h5 id="ch22"></h5>--}}
+                                        {{--</div>--}}
+                                        {{--<div id="div4" class="col-sm-2 col-xs-6">--}}
+                                            {{--<h5 id="ch4">ظرفیت</h5>--}}
+                                            {{--<br>--}}
+                                            {{--<h5 id="ch44"></h5>--}}
+                                        {{--</div>--}}
+                                        {{--<div id="div5" class="col-sm-2 col-xs-6">--}}
+                                            {{--<h5 id="ch5">نوع بلیت</h5>--}}
+                                            {{--<br>--}}
+                                            {{--<h5 id="ch55"></h5>--}}
+                                        {{--</div>--}}
                                         {{--<button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>--}}
 
-                                    <!-- Button trigger modal -->
-                                        <button type="button" id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12" data-toggle="modal" data-target="#exampleModalCenter">
-                                            خرید
-                                        </button>
+                                    {{--<!-- Button trigger modal -->--}}
+                                        {{--<button type="button" id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12" data-toggle="modal" data-target="#exampleModalCenter">--}}
+                                            {{--خرید--}}
+                                        {{--</button>--}}
 
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {{--<!-- Modal -->--}}
+                                        {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">--}}
+                                            {{--<div class="modal-dialog modal-dialog-centered" role="document">--}}
+                                                {{--<div class="modal-content">--}}
+                                                    {{--<div class="modal-header">--}}
+                                                        {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+                                                            {{--<span aria-hidden="true">&times;</span>--}}
+                                                        {{--</button>--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="modal-body">--}}
+                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
+                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
+                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
+                                                    {{--</div>--}}
+                                                    {{--<div class="modal-footer">--}}
+                                                        {{--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
+                                                        {{--<button type="button" class="btn btn-primary">Save changes</button>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
-                                    </div>
+                                    {{--</div>--}}
                                 </div>
                             </div>
 

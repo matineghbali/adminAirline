@@ -157,12 +157,31 @@ class AdminController extends Controller
 
     public function getFlight3(){
 
+         // ارورهای ولیدیشن
+
         if (session()->has('Errors'))       //error haye validation
         {
-            return session('Errors');
+            return ['response'=>session('Errors'),'Error'=>'true'];
         }
-        else
-            return session(('Response'));
+
+        // //ارورهای سرور
+        else{
+            $myRes=session('Response');
+                if ($myRes['response']['Errors']!=null){
+                    if($myRes['response']['Errors'][0]['Code'] =="IpNotTrustedException")
+                        return ['response'=>'IP معتبر نیست!','Error'=>'true'];
+                    else
+                        return ['response'=>$myRes['response']['Errors'][0]['ShortText'],'Error'=>'true'] ;
+                }
+
+                else if($myRes['response']['PricedItineraries'] == null){
+                    return ['response'=>"چنین پروازی وجود ندارد",'Error'=>'true'];
+                }
+                else {
+                    return ['response'=>$myRes['response'],'Error'=>'false'];
+                    }
+
+        }
     }
 
 
