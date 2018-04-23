@@ -224,6 +224,10 @@ class AdminController extends Controller
                     $DepartureDateTime=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['DepartureDateTime'];
 
+                    $ArrivalDateTime=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['ArrivalDateTime'];
+
+
 
 
                     // ظرفیت
@@ -236,6 +240,19 @@ class AdminController extends Controller
 
                     if ($cabinType=="Economy")
                         $cabinType='اکونومی';
+
+                    $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
+
+                    $ADT=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']['PassengerFare']['BaseFare']['Amount'];
+//
+//                    $CHD=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']
+//                    [1]['PassengerFare']['BaseFare']['Amount'];
+//
+//                    $INF=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']
+//                    [2]['PassengerFare']['BaseFare']['Amount'];
+
+
 
                     $html.="<div class='row'>
                                 <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #6c757d;overflow: auto\">
@@ -275,13 +292,59 @@ class AdminController extends Controller
                                                         </button>
                                                     </div>
                                                     <div class=\"modal-body\">
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                                                    
+                                                        <div class='row'>
+                                                        <table class=\"table table-striped table-responsive col-sm-10 p-4\" style='border-radius: 5px;margin: 0px auto;float: none;' >
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">مسیر پروازی</th>
+                                                              <td class=\"col-sm-5\"></td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">شماره پرواز</th>
+                                                              <td class=\"col-sm-5\">$FlightNumber</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">هواپیمایی</th>
+                                                              <td class=\"col-sm-5\">$MarketingAirline</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">هواپیما</th>
+                                                              <td class=\"col-sm-5\">$AirEquipType</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">ظرفیت</th>
+                                                              <td class=\"col-sm-5\">$AvailableSeatQuantity</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">قیمت(بزرگسال)</th>
+                                                              <td class=\"col-sm-5\">$ADT</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">قیمت برای کودک</th>
+                                                              <td class=\"col-sm-5\"></td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">قیمت برای نوزاد</th>
+                                                              <td class=\"col-sm-5\"></td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">تاریخ پرواز</th>
+                                                              <td class=\"col-sm-5\">$DepartureDateTime</td>
+                                                            </tr>
+                                                            <tr>
+                                                              <th class=\"col-sm-5\">تاریخ رسیدن به مقصد</th>
+                                                              <td class=\"col-sm-5\">$ArrivalDateTime</td>
+                                                            </tr>
+                                                        </table>
+
+                                                        </div>
+
+                                                        
                                                     </div>
                                                     <div class=\"modal-footer\">
-                                                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>
-                                                        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>
+                                                        <button type=\"button\" class=\"btn btn-primary\">رزرو</button>
+                                                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>
+
                                                     </div>
                                                 </div>
                                             </div>
