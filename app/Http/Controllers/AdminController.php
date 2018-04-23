@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
+
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     }
 
-    public function getDate($date='1397/1/4'){
+    public function getDate($date){
         //input:1397/1/21
         //input for api :"2018-04-16T00:00:00"
         //output of carbon : 2018-04-18 10:20:30
@@ -36,16 +36,18 @@ class AdminController extends Controller
         $myDate = "$miladi[0]-$miladi[1]-$miladi[2]";
         $carbon=explode(' ',Carbon::now());
 
-//        return var_dump($myDate).'<br>'.var_dump($carbon[0]);
         if ($myDate < $carbon[0]){
             $myDateForApi = "$carbon[0]T00:00:00";
             $carbon=explode('-',$carbon[0]);
-            $this->date=gregorian_to_jalali($carbon[0],$carbon[1],$carbon[2],1);
+            session(['Date'=>gregorian_to_jalali($carbon[0],$carbon[1],$carbon[2],1)]);
+//            $this->date=gregorian_to_jalali($carbon[0],$carbon[1],$carbon[2],1);
 
         }
         else{
             $myDateForApi = $myDate.'T00:00:00';
-            $this->date="false";
+            session(['Date'=>'false']);
+
+//            $this->date="false";
         }
 
         return $myDateForApi;
@@ -147,7 +149,7 @@ class AdminController extends Controller
                     [0]['FlightSegment'][0]['ArrivalDateTime']= $date ." " . $time ;
                 }
             }
-            session(['Response'=>['response'=>$response,'date'=> $this->date]]);
+            session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
 
 
         }
@@ -157,31 +159,148 @@ class AdminController extends Controller
 
     public function getFlight3(){
 
-         // ارورهای ولیدیشن
-
+        // ارورهای ولیدیشن
+        $html='';
         if (session()->has('Errors'))       //error haye validation
         {
-            return ['response'=>session('Errors'),'Error'=>'true'];
+            $response=session('Errors');
+            if ($response->first('DepartureDateTime'))
+                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
+                    $response->first('DepartureDateTime'). '</div></div><br>';
+            if ($response->first('OriginLocation'))
+                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
+                    $response->first('OriginLocation'). '</div></div><br>';
+            if ($response->first('DestinationLocation'))
+                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
+                    $response->first('DestinationLocation'). '</div></div><br>';
+
         }
 
         // //ارورهای سرور
         else{
             $myRes=session('Response');
-                if ($myRes['response']['Errors']!=null){
-                    if($myRes['response']['Errors'][0]['Code'] =="IpNotTrustedException")
-                        return ['response'=>'IP معتبر نیست!','Error'=>'true'];
-                    else
-                        return ['response'=>$myRes['response']['Errors'][0]['ShortText'],'Error'=>'true'] ;
-                }
 
-                else if($myRes['response']['PricedItineraries'] == null){
-                    return ['response'=>"چنین پروازی وجود ندارد",'Error'=>'true'];
-                }
-                else {
-                    return ['response'=>$myRes['response'],'Error'=>'false'];
-                    }
+            if (session('Date') == false)
+                session(['Date'=>'false']);
 
+            if ($myRes['response']['Errors']!=null){
+                if($myRes['response']['Errors'][0]['Code'] =="IpNotTrustedException")
+                    $response= 'IP معتبر نیست!';
+                else
+                    $response=$myRes['response']['Errors'][0]['ShortText'];
+                $html="<div class=\"btn btn-danger disabled\" >$response</div>";
+            }
+
+            else if($myRes['response']['PricedItineraries'] == null){
+                $response="چنین پروازی وجود ندارد";
+
+                $html="<div class=\"btn btn-danger disabled\" >$response</div>";
+            }
+            else {
+                $html='';
+                $responses = $myRes['response'];
+
+                foreach($responses['PricedItineraries'] as $response){
+                    // شرکت هواپیمایی
+                    $MarketingAirline=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['MarketingAirline']['Value'];
+                    if ($MarketingAirline=="QESHM AIR")
+                        $MarketingAirline='قشم ایر';
+                    else if ($MarketingAirline=="MERAJ")
+                        $MarketingAirline='معراج';
+                    else if ($MarketingAirline=="TABAN")
+                        $MarketingAirline='تابان ایر';
+                    else if ($MarketingAirline=="ZAGROS")
+                        $MarketingAirline='زاگرس';
+
+
+                    // شماره پرواز
+                    $FlightNumber=toPersianNum($response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['FlightNumber']);
+
+
+                    // زمان حرکت
+
+                    $DepartureDateTime=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['DepartureDateTime'];
+
+
+
+                    // ظرفیت
+                    $AvailableSeatQuantity=toPersianNum($response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['AvailableSeatQuantity']);
+
+                    // نوع بلیط
+                    $cabinType=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['CabinType'];
+
+                    if ($cabinType=="Economy")
+                        $cabinType='اکونومی';
+
+                    $html.="<div class='row'>
+                                <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #6c757d;overflow: auto\">
+                                        <div id=\"div1\" class=\"col-sm-2 col-xs-6\">
+                                            <h5 id=\"ch1\">$MarketingAirline</h5>
+                                            <br>
+                                            <h5 id=\"ch11\">$FlightNumber</h5>
+
+                                        </div>
+                                        <div id=\"div2\" class=\"col-sm-4 col-xs-6\">
+                                            <h5 id=\"ch2\">تاریخ پرواز</h5>
+                                            <br>
+                                            <h5 id=\"ch22\">$DepartureDateTime</h5>
+                                        </div>
+                                        <div id=\"div4\" class=\"col-sm-2 col-xs-6\">
+                                            <h5 id=\"ch4\">ظرفیت</h5>
+                                            <br>
+                                            <h5 id=\"ch44\">$AvailableSeatQuantity</h5>
+                                        </div>
+                                        <div id=\"div5\" class=\"col-sm-2 col-xs-6\">
+                                            <h5 id=\"ch5\">نوع بلیت</h5>
+                                            <br>
+                                            <h5 id=\"ch55\">$cabinType</h5>
+                                        </div>
+                                        <!-- Button trigger modal -->
+                                        <button type=\"button\" id=\"buy\" style=\"margin-top: 30px\" class=\"btn btn-success col-sm-2 col-xs-12\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
+                                            خرید
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class=\"modal fade\" id=\"exampleModalCenter\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"exampleModalCenterTitle\" aria-hidden=\"true\">
+                                            <div class=\"modal-dialog modal-dialog-centered\" role=\"document\">
+                                                <div class=\"modal-content\">
+                                                    <div class=\"modal-header\">
+                                                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+                                                            <span aria-hidden=\"true\">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class=\"modal-body\">
+                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                                                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+                                                    </div>
+                                                    <div class=\"modal-footer\">
+                                                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Close</button>
+                                                        <button type=\"button\" class=\"btn btn-primary\">Save changes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+
+                    ";
+
+
+                }//end foreach
+
+
+
+            }
         }
+        return ['html'=>$html,'date'=>session('Date')];
+
     }
 
 

@@ -33,42 +33,12 @@
     <script>
         $(document).ready(function () {
 
-
-
             $('#datepicker').persianDatepicker({
                 startDate: 'today',
                 endDate: '1400/2/2'
             });
 
-            function toPersianNum( num, dontTrim ) {
-
-                var i = 0,
-
-                    dontTrim = dontTrim || false,
-
-                    num = dontTrim ? num.toString() : num.toString().trim(),
-                    len = num.length,
-
-                    res = '',
-                    pos,
-
-                    persianNumbers = typeof persianNumber == 'undefined' ?
-                        ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'] :
-                        persianNumbers;
-
-                for (; i < len; i++)
-                    if (( pos = persianNumbers[num.charAt(i)] ))
-                        res += pos;
-                    else
-                        res += num.charAt(i);
-
-                return res;
-            }
-
             $('#form').on('submit',function (e) {
-                // if ($()==$())
-                //     $('#result').html('<div class="alert alert-danger" role="alert">مبدا و مقصد برابر است</div>');
-
                 e.preventDefault();
 
                 var _token=$('input[name="_token"]').val();
@@ -91,35 +61,23 @@
                     },
 
                 }).done(function (data) {
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/getFlight3',
-                        data: formData,
-                        contentType : false,
-                        processData: false,
+                    console.log(data);
+                        $.ajax({
+                            method: 'get',
+                            url: '/admin/getFlight3',
+                            data: formData,
+                            contentType : false,
+                            processData: false,
 
-                    }).done(function (response) {
-                        console.log(response);
-                        if (response['Error']=='true'){
-                            $('#success').attr('style','visibility:hidden');
-                            $('#danger').attr('style','visibility:visible');
-                            $('#danger').text('');
-                            $('#danger').text(response['response']);
-
-                        }
-                        else {
-                            $('#danger').attr('style','visibility:hidden');
-                            $('#success').attr('style','visibility:visible');
-                            $('#success').text('');
-                            $('#success').text(response['response']);
-
-                        }
-
-                    });
+                        }).done(function (response) {
+                            console.log(response);
+                            $('#contentResult').attr('style','visibility:visible');
+                            $('#contentResult').html(response['html']);
+                            if (response['date'] != 'false')
+                                $('#datepicker').val(response['date']);
 
 
-
-
+                        });//end function of ajax2
 
                 });//end function of ajax1
 
@@ -539,73 +497,12 @@
                         </div>
 
                     </div>
-                    {{--result from search--}}
 
+
+                    {{--result from search--}}
                     <div id="result">
                         <div class="row rounded" style="padding: 20px;background: white;margin-left: 20px;border-radius: 5px;min-height: 500px;border: solid #6c757d;border-width: 1px;margin-top: 20px">
-                            <div class="col-sm-12" id="contentResult" style="visibility: visible;margin-top: 10px;margin-bottom:10px;min-height: auto">
-                                <div id="divError" style="visibility: hidden"></div>
-                                <div id="divContents">
-                                    {{--<div class="btn btn-danger">{{$Errors}}</div>--}}
-
-                                    <div class="btn btn-danger col-sm-12"  style="visibility: hidden" id="danger"></div>
-                                    <div class="btn btn-success col-sm-12"  style="visibility: hidden" id="success"></div>
-
-
-
-                                    {{--<div id="divContent0" class="col-sm-12" style="padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border: solid #6c757d;border-width: 1px;">--}}
-                                        {{--<div id="div1" class="col-sm-2 col-xs-6">--}}
-                                            {{--<h5 id="ch1"></h5>--}}
-                                            {{--<br>--}}
-                                            {{--<h5 id="ch11"></h5>--}}
-
-                                        {{--</div>--}}
-                                        {{--<div id="div2" class="col-sm-4 col-xs-6">--}}
-                                            {{--<h5 id="ch2">تاریخ پرواز</h5>--}}
-                                            {{--<br>--}}
-                                            {{--<h5 id="ch22"></h5>--}}
-                                        {{--</div>--}}
-                                        {{--<div id="div4" class="col-sm-2 col-xs-6">--}}
-                                            {{--<h5 id="ch4">ظرفیت</h5>--}}
-                                            {{--<br>--}}
-                                            {{--<h5 id="ch44"></h5>--}}
-                                        {{--</div>--}}
-                                        {{--<div id="div5" class="col-sm-2 col-xs-6">--}}
-                                            {{--<h5 id="ch5">نوع بلیت</h5>--}}
-                                            {{--<br>--}}
-                                            {{--<h5 id="ch55"></h5>--}}
-                                        {{--</div>--}}
-                                        {{--<button id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12">خرید</button>--}}
-
-                                    {{--<!-- Button trigger modal -->--}}
-                                        {{--<button type="button" id="buy" style="margin-top: 30px" class="btn btn-success col-sm-2 col-xs-12" data-toggle="modal" data-target="#exampleModalCenter">--}}
-                                            {{--خرید--}}
-                                        {{--</button>--}}
-
-                                        {{--<!-- Modal -->--}}
-                                        {{--<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">--}}
-                                            {{--<div class="modal-dialog modal-dialog-centered" role="document">--}}
-                                                {{--<div class="modal-content">--}}
-                                                    {{--<div class="modal-header">--}}
-                                                        {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-                                                            {{--<span aria-hidden="true">&times;</span>--}}
-                                                        {{--</button>--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="modal-body">--}}
-                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
-                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
-                                                        {{--Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.--}}
-                                                    {{--</div>--}}
-                                                    {{--<div class="modal-footer">--}}
-                                                        {{--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
-                                                        {{--<button type="button" class="btn btn-primary">Save changes</button>--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-
-                                    {{--</div>--}}
-                                </div>
+                            <div class="col-sm-12" id="contentResult" style="visibility: hidden;margin-top: 10px;margin-bottom:10px;min-height: auto">
                             </div>
 
 
