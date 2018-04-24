@@ -36,9 +36,6 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
 //    $this->get('getdate','AdminController@getDate' )->name('getDate');
 //    $this->get('getFlight2', function (){
-//
-//
-//
 ////        "2018-04-16T00:00:00"
 //        $json=[
 //            "POS"=> [
@@ -60,7 +57,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 //                "DepartureDateTime"=> [
 //                    "WindowBefore"=> 0,
 //                    "WindowAfter"=> 0,
-//                    "Value"=> "2018-04-21T00:00:00"
+//                    "Value"=> "2018-04-24T00:00:00"
 //                ]
 //            ],
 //            "TravelPreferences"=> null,

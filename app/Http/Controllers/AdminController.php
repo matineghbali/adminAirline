@@ -101,15 +101,15 @@ class AdminController extends Controller
                         "PassengerTypeQuantity"=> [
                             [
                                 "Code"=> "ADT",
-                                "Quantity"=> $request['adult']
+                                "Quantity"=> $request['ADT']
                             ],
                             [
                                 "Code"=> "CHD",
-                                "Quantity"=> $request['child']
+                                "Quantity"=> $request['CHD']
                             ],
                             [
                                 "Code"=> "INF",
-                                "Quantity"=> $request['baby']
+                                "Quantity"=> $request['INF']
                             ]
                         ]
                     ]
@@ -200,6 +200,7 @@ class AdminController extends Controller
                 $html='';
                 $responses = $myRes['response'];
 
+
                 foreach($responses['PricedItineraries'] as $response){
                     // شرکت هواپیمایی
                     $MarketingAirline=$response['AirItinerary']['OriginDestinationOptions']
@@ -244,13 +245,15 @@ class AdminController extends Controller
                     $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
 
-                    $ADT=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']['PassengerFare']['BaseFare']['Amount'];
-//
-//                    $CHD=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']
-//                    [1]['PassengerFare']['BaseFare']['Amount'];
-//
-//                    $INF=$response['AirItineraryPricingInfo']['PTC_FareBreakdowns']
-//                    [2]['PassengerFare']['BaseFare']['Amount'];
+                    //قیمت کل
+                     $ItinTotalFare= $response["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
+
+                     $ADT= toPersianNum($response["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]['TotalFare']['Amount']);
+
+
+                     $CHD=toPersianNum($response['AirItineraryPricingInfo']['PTC_FareBreakdowns'][1]['PassengerFare']['TotalFare']['Amount']);
+
+                     $INF=toPersianNum($response['AirItineraryPricingInfo']['PTC_FareBreakdowns'][2]['PassengerFare']['TotalFare']['Amount']);
 
 
 
@@ -270,12 +273,12 @@ class AdminController extends Controller
                                         <div id=\"div4\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch4\">ظرفیت</h5>
                                             <br>
-                                            <h5 id=\"ch44\">$AvailableSeatQuantity</h5>
+                                            <h5 id=\"ch44\">$AvailableSeatQuantity نفر</h5>
                                         </div>
                                         <div id=\"div5\" class=\"col-sm-2 col-xs-6\">
-                                            <h5 id=\"ch5\">نوع بلیت</h5>
+                                            <h5 id=\"ch5\">$cabinType</h5>
                                             <br>
-                                            <h5 id=\"ch55\">$cabinType</h5>
+                                            <h5 id=\"ch55\">$ADT تومان</h5>
                                         </div>
                                         <!-- Button trigger modal -->
                                         <button type=\"button\" id=\"buy\" style=\"margin-top: 30px\" class=\"btn btn-success col-sm-2 col-xs-12\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
@@ -313,7 +316,7 @@ class AdminController extends Controller
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">ظرفیت</th>
-                                                              <td class=\"col-sm-5\">$AvailableSeatQuantity</td>
+                                                              <td class=\"col-sm-5\">$AvailableSeatQuantity نفر</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">قیمت(بزرگسال)</th>
@@ -321,11 +324,11 @@ class AdminController extends Controller
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">قیمت برای کودک</th>
-                                                              <td class=\"col-sm-5\"></td>
+                                                              <td class=\"col-sm-5\">$CHD</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">قیمت برای نوزاد</th>
-                                                              <td class=\"col-sm-5\"></td>
+                                                              <td class=\"col-sm-5\">$INF</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">تاریخ پرواز</th>
