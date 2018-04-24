@@ -279,7 +279,7 @@ class AdminController extends Controller
 
 
                     $html.="<div class='row'>
-                                <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #6c757d;overflow: auto\">
+                                <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #ddd;border-radius: 3px;overflow: auto\">
                                         <div id=\"div1\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch1\">$MarketingAirline</h5>
                                             <br>

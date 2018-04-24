@@ -328,7 +328,7 @@ line-height: 1.428571429;
 #content{
     color:black !important;
     padding-top:50px;
-    padding-right:80px;
+    /*padding-right:80px;*/
     min-height: 100px;
     /*background-color: #00CE6F;*/
     /*text-align: center;*/

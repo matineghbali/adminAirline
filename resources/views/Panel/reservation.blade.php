@@ -115,16 +115,43 @@
 
             </div>
             <div class="col-sm-9" id="content" >
-                <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">
-                    <h2 style="padding: 10px">
-                        {{\Illuminate\Support\Facades\Auth::user()->name}} عزیز خوش آمدید!
 
-                    </h2>
+                <div class="row">
+                    <div class="col-sm-12" >
+                        <div style="text-align: center;font-weight: 300;line-height: 1;margin: 0 0 20px 0;">اطلاعات بلیط تهران به مشهد سه شنبه ۴ اردیبهشت ۱۳۹۷</div>
+
+                        <div style="border:1px solid #ddd;margin: 0 0 10px 0;background: white">
+                            <div class="row" style="padding: 15px;text-align: center;line-height: 50px">
+                                <div class="col-md-3">
+                                    <h3>۲۱:۰۰</h3>
+                                    <span>تهران  مشهد</span>
+                                </div>
+                                <div class="col-md-2" style="padding-top: 20px">
+                                    <span class="text-muted" >هواپیمایی تابان ایر</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <ul>
+                                        <li>هواپیما: <b>بوئینگ </b></li>
+                                        <li>شماره پرواز: <b>6224</b></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-2">
+                                    <ul>
+                                        <li>پرواز  <b>چارتر </b></li>
+                                        <li>کلاس پروازی: <b>اکونومی</b></li>
+                                    </ul>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <h3>١ نفر </h3>
+                                    <span>٢٤٨,٠٠٠ تومان</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
-
-
-
 
             </div>
 
