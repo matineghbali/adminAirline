@@ -90,7 +90,7 @@
                                     <a    href="{{route('getFlight')}}"><i class="fa fa-desktop fa-3x"></i> جستجوی پرواز</a>
                                 </li>
                                 <li>
-                                    <a  href="#"><i class="fa fa-qrcode fa-3x"></i> Tabs & Panels</a>
+                                    <a  href="#"><i class="fa fa-qrcode fa-3x"></i>رزرو بلیط</a>
                                 </li>
                                 <li  >
                                     <a  href="{{route('adminPanel')}}"><i class="fa fa-bar-chart-o fa-3x"></i> Morris Charts</a>
@@ -115,46 +115,11 @@
 
             </div>
             <div class="col-sm-9" id="content" >
-                {{--<div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">--}}
-                    {{--<h2 style="padding: 10px">--}}
-                        {{--{{\Illuminate\Support\Facades\Auth::user()->name}} عزیز خوش آمدید!--}}
+                <div class="row " style="background: #5F5D5D;margin-left: 20px;min-height:80px;border-radius: 8px">
+                    <h2 style="padding: 10px">
+                        {{\Illuminate\Support\Facades\Auth::user()->name}} عزیز خوش آمدید!
 
-                    {{--</h2>--}}
-
-                {{--</div>--}}
-
-                <button id="b">jvgv</button>
-
-                <div id="result" style="visibility: hidden">
-                    <div class="row" id="row" style="background: white;margin-left: 20px;min-height:80px;border-radius: 8px;padding: 5px">
-                        <div id="div1" class="col-sm-2 col-xs-6">
-                            <h4 id="ch1">شرکت هواپیمایی</h4>
-                            <br>
-                            <h4 id="ch11">شماره پرواز</h4>
-
-                        </div>
-                        <div id="div2" class="col-sm-2 col-xs-6">
-                            <h4 id="ch2">زمان حرکت</h4>
-                            <br>
-                            <h4 id="ch22">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h4>
-                        </div>
-                        <div id="div3" class="col-sm-2 col-xs-6">
-                            <h4 id="ch3">زمان رسیدن</h4>
-                            <br>
-                            <h4 id="ch33">۰۳ اردیبهشت، ۱۳۹۷ ۱۳:۰۰:۰۰	</h4>
-                        </div>
-                        <div id="div4" class="col-sm-2 col-xs-6">
-                            <h4 id="ch4">ظرفیت</h4>
-                            <br>
-                            <h4 id="ch44">X نفر</h4>
-                        </div>
-                        <div id="div5" class="col-sm-2 col-xs-6">
-                            <h4 id="ch5">نوع بلیت</h4>
-                            <br>
-                            <h4 id="ch55">X تومان</h4>
-                        </div>
-                        <button id="buy" style="margin-top: 50px" class="btn btn-success col-sm-1 col-xs-12">خرید</button>
-                    </div>
+                    </h2>
 
                 </div>
 
@@ -169,18 +134,6 @@
 
 </div>
 
-
-
-
-
-
-
-
-</body>
-</html>
-
-
-
 </body>
 </html>
 
@@ -200,111 +153,113 @@
 
 
 
-//
-//
-//
-//
-// // ارورهای ولیدیشن
-//  if (data['DepartureDateTime']!=null){
-//      $('#divContents').attr('style','visibility:hidden');
-//      $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');
-// }
-// else if (data['OriginLocation']!=null){
-//      $('#divContents').attr('style','visibility:hidden');
-//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');
-// }
-// else if (data['DestinationLocation']!=null){
-//      $('#divContents').attr('style','visibility:hidden');
-//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');
-// }
-//
-//
-// //ارورهای سرور
-// else if (data['response']['Errors']!=null){
-//      $('#divContents').attr('style','visibility:hidden');
-//      if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")
-//         $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');
-//      else
-//          $('#divError').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');
-//
-// }
-//
-// else if(data['response']['PricedItineraries'] == null){
-//      $('#divContents').attr('style','visibility:hidden');
-//     $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');
-// }
-// else{
-//     $('#divError').html('');
-//
-//         if (data['date']!= "false")
-//         $('#datepicker').val(data['date']);
-//
-//      $('#divContents').attr('style','visibility:visible');
-//
-//
-//      var i=0,j=0;
-//     for(j in data['response']['PricedItineraries']) {
-//         if (j=='_indexOf')
-//             break;
-//         if (j>0){
-//             $("#divContent0").clone().attr('id', 'divContent'+j).appendTo("#contentResult");
-//             $("#divContent"+j).text('');
-//         }
-//
-//
-//         //     // شرکت هواپیمایی
-//         MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//             [0]['FlightSegment'][0]['MarketingAirline']['Value'];
-//         if (MarketingAirline=="QESHM AIR")
-//             $('#divContent'+j+ ' #ch1').text('قشم ایر');
-//         else if (MarketingAirline=="MERAJ")
-//             $('#divContent'+j+ ' #ch1').text('معراج');
-//         else if (MarketingAirline=="TABAN")
-//             $('#divContent'+j+ ' #ch1').text('تابان ایر');
-//         else if (MarketingAirline=="ZAGROS")
-//             $('#divContent'+j+ ' #ch1').text('زاگرس');
-//         else
-//             $('#divContent'+j+ ' #ch1').text(MarketingAirline);
-//
-//
-//     //     // شماره پرواز
-//         $('#divContent'+j+ ' #ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//             [0]['FlightSegment'][0]['FlightNumber']));
-//
-//
-//     //     // // زمان حرکت
-//
-//         $('#divContent'+j+ ' #ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//             [0]['FlightSegment'][0]['DepartureDateTime']);
-//
-//
-//     //     // // زمان رسیدن به مقصد
-//     //     $('#divContent'+j+ ' #ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//     //         [0]['FlightSegment'][0]['ArrivalDateTime']);
-//
-//
-//     //      ظرفیت
-//         $('#divContent'+j+ ' #ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//             [0]['FlightSegment'][0]['AvailableSeatQuantity']));
-//
-//      // نوع بلیط
-//         var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']
-//             [0]['FlightSegment'][0]['CabinType'];
-//
-//         if (cabinType=="Economy")
-//             $('#divContent'+j+ ' #ch5').text('اکونومی');
-//         else
-//             $('#divContent'+j+ ' #ch5').text(cabinType);
-//
-//
-//
-//
-//
-//
-//     } //end forin
-//
-//
-// } //end else
+
+
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--// // ارورهای ولیدیشن--}}
+{{--//  if (data['DepartureDateTime']!=null){--}}
+{{--//      $('#divContents').attr('style','visibility:hidden');--}}
+{{--//      $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DepartureDateTime']+'</div>');--}}
+{{--// }--}}
+{{--// else if (data['OriginLocation']!=null){--}}
+{{--//      $('#divContents').attr('style','visibility:hidden');--}}
+{{--//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['OriginLocation']+'</div>');--}}
+{{--// }--}}
+{{--// else if (data['DestinationLocation']!=null){--}}
+{{--//      $('#divContents').attr('style','visibility:hidden');--}}
+{{--//     $('#divError').html('<div class="alert alert-danger" role="alert">'+data['DestinationLocation']+'</div>');--}}
+{{--// }--}}
+{{--//--}}
+{{--//--}}
+{{--// //ارورهای سرور--}}
+{{--// else if (data['response']['Errors']!=null){--}}
+{{--//      $('#divContents').attr('style','visibility:hidden');--}}
+{{--//      if(data['response']['Errors'][0]['Code']=="IpNotTrustedException")--}}
+{{--//         $('#divError').html('<div class="alert alert-danger" role="alert">IP معتبر نیست.</div>');--}}
+{{--//      else--}}
+{{--//          $('#divError').html('<div class="alert alert-danger" role="alert">'+data['response']['Errors'][0]['ShortText']+'</div>');--}}
+{{--//--}}
+{{--// }--}}
+{{--//--}}
+{{--// else if(data['response']['PricedItineraries'] == null){--}}
+{{--//      $('#divContents').attr('style','visibility:hidden');--}}
+{{--//     $('#divError').html('<div class="alert alert-danger" role="alert">چنین پروازی وجود ندارد</div>');--}}
+{{--// }--}}
+{{--// else{--}}
+{{--//     $('#divError').html('');--}}
+{{--//--}}
+{{--//         if (data['date']!= "false")--}}
+{{--//         $('#datepicker').val(data['date']);--}}
+{{--//--}}
+{{--//      $('#divContents').attr('style','visibility:visible');--}}
+{{--//--}}
+{{--//--}}
+{{--//      var i=0,j=0;--}}
+{{--//     for(j in data['response']['PricedItineraries']) {--}}
+{{--//         if (j=='_indexOf')--}}
+{{--//             break;--}}
+{{--//         if (j>0){--}}
+{{--//             $("#divContent0").clone().attr('id', 'divContent'+j).appendTo("#contentResult");--}}
+{{--//             $("#divContent"+j).text('');--}}
+{{--//         }--}}
+{{--//--}}
+{{--//--}}
+{{--//         //     // شرکت هواپیمایی--}}
+{{--//         MarketingAirline=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//             [0]['FlightSegment'][0]['MarketingAirline']['Value'];--}}
+{{--//         if (MarketingAirline=="QESHM AIR")--}}
+{{--//             $('#divContent'+j+ ' #ch1').text('قشم ایر');--}}
+{{--//         else if (MarketingAirline=="MERAJ")--}}
+{{--//             $('#divContent'+j+ ' #ch1').text('معراج');--}}
+{{--//         else if (MarketingAirline=="TABAN")--}}
+{{--//             $('#divContent'+j+ ' #ch1').text('تابان ایر');--}}
+{{--//         else if (MarketingAirline=="ZAGROS")--}}
+{{--//             $('#divContent'+j+ ' #ch1').text('زاگرس');--}}
+{{--//         else--}}
+{{--//             $('#divContent'+j+ ' #ch1').text(MarketingAirline);--}}
+{{--//--}}
+{{--//--}}
+{{--//     //     // شماره پرواز--}}
+{{--//         $('#divContent'+j+ ' #ch11').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//             [0]['FlightSegment'][0]['FlightNumber']));--}}
+{{--//--}}
+{{--//--}}
+{{--//     //     // // زمان حرکت--}}
+{{--//--}}
+{{--//         $('#divContent'+j+ ' #ch22').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//             [0]['FlightSegment'][0]['DepartureDateTime']);--}}
+{{--//--}}
+{{--//--}}
+{{--//     //     // // زمان رسیدن به مقصد--}}
+{{--//     //     $('#divContent'+j+ ' #ch33').text(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//     //         [0]['FlightSegment'][0]['ArrivalDateTime']);--}}
+{{--//--}}
+{{--//--}}
+{{--//     //      ظرفیت--}}
+{{--//         $('#divContent'+j+ ' #ch44').text(toPersianNum(data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//             [0]['FlightSegment'][0]['AvailableSeatQuantity']));--}}
+{{--//--}}
+{{--//      // نوع بلیط--}}
+{{--//         var cabinType=data['response']['PricedItineraries'][j]['AirItinerary']['OriginDestinationOptions']--}}
+{{--//             [0]['FlightSegment'][0]['CabinType'];--}}
+{{--//--}}
+{{--//         if (cabinType=="Economy")--}}
+{{--//             $('#divContent'+j+ ' #ch5').text('اکونومی');--}}
+{{--//         else--}}
+{{--//             $('#divContent'+j+ ' #ch5').text(cabinType);--}}
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--//--}}
+{{--//     } //end forin--}}
+{{--//--}}
+{{--//--}}
+{{--// } //end else--}}
 
 
 

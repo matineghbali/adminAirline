@@ -143,7 +143,7 @@
                                     <a class="active-menu"   href="{{route('getFlight')}}"><i class="fa fa-desktop fa-3x"></i> جستجوی پرواز</a>
                                 </li>
                                 <li>
-                                    <a  href="#"><i class="fa fa-qrcode fa-3x"></i> Tabs & Panels</a>
+                                    <a href="#"><i class="fa fa-qrcode fa-3x"></i>رزرو بلیط</a>
                                 </li>
                                 <li  >
                                     <a  href="{{route('adminPanel')}}"><i class="fa fa-bar-chart-o fa-3x"></i> Morris Charts</a>

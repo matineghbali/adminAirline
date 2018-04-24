@@ -155,8 +155,6 @@ class AdminController extends Controller
         }
     }
 
-
-
     public function getFlight3(){
 
         // ارورهای ولیدیشن
@@ -214,6 +212,12 @@ class AdminController extends Controller
                     else if ($MarketingAirline=="ZAGROS")
                         $MarketingAirline='زاگرس';
 
+                    //مبدا
+                    $DepartureAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['DepartureAirport']['LocationCode'];
+
+                    //مقصد
+                    $ArrivalAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode'];
+
 
                     // شماره پرواز
                     $FlightNumber=toPersianNum($response['AirItinerary']['OriginDestinationOptions']
@@ -225,10 +229,9 @@ class AdminController extends Controller
                     $DepartureDateTime=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['DepartureDateTime'];
 
+                    //زمان رسیدن
                     $ArrivalDateTime=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['ArrivalDateTime'];
-
-
 
 
                     // ظرفیت
@@ -248,12 +251,30 @@ class AdminController extends Controller
                     //قیمت کل
                      $ItinTotalFare= $response["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
 
-                     $ADT= toPersianNum($response["AirItineraryPricingInfo"]["PTC_FareBreakdowns"][0]["PassengerFare"]['TotalFare']['Amount']);
+                     //قیمت های مجزا
+                     foreach ($response["AirItineraryPricingInfo"]["PTC_FareBreakdowns"] as $prices){
 
+                         $price[$prices["PassengerTypeQuantity"]['Code']]=toPersianNum($prices["PassengerFare"]['TotalFare']['Amount']);
+                     }
 
-                     $CHD=toPersianNum($response['AirItineraryPricingInfo']['PTC_FareBreakdowns'][1]['PassengerFare']['TotalFare']['Amount']);
+                     $ADT='';$CHD='';$INF='';
+                     if (array_key_exists('ADT',$price))
+                        $ADT="<tr>
+                                  <th class=\"col - sm - 5\">قیمت برای بزرگسال</th>
+                                  <td class=\"col - sm - 5\">".$price['ADT']."</td>
+                             </tr>";
+                     if (array_key_exists('CHD',$price))
+                        $CHD=
+                            "<tr>
+                                <th class=\"col-sm-5\">قیمت برای کودک</th>
+                                <td class=\"col-sm-5\">".$price['CHD']."</td>
+                            </tr>";
+                     if (array_key_exists('INF',$price))
+                        $INF="<tr>
+                                 <th class=\"col - sm - 5\">قیمت برای نوزاد</th>
+                                 <td class=\"col - sm - 5\">".$price['INF']."</td>
+                              </tr>";
 
-                     $INF=toPersianNum($response['AirItineraryPricingInfo']['PTC_FareBreakdowns'][2]['PassengerFare']['TotalFare']['Amount']);
 
 
 
@@ -278,7 +299,7 @@ class AdminController extends Controller
                                         <div id=\"div5\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch5\">$cabinType</h5>
                                             <br>
-                                            <h5 id=\"ch55\">$ADT تومان</h5>
+                                            <h5 id=\"ch55\">".$price['ADT']."</h5>
                                         </div>
                                         <!-- Button trigger modal -->
                                         <button type=\"button\" id=\"buy\" style=\"margin-top: 30px\" class=\"btn btn-success col-sm-2 col-xs-12\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
@@ -300,7 +321,7 @@ class AdminController extends Controller
                                                         <table class=\"table table-striped table-responsive col-sm-10 p-4\" style='border-radius: 5px;margin: 0px auto;float: none;' >
                                                             <tr>
                                                               <th class=\"col-sm-5\">مسیر پروازی</th>
-                                                              <td class=\"col-sm-5\"></td>
+                                                              <td class=\"col-sm-5\">از $DepartureAirport به $ArrivalAirport</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">شماره پرواز</th>
@@ -318,18 +339,9 @@ class AdminController extends Controller
                                                               <th class=\"col-sm-5\">ظرفیت</th>
                                                               <td class=\"col-sm-5\">$AvailableSeatQuantity نفر</td>
                                                             </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">قیمت(بزرگسال)</th>
-                                                              <td class=\"col-sm-5\">$ADT</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">قیمت برای کودک</th>
-                                                              <td class=\"col-sm-5\">$CHD</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">قیمت برای نوزاد</th>
-                                                              <td class=\"col-sm-5\">$INF</td>
-                                                            </tr>
+                                                            $ADT
+                                                            $CHD      
+                                                            $INF                                                     
                                                             <tr>
                                                               <th class=\"col-sm-5\">تاریخ پرواز</th>
                                                               <td class=\"col-sm-5\">$DepartureDateTime</td>
@@ -345,9 +357,8 @@ class AdminController extends Controller
                                                         
                                                     </div>
                                                     <div class=\"modal-footer\">
-                                                        <button type=\"button\" class=\"btn btn-primary\">رزرو</button>
-                                                        <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>
-
+                                                            <a href='/admin/reservation'><button type=\"button\" class=\"btn btn-primary\" >رزرو</button></a>
+                                                            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -369,5 +380,21 @@ class AdminController extends Controller
 
     }
 
+    public function reservation(){
+        return view('Panel/reservation');
+    }
+
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
