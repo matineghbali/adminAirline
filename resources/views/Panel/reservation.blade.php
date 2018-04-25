@@ -157,13 +157,13 @@
                                     <div class="row" >
                                         <div class="col-sm-4">
                                             <div class="form-group ">
-                                                <label for="customer-name">نام و نام خانوادگی</label>
+                                                <label for="customer-name" style="font-size: 12px;color: #666;">نام و نام خانوادگی</label>
                                                 <input class="form-control" type="text" name="customer-name">
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label for="email1">ایمیل</label>
+                                                <label for="email1" style="font-size: 12px;color: #666;">ایمیل</label>
                                                 <input type="email" class="form-control" id="email1" aria-describedby="emailHelp">
                                                 <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
                                             </div>
@@ -171,7 +171,7 @@
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group">
-                                                <label for="tel">شماره تماس</label>
+                                                <label for="tel" style="font-size: 12px;color: #666;">شماره تماس</label>
                                                 <input type="tel" class="form-control" id="tel" aria-describedby="telHelp">
                                                 <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
                                             </div>
@@ -189,7 +189,7 @@
                             {{--add field--}}
                             <div style="margin-top: 20px;padding: 15px">
                                 <div class="row">
-                                    <div class="col-md-6 col-lg-7 m-passengers__section" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px 15px;background-color: #FFF;border-radius: 6px;border: 1px solid #ededed;margin-bottom: 10px;">
+                                    <div class="col-md-6 col-lg-7 m-passengers__section" style="padding: 10px 15px;background-color: #FFF;border-radius: 6px;border: 1px solid #ededed;margin-bottom: 10px;">
                                         مشخصات مسافران را وارد کنید
                                     </div>
                                     <div class="col-md-6 col-lg-5" style="padding: 0 6px 0 0;text-align: center;">
@@ -199,7 +199,7 @@
     background-color: #FFF;
     border-radius: 4px;
     border: 1px solid #ededed;
-    height: 42px;
+    height: 43px;
     width: 32%;
     margin: 0 2px 0 0 !important;
     padding-left: 38px;">
@@ -267,36 +267,235 @@
 
                             </div>
 
+                            {{--adult info--}}
+                            <div style="border: 1px solid #d6e9c6;border-radius: 3px;background: white;margin-top: 15px">
+                                <div style="background: #d6e9c6;border-bottom: 1px solid #d6e9c6">
+                                    <h4 style="padding: 10px;font-size: 13px;margin: 0px">
+                                        اطلاعات مسافران (بزرگسال)
+                                    </h4>
+                                </div>
 
+                                <div class="row">
+                                    <div style="float: left;margin-top: 10px;padding-left: 20px">
+                                        <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
+                                        <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                                    </div>
 
+                                </div>
+                                <div class="row" style="padding: 10px">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="sex" style="font-size: 12px;color: #666;">جنسیت</label>
+                                            <select class="form-control" id="sex">
+                                                <option selected>انتخاب</option>
+                                                <option value="1">زن</option>
+                                                <option value="2">مرد</option>
+                                            </select>                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام خانوادگی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">کد ملی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">تاریخ تولد</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                            <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
-                            {{--<div style="margin-top: 20px;padding: 15px">--}}
-                                {{--<div class="row">--}}
-                                    {{--<div class="col-md-6" style="background: #f5f5f5;padding:10px;border: 1px solid #ddd;border-radius: 3px;">--}}
-                                        {{--<b>مشخصات مسافران را وارد کنید.</b>--}}
-                                    {{--</div>--}}
-                                    {{--<div class="col-md-5">--}}
-                                        {{--<div class="row" >--}}
-                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
-                                                {{--<span>+</span>--}}
-                                                {{--بزرگسال--}}
-                                            {{--</button>--}}
-                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
-                                                {{--<span>+</span>--}}
-                                                {{--بزرگسال--}}
-                                            {{--</button>--}}
-                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
-                                                {{--<span>+</span>--}}
-                                                {{--بزرگسال--}}
-                                            {{--</button>--}}
+                                        </div>
+                                    </div>
+                                </div>
 
-                                        {{--</div>--}}
-                                    {{--</div>--}}
-                                {{--</div>--}}
-                            {{--</div>--}}
+                            </div>
 
+                            {{--child info--}}
+                            <div style="border: 1px solid #d6e9c6;border-radius: 3px;background: white;margin-top: 15px">
+                                <div style="background: #d6e9c6;border-bottom: 1px solid #d6e9c6">
+                                    <h4 style="padding: 10px;font-size: 13px;margin: 0px">
+                                        اطلاعات مسافران (بزرگسال)
+                                    </h4>
+                                </div>
 
+                                <div class="row">
+                                    <div style="float: left;margin-top: 10px;padding-left: 20px">
+                                        <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
+                                        <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                                    </div>
 
+                                </div>
+                                <div class="row" style="padding: 10px">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="sex" style="font-size: 12px;color: #666;">جنسیت</label>
+                                            <select class="form-control" id="sex">
+                                                <option selected>انتخاب</option>
+                                                <option value="1">زن</option>
+                                                <option value="2">مرد</option>
+                                            </select>                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام خانوادگی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">کد ملی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">تاریخ تولد</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                            <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{--inf info--}}
+                            <div style="border: 1px solid #d6e9c6;border-radius: 3px;background: white;margin-top: 15px">
+                                <div style="background: #d6e9c6;border-bottom: 1px solid #d6e9c6">
+                                    <h4 style="padding: 10px;font-size: 13px;margin: 0px">
+                                        اطلاعات مسافران (بزرگسال)
+                                    </h4>
+                                </div>
+
+                                <div class="row">
+                                    <div style="float: left;margin-top: 10px;padding-left: 20px">
+                                        <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
+                                        <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="padding: 10px">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="sex" style="font-size: 12px;color: #666;">جنسیت</label>
+                                            <select class="form-control" id="sex">
+                                                <option selected>انتخاب</option>
+                                                <option value="1">زن</option>
+                                                <option value="2">مرد</option>
+                                            </select>                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام خانوادگی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">کد ملی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">تاریخ تولد</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                            <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{--inf info--}}
+                            <div style="border: 1px solid #d6e9c6;border-radius: 3px;background: white;margin-top: 15px">
+                                <div style="background: #d6e9c6;border-bottom: 1px solid #d6e9c6">
+                                    <h4 style="padding: 10px;font-size: 13px;margin: 0px">
+                                        اطلاعات مسافران (بزرگسال)
+                                    </h4>
+                                </div>
+
+                                <div class="row">
+                                    <div style="float: left;margin-top: 10px;padding-left: 20px">
+                                        <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
+                                        <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="padding: 10px">
+                                    <div class="col-sm-4">
+                                        <div class="form-group">
+                                            <label for="sex" style="font-size: 12px;color: #666;">جنسیت</label>
+                                            <select class="form-control" id="sex">
+                                                <option selected>انتخاب</option>
+                                                <option value="1">زن</option>
+                                                <option value="2">مرد</option>
+                                            </select>                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">نام خانوادگی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">کد ملی</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="form-group ">
+                                            <label for="customer-name" style="font-size: 12px;color: #666;">تاریخ تولد</label>
+                                            <input class="form-control" type="text" name="customer-name">
+                                            <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <div style="margin-top: 20px;margin-bottom:20px;">
+                                        <button class="btn btn-primary btn-block" type="submit">ثبت اطلاعات</button>
+                                    </div>
+                                </div>
+
+                            </div>
                         </form>
                     </div>
 
