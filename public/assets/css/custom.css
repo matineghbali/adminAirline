@@ -371,3 +371,26 @@ line-height: 1.428571429;
     /*}*/
 /*}*/
 
+
+
+
+
+
+/*for info field*/
+@media (min-width: 1200px){
+    .col-lg-7 {
+        width: 58.333333333333336%;
+    }
+}
+
+@media (min-width: 1200px){
+    .col-lg-5 {
+        width: 41.66666666666667%;
+    }
+}
+
+
+
+
+
+

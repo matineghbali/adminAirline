@@ -149,6 +149,155 @@
 
                             </div>
                         </div>
+
+                        <form>
+                            <div style="border: 1px solid #ddd;border-radius: 3px;margin-top: 20px;background: #f4f4f4">
+                                {{--customer info--}}
+                                <div style="padding: 15px">
+                                    <div class="row" >
+                                        <div class="col-sm-4">
+                                            <div class="form-group ">
+                                                <label for="customer-name">نام و نام خانوادگی</label>
+                                                <input class="form-control" type="text" name="customer-name">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="email1">ایمیل</label>
+                                                <input type="email" class="form-control" id="email1" aria-describedby="emailHelp">
+                                                <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="tel">شماره تماس</label>
+                                                <input type="tel" class="form-control" id="tel" aria-describedby="telHelp">
+                                                <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <small style="color: #0275d8">این قسمت مربوط به مشخصات خریدار است.</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{--add field--}}
+                            <div style="margin-top: 20px;padding: 15px">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-7 m-passengers__section" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px 15px;background-color: #FFF;border-radius: 6px;border: 1px solid #ededed;margin-bottom: 10px;">
+                                        مشخصات مسافران را وارد کنید
+                                    </div>
+                                    <div class="col-md-6 col-lg-5" style="padding: 0 6px 0 0;text-align: center;">
+                                        <button class="btn add-passenger m-passengers__addp" data-age="0" style="position: relative;
+    padding: 0;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);
+    background-color: #FFF;
+    border-radius: 4px;
+    border: 1px solid #ededed;
+    height: 42px;
+    width: 32%;
+    margin: 0 2px 0 0 !important;
+    padding-left: 38px;">
+                                        <span style="display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-right: 1px solid #e2e2e2;">
+                                            <svg style="width: 16px;
+    height: 16px;
+    margin: 8.5px;
+    fill: #397ff6;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg></span>
+                                            بزرگسال
+                                        </button>
+                                        <button class="btn add-passenger m-passengers__addp" data-age="0" style="position: relative;
+    padding: 0;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);
+    background-color: #FFF;
+    border-radius: 4px;
+    border: 1px solid #ededed;
+    height: 43px;
+    width: 32%;
+    margin: 0 2px 0 0 !important;
+    padding-left: 38px;">
+                                        <span style="display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-right: 1px solid #e2e2e2;">
+                                            <svg style="width: 16px;
+    height: 16px;
+    margin: 8.5px;
+    fill: #397ff6;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg></span>
+                                            کودک
+                                        </button>
+                                        <button class="btn add-passenger m-passengers__addp" data-age="0" style="position: relative;
+    padding: 0;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);
+    background-color: #FFF;
+    border-radius: 4px;
+    border: 1px solid #ededed;
+    height: 43px;
+    width: 32%;
+    margin: 0 2px 0 0 !important;
+    padding-left: 38px;">
+                                        <span style="display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-right: 1px solid #e2e2e2;">
+                                            <svg style="width: 16px;
+    height: 16px;
+    margin: 8.5px;
+    fill: #397ff6;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg></span>
+                                            نوزاد
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            {{--<div style="margin-top: 20px;padding: 15px">--}}
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-6" style="background: #f5f5f5;padding:10px;border: 1px solid #ddd;border-radius: 3px;">--}}
+                                        {{--<b>مشخصات مسافران را وارد کنید.</b>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-md-5">--}}
+                                        {{--<div class="row" >--}}
+                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
+                                                {{--<span>+</span>--}}
+                                                {{--بزرگسال--}}
+                                            {{--</button>--}}
+                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
+                                                {{--<span>+</span>--}}
+                                                {{--بزرگسال--}}
+                                            {{--</button>--}}
+                                            {{--<button type="button" class="btn col-md-4" style="box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);padding: 10px;margin-left: 10px">--}}
+                                                {{--<span>+</span>--}}
+                                                {{--بزرگسال--}}
+                                            {{--</button>--}}
+
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+
+
+
+                        </form>
                     </div>
 
                 </div>
