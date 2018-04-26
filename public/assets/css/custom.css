@@ -40,13 +40,7 @@ h2 {
 h4 {
     padding-top:10px;
 }
-.square-btn-adjust {
-    border: 0px solid transparent; 
-   -webkit-border-radius: 0px;
--moz-border-radius: 0px;
-border-radius: 0px;
 
-}
 p {
     font-size:16px;
     line-height:25px;
@@ -59,36 +53,13 @@ p {
     background-color:#F8F8F8;
 
 }
-   .noti-box {
-min-height: 100px;
-padding: 20px;
-}
 
-    .noti-box .icon-box {
-display: block;
-float: left;
-margin: 0 15px 10px 0;
-width: 70px;
-height: 70px;
-line-height: 75px;
-vertical-align: middle;
-text-align: center;
-font-size: 40px;
-}
+
 .text-box p{
     margin: 0 0 3px;
 }
-.main-text {
-    font-size: 25px;
-    font-weight:600;
-}
-.set-icon {
-    -webkit-border-radius: 50px;
--moz-border-radius: 50px;
-border-radius: 50px;
 
-}
-    .bg-color-green {
+.bg-color-green {
 background-color: #00CE6F;
 color: #fff;
 }
@@ -106,83 +77,7 @@ color: #fff;
 }
 
 
- .icon-box-right {
-display: block;
-float: right;
-margin: 0 15px 10px 0;
-width: 70px;
-height: 70px;
-line-height: 75px;
-vertical-align: middle;
-text-align: center;
-font-size: 40px;
-}
 
- .main-temp-back {
-background: #8702A8;
-color: #FFFFFF;
-font-size: 16px;
-font-weight: 300;
-text-align: center;
-}
- .main-temp-back .text-temp {
-font-size: 40px;
-}
-.back-dash {
-    padding:20px;
-    font-size:20px;
-    font-weight:500;
-      -webkit-border-radius: 0px;
--moz-border-radius: 0px;
-border-radius: 0px;
-background-color:#2EA7EB;
-color:#fff;
-}
-    .back-dash p {
-        padding-top:16px;
-        font-size:13px;
-        color:#fff;
-        line-height:25px;
-        text-align:justify;
-    }
-    .back-footer-green {
-    background-color: #009B50;
-    border-top: 0px solid #fff;
-}
-     .back-footer-red {
-    background-color: #AF0000;
-    border-top: 0px solid #fff;
-}
-     .color-bottom-txt {
-   color: #000;
-font-size: 16px;
-line-height: 30px;
-}
-     /*CHAT PANEL*/
- .chat-panel .panel-body {
-height: 450px;
-overflow-y: scroll;
-}
- .chat-box {
-margin: 0;
-padding: 0;
-list-style: none;
-}
- .chat-box li {
-margin-bottom: 15px;
-padding-bottom: 5px;
-border-bottom: 1px dotted #808080;
-}
- .chat-box li.left .chat-body {
-margin-left: 90px;
-}
- .chat-box li .chat-body p {
-margin: 0;
-color: #8d8888;
-}
-.chat-img>img {
-    margin-left:20px;
-}
 
 /*==============================================
     MENU STYLES    
@@ -211,31 +106,13 @@ font-weight: 700;
     background-color:#C90000!important;
 }
 
-.arrow {
-    float: right;
-}
 
-.fa.arrow:before {
-    content: "\f104";
-}
 
 .active > a > .fa.arrow:before {
     content: "\f107";
 }
 
 
-.nav-second-level li,
-.nav-third-level li {
-    border-bottom: none !important;
-}
-
-.nav-second-level li a {
-    padding-left: 37px;
-}
-
-.nav-third-level li a {
-    padding-left: 55px;
-}
 .sidebar-collapse , .sidebar-collapse .nav{
 	background:none;
 }
@@ -261,37 +138,7 @@ font-weight: 700;
 	outline:0;
 }
 
-.nav-second-level > li > a:before ,
-.nav-third-level > li > a:before {
-	content:"";
-	display:block;
-	position:absolute;
-	left:20px;
-	width:15px;
-	height:1px;
-	background:#ff0000;
-	top:20px;
-}
-.nav-second-level > li > a:after,
-.nav-third-level > li > a:after {
-	content:"";
-	display:block;
-	position:absolute;
-	left:20px;
-	width:1px;
-	height:100%;
-	background:#ff0000;
-	top:0px;
-	z-index:10;
-}
-.nav-second-level  > li:last-child > a:after,
-.nav-third-level  > li:last-child > a:after {
-	height:50%;
-}
-.nav-third-level > li > a:after,
-.nav-third-level > li > a:before  {
-	left:40px;
-}
+
 .navbar-side {
 	border:none;
 	background-color: #202020;
@@ -300,6 +147,7 @@ font-weight: 700;
 .navbar-cls-top {
 	background:#4D4D4D;
 	border-bottom:none;
+    margin-bottom: 0;
 	
 }
 .navbar-cls-top .navbar-brand:hover {
@@ -316,6 +164,12 @@ border:0px solid black;
 .navbar-header {
     background: #A70303;
 }
+.navbar-header-logout{
+    color: white;
+    padding: 15px 50px 5px 50px;
+    float: left;
+    font-size: 16px;
+}
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
 background-color: #B40101;
 }
@@ -329,21 +183,130 @@ background-color: #FFF;
 .nav > li > a > i {
     margin-right:10px;
 }
-/*==============================================
-    UI ELEMENTS STYLES     
-    =============================================*/
-.btn-circle {
-width: 50px;
-height: 50px;
-padding: 6px 0;
- -webkit-border-radius: 25px;
--moz-border-radius: 25px;
-border-radius: 25px;
-text-align: center;
-font-size: 12px;
-line-height: 1.428571429;
+
+/*css for reservation*/
+.panelTitle{
+    text-align: center;
+    font-weight: 300;
+    line-height: 1;
+    margin: 0 0 20px 0;
 }
 
+.panel{
+    border:1px solid #ddd;
+    margin: 0 0 10px 0;
+    background: white;
+}
+
+.panelContent{
+    padding: 15px;
+    text-align: center;
+    line-height: 50px;
+}
+.formContent{
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    margin-top: 20px;
+    background: #f4f4f4;
+}
+.customerInfo{
+    padding: 15px;
+}
+.formLabel{
+    font-size: 12px;
+    color: #666;
+}
+.addField{
+    padding: 0 6px 0 0;
+    text-align: center;
+}
+.addFieldContent{
+    margin-top: 20px;
+    padding: 15px;
+}
+.addFieldLabel{
+    padding: 10px 15px;
+    background-color: #FFF;
+    margin-bottom: 10px;
+}
+.addFieldBtn{
+    position: relative;
+    padding: 0;
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.20);
+    background-color: #FFF;
+    border-radius: 4px;
+    border: 1px solid #ededed;
+    height: 43px;
+    width: 32%;
+    margin: 0 2px 0 0 !important;
+    padding-left: 38px;
+}
+.addFieldSpan{
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border-right: 1px solid #e2e2e2;
+}
+.addFieldSVG{
+    width: 16px;
+    height: 16px;
+    margin: 8.5px;
+    fill: #397ff6;
+
+}
+/*passenger info*/
+.passsengerContent{
+    border: 1px solid #d6e9c6;
+    border-radius: 3px;
+    background: white;
+    margin-top: 15px;
+}
+
+.passengerHeader{
+    background: #d6e9c6;
+    border-bottom: 1px solid #d6e9c6;
+}
+.passengerHeader h4{
+    padding: 10px;
+    font-size: 13px;
+    margin: 0px;
+}
+.passengerPastPassenger{
+    float: left;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+.passengerContent{
+    border: 1px solid #d6e9c6;
+    border-radius: 3px;
+    background: white;
+    margin-top: 10px;
+}
+.passengerInfo{
+    padding: 10px;
+}
+.passengerBtn{
+    margin-top: 20px;
+    margin-bottom:20px;
+}
+
+/*end css of reservation*/
+
+/*start css for flight*/
+.searchBoxContent{
+    background: #5F5D5D;padding: 15px;text-align: center;margin-bottom: 30px;border-radius: 3px
+}
+.searchResult{
+    margin:15px 15px 15px 15px;
+}
+#contentResult{
+    visibility: hidden;
+}
+
+/*end css of flight*/
 /*==============================================
     MEDIA QUERIES     
     =============================================*/
