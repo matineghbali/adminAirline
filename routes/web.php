@@ -181,6 +181,11 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
         }
     });
 
+    $this->get('panell',function (){
+        return view('Panel.panell');
+    });
+
+
 
 
 

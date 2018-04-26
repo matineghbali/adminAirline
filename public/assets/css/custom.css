@@ -9,16 +9,29 @@
     direction: rtl;
 }
 
-#page-wrapper {
+ #wrapper {
     width: 100%;
-
+    background:#202020;
 }
 
+#page-wrapper {
+    padding: 15px 15px;
+    min-height: 600px;
+    background:white;
+   
+}
+#page-inner {
+    width:100%;
+    /*margin:10px 20px 10px 0px;*/
+    background-color:#fff!important;
+    padding:10px;
+    min-height:1200px;
+}
 
 .text-center {
     text-align:center;
 }
-.no-border {
+.no-boder {
     border:1px solid #f3f3f3;
 }
 h2 {
@@ -27,7 +40,13 @@ h2 {
 h4 {
     padding-top:10px;
 }
+.square-btn-adjust {
+    border: 0px solid transparent; 
+   -webkit-border-radius: 0px;
+-moz-border-radius: 0px;
+border-radius: 0px;
 
+}
 p {
     font-size:16px;
     line-height:25px;
@@ -182,7 +201,7 @@ max-width:170px;
 .navbar-cls-top .navbar-brand {
 	color: #fff;
 background: #C90000;
-/*min-width: 260px;*/
+width: 260px;
 text-align: center;
 height: 60px;
 font-size: 30px;
@@ -294,7 +313,7 @@ color:#fff;
 border:0px solid black;
      
 }
-.navbar-header1 {
+.navbar-header {
     background: #A70303;
 }
 .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
@@ -325,24 +344,15 @@ font-size: 12px;
 line-height: 1.428571429;
 }
 
-#content{
-    color:black !important;
-    padding-top:50px;
-    /*padding-right:80px;*/
-    min-height: 100px;
-    /*background-color: #00CE6F;*/
-    /*text-align: center;*/
-}
-
 /*==============================================
     MEDIA QUERIES     
     =============================================*/
  
  @media(min-width:768px) {
      #page-wrapper{
-        /*margin: 0 0 0 260px;*/
-        /*padding: 15px 30px;*/
-        min-height:1200px;
+               margin: 0 260px 0 0;
+        padding: 15px 30px;
+        min-height: 1200px;
 		
     }
 	
@@ -350,47 +360,13 @@ line-height: 1.428571429;
     .navbar-side {
         z-index: 1;
         position: absolute;
-        min-height: 1200px;
+        width: 260px;
     }
 
    .navbar {
-        border-radius: 0px;
-    }
-
-
+ border-radius: 0px; 
 }
-
-/*@media(max-width: 768px) {*/
-    /*.navbar-side {*/
-        /*z-index: 1;*/
-        /*position: absolute;*/
-        /*min-height: 700px;*/
-    /*}*/
-    /*#menu{*/
-        /*display: none;*/
-    /*}*/
-/*}*/
-
-
-
-
-
-
-/*for info field*/
-@media (min-width: 1200px){
-    .col-lg-7 {
-        width: 58.333333333333336%;
-    }
+   
 }
-
-@media (min-width: 1200px){
-    .col-lg-5 {
-        width: 41.66666666666667%;
-    }
-}
-
-
-
-
 
 
