@@ -56,8 +56,8 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
                                         "Terminal"=> null
                                     ],
                                     "Equipment"=> null,
-                                    "DepartureDateTime"=> "2018-04-25T13:00:00",
-                                    "ArrivalDateTime"=> "2018-04-25T14:15:00",
+                                    "DepartureDateTime"=> "2018-04-28T13:00:00",
+                                    "ArrivalDateTime"=> "2018-04-27T14:15:00",
                                     "StopQuantity"=> null,
                                     "RPH"=> 0,
                                     "MarketingAirline"=> null,
@@ -181,9 +181,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
         }
     });
 
-    $this->get('panell',function (){
-        return view('Panel.panell');
-    });
+
 
 
 
