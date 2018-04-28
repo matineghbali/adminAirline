@@ -269,7 +269,7 @@
                                 </div>
 
                                 <div class="col-sm-2 form-group">
-                                    <select data-live-search="true" id="ADT" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
+                                    <select data-live-search="true" id="ADT" name="ADT" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="1" data-iata="" disabled="" selected="" >12 سال به بالا</option>--}}
                                         <option value="1" selected>1 بزرگسال</option>
                                         <option value="2">2 بزرگسال</option>
@@ -284,7 +284,7 @@
                                 </div>
 
                                 <div class="col-sm-2 form-group">
-                                    <select data-live-search="true" id="CHD" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
+                                    <select data-live-search="true" id="CHD" name="CHD" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="0" data-iata="" disabled="" selected="" >2 تا 12 سال</option>--}}
                                         <option value="0" selected>0 کودک</option>
                                         <option value="1">1 کودک</option>
@@ -300,7 +300,7 @@
                                 </div>
 
                                 <div class="col-sm-2 form-group">
-                                    <select data-live-search="true" id="INF" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
+                                    <select data-live-search="true" id="INF" name="INF" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="0" data-iata=""  selected="" >0 تا 2 سال</option>--}}
                                         <option value="0" selected>0 نوزاد</option>
                                         <option value="1">1 نوزاد</option>

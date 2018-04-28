@@ -56,7 +56,7 @@ return array(
     "not_in"           => ":attribute انتخاب شده، معتبر نیست.",
     "numeric"          => ":attribute باید شامل عدد باشد.",
     "regex"            => ":attribute یک فرمت معتبر نیست",
-    "required"         => "فیلد :attribute الزامی است",
+    "required"         => " :attribute را وارد کنید",
     "required_if"      => "فیلد :attribute هنگامی که :other برابر با :value است، الزامیست.",
     "required_with"    => ":attribute الزامی است زمانی که :values موجود است.",
     "required_with_all"=> ":attribute الزامی است زمانی که :values موجود است.",
@@ -136,7 +136,14 @@ return array(
         "comment" => "کامنت",
         'DepartureDateTime' => 'تاریخ رفت',
         'OriginLocation' => 'مبدا',
-        'DestinationLocation' => 'مقصد'
+        'DestinationLocation' => 'مقصد',
+        'customer-name'=>'نام و نام خانوادگی',
+        'tel' => 'تلفن',
+        'passenger-fname' => 'نام',
+        'passenger-lname' => 'نام خانوادگی',
+        'passenger-id' => 'کد ملی',
+        'passenger-birthday'=> 'تاریخ تولد'
+
 
     ),
 );

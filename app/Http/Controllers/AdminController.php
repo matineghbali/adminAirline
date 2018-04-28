@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
@@ -55,9 +56,12 @@ class AdminController extends Controller
     }
 
     public function getFlight2(Request $request){
+
 //        session_destroy();
         session()->forget('Errors');
+        session()->forget('PassengerNumERR');
         session()->forget('Response');
+
 
         //$validation
         if ($request['OriginLocation']=='null')
@@ -71,6 +75,12 @@ class AdminController extends Controller
         ]);
         if ($validation->fails())
             session(['Errors'=>$validation->errors()]);
+        elseif (($request['INF']+$request['ADT']+$request['CHD'])>9)
+            session(['PassengerNumERR'=>"تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید"]);
+
+        elseif ($request['INF']>$request['ADT'])
+            session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
+
         else{
             $json=[
                 "POS"=> [
@@ -161,20 +171,28 @@ class AdminController extends Controller
         $html='';
         if (session()->has('Errors'))       //error haye validation
         {
-            $response=session('Errors');
-            if ($response->first('DepartureDateTime'))
+            $error=session('Errors');
+            if ($error->first('DepartureDateTime'))
                 $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $response->first('DepartureDateTime'). '</div></div><br>';
-            if ($response->first('OriginLocation'))
+                    $error->first('DepartureDateTime'). '</div></div><br>';
+            if ($error->first('OriginLocation'))
                 $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $response->first('OriginLocation'). '</div></div><br>';
-            if ($response->first('DestinationLocation'))
+                    $error->first('OriginLocation'). '</div></div><br>';
+            if ($error->first('DestinationLocation'))
                 $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $response->first('DestinationLocation'). '</div></div><br>';
+                    $error->first('DestinationLocation'). '</div></div><br>';
 
         }
 
-        // //ارورهای سرور
+        //اارور های تعداد مسافران
+        elseif (session()->has('PassengerNumERR')){
+            $error=session('PassengerNumERR');
+            $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
+                $error. '</div></div><br>';
+
+
+        }
+         //ارورهای سرور
         else{
             $myRes=session('Response');
 
@@ -382,6 +400,24 @@ class AdminController extends Controller
 
     public function reservation(){
         return view('Panel/reservation');
+    }
+
+    public function reserve(Request $request){
+        return $request->validate([
+            'customer-name'=>'required',
+            'email'=>'required|email',
+            'tel'=>'required|digits:11',
+            'sex' => [
+                'required',
+                Rule::notIn(['select']),
+            ],
+            'passenger-fname'=>'required',
+            'passenger-lname'=>'required',
+            'passenger-id'=>'required|digits:10',
+            'passenger-birthday'=>'required',
+        ]);
+
+
     }
 
 

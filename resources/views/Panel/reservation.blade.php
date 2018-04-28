@@ -1,4 +1,5 @@
 @include('Section.Header')
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -35,7 +36,8 @@
                                 </div>
                             </div>
 
-                            <form>
+                            <form method="post" action="{{route('reserve')}}">
+                                {{csrf_field()}}
                                 <div class="formContent">
                                     {{--customer info--}}
                                     <div class="customerInfo">
@@ -43,22 +45,42 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name">
+                                                    <input class="form-control" type="text" name="customer-name" value="{{old('customer-name')}}">
+                                                    @if($errors->has('customer-name'))
+                                                        <div class="invalid-feedback">
+                                                            <small class="text-danger">{{$errors->first('customer-name')}}</small>
+                                                        </div>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="email1" class="formLabel">ایمیل</label>
-                                                    <input type="email" class="form-control" id="email1" aria-describedby="emailHelp">
-                                                    <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
+                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="{{old('email')}}">
+                                                    @if($errors->has('email'))
+                                                        <div class="invalid-feedback">
+                                                            <small class="text-danger">{{$errors->first('email')}}</small>
+                                                        </div>
+                                                    @else
+                                                        <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
+                                                    @endif
+
                                                 </div>
 
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="tel" class="formLabel">شماره تماس</label>
-                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp">
-                                                    <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
+                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="{{old('tel')}}">
+                                                    @if($errors->has('tel'))
+                                                        <div class="invalid-feedback">
+                                                            <small class="text-danger">{{$errors->first('tel')}}</small>
+                                                        </div>
+                                                    @else
+                                                        <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                         </div>
@@ -121,35 +143,66 @@
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label for="sex" class="formLabel">جنسیت</label>
-                                                <select class="form-control" id="sex">
-                                                    <option selected>انتخاب</option>
-                                                    <option value="1">زن</option>
-                                                    <option value="2">مرد</option>
-                                                </select>                                        </div>
+                                                <select class="form-control" id="sex" name="sex" value="{{old('sex')}}">
+                                                    <option {{old('sex')=="select" ? 'selected' : ''}} value="select">انتخاب</option>
+                                                    <option {{old('sex')=="female" ? 'selected' : ''}} value="female">زن</option>
+                                                    <option {{old('sex')=="male" ? 'selected' : ''}} value="male">مرد</option>
+                                                </select>
+                                                @if($errors->has('sex'))
+                                                    <div class="invalid-feedback">
+                                                        <small class="text-danger">{{$errors->first('sex')}}</small>
+                                                    </div>
+                                                @endif
+
+                                            </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <label for="customer-name" class="formLabel">نام</label>
-                                                <input class="form-control" type="text" name="customer-name">
+                                                <input class="form-control" type="text" name="passenger-fname" value="{{old('passenger-fname')}}">
+                                                @if($errors->has('passenger-fname'))
+                                                    <div class="invalid-feedback">
+                                                        <small class="text-danger">{{$errors->first('passenger-fname')}}</small>
+                                                    </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                <input class="form-control" type="text" name="customer-name">
+                                                <input class="form-control" type="text" name="passenger-lname" value="{{old('passenger-lname')}}">
+                                                @if($errors->has('passenger-lname'))
+                                                    <div class="invalid-feedback">
+                                                        <small class="text-danger">{{$errors->first('passenger-lname')}}</small>
+                                                    </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <label for="customer-name" class="formLabel">کد ملی</label>
-                                                <input class="form-control" type="text" name="customer-name">
+                                                <input class="form-control" type="text" name="passenger-id" value="{{old('passenger-id')}}">
+                                                @if($errors->has('passenger-id'))
+                                                    <div class="invalid-feedback">
+                                                        <small class="text-danger">{{$errors->first('passenger-id')}}</small>
+                                                    </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="form-group ">
                                                 <label for="customer-name" class="formLabel">تاریخ تولد</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                                <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+                                                <input class="form-control" type="text" name="passenger-birthday" value="{{old('passenger-birthday')}}">
+                                                @if($errors->has('passenger-birthday'))
+                                                    <div class="invalid-feedback">
+                                                        <small class="text-danger">{{$errors->first('passenger-birthday')}}</small>
+                                                    </div>
+                                                @else
+                                                    <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+                                                @endif
 
                                             </div>
                                         </div>
@@ -158,114 +211,114 @@
                                 </div>
 
                                 {{--child info--}}
-                                <div class="passengerContent">
-                                    <div class="passengerHeader">
-                                        <h4>
-                                            اطلاعات مسافران (کودک)
-                                        </h4>
-                                    </div>
+                                {{--<div class="passengerContent">--}}
+                                    {{--<div class="passengerHeader">--}}
+                                        {{--<h4>--}}
+                                            {{--اطلاعات مسافران (کودک)--}}
+                                        {{--</h4>--}}
+                                    {{--</div>--}}
 
-                                    <div class="row">
-                                        <div class="passengerPastPassenger">
-                                            <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                            <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
-                                        </div>
+                                    {{--<div class="row">--}}
+                                        {{--<div class="passengerPastPassenger">--}}
+                                            {{--<button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>--}}
+                                            {{--<button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>--}}
+                                        {{--</div>--}}
 
-                                    </div>
-                                    <div class="row passengerInfo">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label for="sex" class="formLabel">جنسیت</label>
-                                                <select class="form-control" id="sex">
-                                                    <option selected>انتخاب</option>
-                                                    <option value="1">زن</option>
-                                                    <option value="2">مرد</option>
-                                                </select>                                        </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">نام</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">کد ملی</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">تاریخ تولد</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                                <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+                                    {{--</div>--}}
+                                    {{--<div class="row passengerInfo">--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<label for="sex" class="formLabel">جنسیت</label>--}}
+                                                {{--<select class="form-control" id="sex">--}}
+                                                    {{--<option selected>انتخاب</option>--}}
+                                                    {{--<option value="1">زن</option>--}}
+                                                    {{--<option value="2">مرد</option>--}}
+                                                {{--</select>                                        </div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">نام</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">نام خانوادگی</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">کد ملی</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">تاریخ تولد</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                                {{--<small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>--}}
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                </div>
+                                {{--</div>--}}
 
                                 {{--inf info--}}
-                                <div class="passengerContent">
-                                    <div class="passengerHeader">
-                                        <h4>
-                                            اطلاعات مسافران (نوزاد)
-                                        </h4>
-                                    </div>
+                                {{--<div class="passengerContent">--}}
+                                    {{--<div class="passengerHeader">--}}
+                                        {{--<h4>--}}
+                                            {{--اطلاعات مسافران (نوزاد)--}}
+                                        {{--</h4>--}}
+                                    {{--</div>--}}
 
-                                    <div class="row">
-                                        <div class="passengerPastPassenger">
-                                            <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                            <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
-                                        </div>
+                                    {{--<div class="row">--}}
+                                        {{--<div class="passengerPastPassenger">--}}
+                                            {{--<button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>--}}
+                                            {{--<button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>--}}
+                                        {{--</div>--}}
 
-                                    </div>
-                                    <div class="row passengerInfo">
-                                        <div class="col-sm-4">
-                                            <div class="form-group">
-                                                <label for="sex" class="formLabel">جنسیت</label>
-                                                <select class="form-control" id="sex">
-                                                    <option selected>انتخاب</option>
-                                                    <option value="1">زن</option>
-                                                    <option value="2">مرد</option>
-                                                </select>                                        </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">نام</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">کد ملی</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div class="form-group ">
-                                                <label for="customer-name" class="formLabel">تاریخ تولد</label>
-                                                <input class="form-control" type="text" name="customer-name">
-                                                <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+                                    {{--</div>--}}
+                                    {{--<div class="row passengerInfo">--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group">--}}
+                                                {{--<label for="sex" class="formLabel">جنسیت</label>--}}
+                                                {{--<select class="form-control" id="sex">--}}
+                                                    {{--<option selected>انتخاب</option>--}}
+                                                    {{--<option value="1">زن</option>--}}
+                                                    {{--<option value="2">مرد</option>--}}
+                                                {{--</select>                                        </div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">نام</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">نام خانوادگی</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">کد ملی</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<div class="form-group ">--}}
+                                                {{--<label for="customer-name" class="formLabel">تاریخ تولد</label>--}}
+                                                {{--<input class="form-control" type="text" name="customer-name">--}}
+                                                {{--<small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>--}}
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                </div>
+                                {{--</div>--}}
 
 
                                 <div class="row">

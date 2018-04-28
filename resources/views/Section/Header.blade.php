@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="/assets/css/fontiran.css">
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+
     <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
