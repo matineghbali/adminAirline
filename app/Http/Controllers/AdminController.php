@@ -11,7 +11,6 @@ class AdminController extends Controller
 {
     public $date="false";
 
-
     public function index(){
         return view('Panel/panel');
 
@@ -57,7 +56,6 @@ class AdminController extends Controller
 
     public function getFlight2(Request $request){
 
-//        session_destroy();
         session()->forget('Errors');
         session()->forget('PassengerNumERR');
         session()->forget('Response');
@@ -143,22 +141,6 @@ class AdminController extends Controller
             $err = curl_error($curl);
             curl_close($curl);
             $response=json_decode($response,true);
-            if ($response['PricedItineraries']!= null){
-                for ($i=0;$i<count($response['PricedItineraries']);$i++){
-                    $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['DepartureDateTime']);
-                    $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
-                    $time=toPersianNum($arrival[1]);
-                    $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['DepartureDateTime']= $date ." " . $time ;
-                    $arrival=explode('T',$response['PricedItineraries'][$i]['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['ArrivalDateTime']);
-                    $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
-                    $time=toPersianNum($arrival[1]);
-                    $response['PricedItineraries'][0]['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['ArrivalDateTime']= $date ." " . $time ;
-                }
-            }
             session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
 
 
@@ -230,11 +212,15 @@ class AdminController extends Controller
                     else if ($MarketingAirline=="ZAGROS")
                         $MarketingAirline='زاگرس';
 
+                    // تجهیزات هواپیمایی
+                    $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
+
                     //مبدا
-                    $DepartureAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['DepartureAirport']['LocationCode'];
+                    $DepartureAirport=CodeToCity($response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['DepartureAirport']['LocationCode']);
 
                     //مقصد
-                    $ArrivalAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode'];
+                    $ArrivalAirport=CodeToCity($response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode']);
 
 
                     // شماره پرواز
@@ -270,28 +256,68 @@ class AdminController extends Controller
                      $ItinTotalFare= $response["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
 
                      //قیمت های مجزا
+                    $passengerNumber=0;
                      foreach ($response["AirItineraryPricingInfo"]["PTC_FareBreakdowns"] as $prices){
+                         $passengerNumber+=$prices["PassengerTypeQuantity"]['Quantity'];
+                         $price[$prices["PassengerTypeQuantity"]['Code']]=
+                             [toPersianNum($prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]['Quantity']),$prices["PassengerTypeQuantity"]['Quantity']];
 
-                         $price[$prices["PassengerTypeQuantity"]['Code']]=toPersianNum($prices["PassengerFare"]['TotalFare']['Amount']);
                      }
 
-                     $ADT='';$CHD='';$INF='';
-                     if (array_key_exists('ADT',$price))
-                        $ADT="<tr>
+                     $ADT='';$CHD='';$INF='';$ADTNumber=0;$CHDNumber=0;$INFNumber=0;
+                     if (array_key_exists('ADT',$price)){
+                         $ADT="<tr>
                                   <th class=\"col - sm - 5\">قیمت برای بزرگسال</th>
-                                  <td class=\"col - sm - 5\">".$price['ADT']."</td>
+                                  <td class=\"col - sm - 5\">".$price['ADT'][0]."</td>
                              </tr>";
-                     if (array_key_exists('CHD',$price))
-                        $CHD=
-                            "<tr>
+                         $ADTNumber=$price['ADT'][1];
+                     }
+                     if (array_key_exists('CHD',$price)){
+                         $CHD=
+                             "<tr>
                                 <th class=\"col-sm-5\">قیمت برای کودک</th>
-                                <td class=\"col-sm-5\">".$price['CHD']."</td>
+                                <td class=\"col-sm-5\">".$price['CHD'][0]."</td>
                             </tr>";
-                     if (array_key_exists('INF',$price))
-                        $INF="<tr>
+                         $CHDNumber=$price['CHD'][1];
+                     }
+                     if (array_key_exists('INF',$price)){
+                         $INF="<tr>
                                  <th class=\"col - sm - 5\">قیمت برای نوزاد</th>
-                                 <td class=\"col - sm - 5\">".$price['INF']."</td>
+                                 <td class=\"col - sm - 5\">".$price['INF'][0]."</td>
                               </tr>";
+                         $INFNumber=$price['INF'][1];
+
+                     }
+
+                    $dateTime=explode('T',$DepartureDateTime);
+                    $time=explode(':',$dateTime[1]);
+
+                    session(['data'=>[
+                        'DepartureAirport'=>$DepartureAirport,
+                        'ArrivalAirport' => $ArrivalAirport,
+                        'DepartureDate' => toPersianNum(jdate($dateTime[0])->format('%A	%d	%B	%Y	')) ,
+                        'DepartureTime' => toPersianNum($time[0].':'.$time[1]),
+                        'MarketingAirline' => $MarketingAirline,
+                        'FlightNumber' => $FlightNumber,
+                        'cabinType' => $cabinType,
+                        'passengerNumber'=>$passengerNumber,
+                        'price'=>toPersianNum($ItinTotalFare),
+                        'AirEquipType'=>$AirEquipType,
+                        'ADTNumber'=>$ADTNumber,
+                        'CHDNumber'=>$CHDNumber,
+                        'INFNumber'=>$INFNumber
+                    ]]);
+
+
+                    $Departure=explode('T',$DepartureDateTime);
+                    $date=toPersianNum(jdate($Departure[0])->format('%d %B، %Y'));
+                    $time=toPersianNum($Departure[1]);
+                    $DepartureDateTime= $date ." " . $time ;
+                    $arrival=explode('T',$ArrivalDateTime);
+                    $date=toPersianNum(jdate($arrival[0])->format('%d %B، %Y'));
+                    $time=toPersianNum($arrival[1]);
+                    $ArrivalDateTime= $date ." " . $time ;
+
 
 
 
@@ -317,7 +343,7 @@ class AdminController extends Controller
                                         <div id=\"div5\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch5\">$cabinType</h5>
                                             <br>
-                                            <h5 id=\"ch55\">".$price['ADT']."</h5>
+                                            <h5 id=\"ch55\">".$price['ADT'][0]."</h5>
                                         </div>
                                         <!-- Button trigger modal -->
                                         <button type=\"button\" id=\"buy\" style=\"margin-top: 30px\" class=\"btn btn-success col-sm-2 col-xs-12\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
@@ -388,6 +414,7 @@ class AdminController extends Controller
                     ";
 
 
+
                 }//end foreach
 
 
@@ -395,11 +422,70 @@ class AdminController extends Controller
             }
         }
         return ['html'=>$html,'date'=>session('Date')];
-
     }
 
+
+
     public function reservation(){
-        return view('Panel/reservation');
+        $passengerInfo="<div class=\"passengerContent\">
+                                    <div class=\"passengerHeader\">
+                                        <h4>
+                                            اطلاعات مسافران (بزرگسال)
+                                        </h4>
+                                    </div>
+
+                                    <div class=\"row\">
+                                        <div class=\"passengerPastPassenger\">
+                                            <button type=\"button\" class=\"btn btn-primary btn-xs\"><i class=\"fa fa-th-list\"></i> مسافران سابق</button>
+                                            <button class=\"btn btn-danger btn-xs\"><i class=\"fa fa-remove\"></i></button>
+                                        </div>
+
+                                    </div>
+                                    <div class=\"row passengerInfo\">
+                                        <div class=\"col-sm-4\">
+                                            <div class=\"form-group\">
+                                                <label for=\"sex\" class=\"formLabel\">جنسیت</label>
+                                                <select class=\"form-control\" id=\"sex\" name=\"sex\" >
+                                                    <option  value=\"female\">انتخاب</option>
+                                                    <option  value=\"female\">زن</option>
+                                                    <option value=\"male\">مرد</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                        <div class=\"col-sm-4\">
+                                            <div class=\"form-group \">
+                                                <label for=\"customer-name\" class=\"formLabel\">نام</label>
+                                                <input class=\"form-control\" type=\"text\" name=\"passenger-fname\" value=".old('passenger-fname').">
+
+                                            </div>
+                                        </div>
+                                        <div class=\"col-sm-4\">
+                                            <div class=\"form-group \">
+                                                <label for=\"customer-name\" class=\"formLabel\">نام خانوادگی</label>
+                                                <input class=\"form-control\" type=\"text\" name=\"passenger-lname\" value=".old('passenger-lname').">
+
+                                            </div>
+                                        </div>
+                                        <div class=\"col-sm-4\">
+                                            <div class=\"form-group \">
+                                                <label for=\"customer-name\" class=\"formLabel\">کد ملی</label>
+                                                <input class=\"form-control\" type=\"text\" name=\"passenger-id\" value=".old('passenger-id').">
+
+                                            </div>
+                                        </div>
+                                        <div class=\"col-sm-4\">
+                                            <div class=\"form-group \">
+                                                <label for=\"customer-name\" class=\"formLabel\">تاریخ تولد</label>
+                                                <input class=\"form-control\" type=\"text\" name=\"passenger-birthday\" value=".old('passenger-birthday').">
+                                                    <small id=\"telHelp\" class=\"form-text text-muted\">مثال: ۱۳۹۱/۰۲/۰۶</small>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                               </div>";
+        return view('Panel/reservation',['data'=>session('data'),'PassengerInfo'=>$passengerInfo]);
     }
 
     public function reserve(Request $request){
