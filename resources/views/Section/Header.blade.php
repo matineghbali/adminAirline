@@ -9,10 +9,18 @@
     <link rel="stylesheet" href="/assets/css/fontiran.css">
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
 
+
+    <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
+
+
+
     <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
+
+    <script type="text/javascript" src="/assests/js/bootstrapValidator.js"></script>
+
 
     {{--persianDatepicker--}}
     <script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>
@@ -21,15 +29,10 @@
 
 
 
-
     {{--js for toggleButton--}}
     <script src="/assets/js/bootstrap.min.js"></script>
     {{--<script src="/assets/js/jquery.metisMenu.js"></script>--}}
     {{--<script src="/assets/js/custom.js"></script>--}}
-
-
-
-
 
 </head>
 <body>

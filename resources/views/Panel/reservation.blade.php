@@ -1,50 +1,124 @@
-@include('Section.Header')
 
-            <script>
-                $(document).ready(function () {
-                    var ADTNumber= {{$data['ADTNumber']}};
-                    var CHDNumber= {{$data['CHDNumber']}};
-                    var INFNumber= {{$data['INFNumber']}};
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدیریت</title>
 
-                    if (CHDNumber>0){
-                        $("#ADT").after($("#ADT").clone().attr('id','CHD'));
-                        $("#CHD .h4Passenger").text('اطلاعات مسافران (کودک)');
-                        $("#CHD .passengerBody").attr('id','passengerBodyCHD0')
-
-                    }
-
-                    if (INFNumber>0) {
-                        $("#CHD").after($("#ADT").clone().attr('id', 'INF'));
-                        $("#INF .h4Passenger").text('اطلاعات مسافران (نوزاد)');
-                        $("#INF .passengerBody").attr('id','passengerBodyINF0')
-
-                    }
-
-                    for (i=1;i<ADTNumber;i++){
-                        $("#ADT").append($('#passengerBodyADT0').clone().attr('id','passengerBodyADT'+i));
-                        if (i!= ADTNumber-1)
-                            $('#passengerBodyADT'+i).after('<hr>');
-                    }
+    <link rel="stylesheet" href="/assets/css/fontiran.css">
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
 
 
-
-                    for (i=1;i<CHDNumber;i++){
-                        $("#CHD").append($('#passengerBodyCHD0').clone().attr('id','passengerBodyCHD'+i));
-                        if (i!= CHDNumber-1)
-                            $('#passengerBodyCHD'+i).after('<hr>');
-
-                    }
-
-                    for (i=1;i<INFNumber;i++){
-                        $("#INF").append($('#passengerBodyINF0').clone().attr('id','passengerBodyINF'+i));
-                        if (i!= CHDNumber-1)
-                            $('#passengerBodyINF'+i).after('<hr>');
-
-                    }
+    <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/assets/css/custom.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
 
 
-                });
-            </script>
+    <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
+    <script type="text/javascript" src="/assets/js/reservation.js"></script>
+
+    {{--persianDatepicker--}}
+    {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
+    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
+
+
+    {{--js for toggleButton--}}
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.metisMenu.js"></script>
+    {{--<script src="/assets/js/custom.js"></script>--}}
+
+
+    <script>
+        $(document).ready(function () {
+            var ADTNumber= {{$data['ADTNumber']}};
+            var CHDNumber= {{$data['CHDNumber']}};
+            var INFNumber= {{$data['INFNumber']}};
+
+            if (CHDNumber>0){
+                $("#ADT").after($("#ADT").clone().attr('id','CHD'));
+                $("#CHD .h4Passenger").text('اطلاعات مسافران (کودک)');
+                $("#CHD .passengerBody").attr('id','CHD0')
+
+            }
+
+            if (INFNumber>0) {
+                $("#CHD").after($("#ADT").clone().attr('id', 'INF'));
+                $("#INF .h4Passenger").text('اطلاعات مسافران (نوزاد)');
+                $("#INF .passengerBody").attr('id','INF0')
+
+            }
+
+            for (i=1;i<ADTNumber;i++){
+                $("#ADT").append($('#ADT0').clone().attr('id','ADT'+i));
+                if (i!= ADTNumber-1)
+                    $('#passengerBodyADT'+i).after('<hr>');
+            }
+
+
+
+            for (i=1;i<CHDNumber;i++){
+                $("#CHD").append($('#CHD0').clone().attr('id','CHD'+i));
+                if (i!= CHDNumber-1)
+                    $('#passengerBodyCHD'+i).after('<hr>');
+
+            }
+
+            for (i=1;i<INFNumber;i++){
+                $("#INF").append($('#INF0').clone().attr('id','INF'+i));
+                if (i!= CHDNumber-1)
+                    $('#passengerBodyINF'+i).after('<hr>');
+
+            }
+
+
+        });
+    </script>
+
+
+
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default navbar-cls-top " role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{route('adminPanel')}}">پنل مدیریت</a>
+        </div>
+        <div class="navbar-header-logout">
+            {{toPersianNum(jdate()->format('%d %B، %Y'))}}
+            <a href="/logout" class="btn btn-danger">خروج</a>
+        </div>
+    </nav>
+    <!-- /. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li class="text-center">
+                    <img src="/assets/img/find_user.png" class="user-image img-responsive"/>
+                </li>
+                <li>
+                    <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
+                </li>
+                <li>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
+                </li>
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper" >
+        <div id="page-inner">
 
             adt:{{$data['ADTNumber']}}
             chd:{{$data['CHDNumber']}}
@@ -85,7 +159,8 @@
                                 </div>
                             </div>
 
-                            <form method="post" action="{{route('reserve')}}">
+
+                            <form id="defaultForm" method="post" action="target.php">
                                 {{csrf_field()}}
                                 <div class="formContent">
                                     {{--customer info--}}
@@ -94,26 +169,15 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name" value="{{old('customer-name')}}">
-                                                    @if($errors->has('customer-name'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('customer-name')}}</small>
-                                                        </div>
-                                                    @endif
+                                                    <input class="form-control" type="text" name="customer-name" >
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="email1" class="formLabel">ایمیل</label>
-                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="{{old('email')}}">
-                                                    @if($errors->has('email'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('email')}}</small>
-                                                        </div>
-                                                    @else
+                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email">
                                                         <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
-                                                    @endif
 
                                                 </div>
 
@@ -121,14 +185,8 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="tel" class="formLabel">شماره تماس</label>
-                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="{{old('tel')}}">
-                                                    @if($errors->has('tel'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('tel')}}</small>
-                                                        </div>
-                                                    @else
+                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
-                                                    @endif
 
                                                 </div>
                                             </div>
@@ -181,7 +239,7 @@
                                         </h4>
                                     </div>
 
-                                    <div class="passengerBody" id="passengerBodyADT0">
+                                    <div class="passengerBody" id="ADT0">
                                         <div class="row">
                                             <div class="passengerPastPassenger">
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
@@ -193,66 +251,40 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" id="sex" name="sex" value="{{old('sex')}}">
-                                                        <option {{old('sex')=="select" ? 'selected' : ''}} value="select">انتخاب</option>
-                                                        <option {{old('sex')=="female" ? 'selected' : ''}} value="female">زن</option>
-                                                        <option {{old('sex')=="male" ? 'selected' : ''}} value="male">مرد</option>
+                                                    <select class="form-control" id="gender" name="gender" required>
+                                                        <option value="">انتخاب</option>
+                                                        <option value="female">زن</option>
+                                                        <option value="male">مرد</option>
                                                     </select>
-                                                    @if($errors->has('sex'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('sex')}}</small>
-                                                        </div>
-                                                    @endif
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname" value="{{old('passenger-fname')}}">
-                                                    @if($errors->has('passenger-fname'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('passenger-fname')}}</small>
-                                                        </div>
-                                                    @endif
+                                                    <input class="form-control" type="text" name="passenger-fname">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname" value="{{old('passenger-lname')}}">
-                                                    @if($errors->has('passenger-lname'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('passenger-lname')}}</small>
-                                                        </div>
-                                                    @endif
+                                                    <input class="form-control" type="text" name="passenger-lname">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id" value="{{old('passenger-id')}}">
-                                                    @if($errors->has('passenger-id'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('passenger-id')}}</small>
-                                                        </div>
-                                                    @endif
+                                                    <input class="form-control" type="text" name="passenger-id">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday" value="{{old('passenger-birthday')}}">
-                                                    @if($errors->has('passenger-birthday'))
-                                                        <div class="invalid-feedback">
-                                                            <small class="text-danger">{{$errors->first('passenger-birthday')}}</small>
-                                                        </div>
-                                                    @else
+                                                    <input class="form-control" type="text" name="passenger-birthday">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
-                                                    @endif
 
                                                 </div>
                                             </div>
@@ -269,11 +301,17 @@
                                     <div class="col-sm-6">
                                         <div class="passengerBtn">
                                             <button class="btn btn-primary btn-block" type="submit">ثبت اطلاعات</button>
+                                            <button type="button" class="btn btn-info" id="validateBtn">Manual validate</button>
+
                                         </div>
                                     </div>
 
                                 </div>
                             </form>
+
+
+
+
                         </div>
 
                     </div>
