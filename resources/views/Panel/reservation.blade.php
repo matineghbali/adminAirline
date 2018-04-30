@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,49 +33,102 @@
 
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             var ADTNumber= {{$data['ADTNumber']}};
             var CHDNumber= {{$data['CHDNumber']}};
             var INFNumber= {{$data['INFNumber']}};
 
+
+            for(i=1;i<ADTNumber;i++){
+                var template     = "passengerBody",
+                    $templateEle = $('#' + template + 'TemplateADT'),
+                    $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
+
+                var $el= $row.find('select').eq(0).attr('name', template + '[]');
+                $('#defaultForm').bootstrapValidator('addField', $el);
+
+
+                for (j=0;j<=3;j++)
+                {
+                    var  $el = $row.find('input').eq(j).attr('name', template + '[]');
+                    $('#defaultForm').bootstrapValidator('addField', $el);
+
+                }
+
+
+
+                $row.on('click', '.removeButton', function(e) {
+                    $('#defaultForm').bootstrapValidator('removeField', $el);
+                    $row.remove();
+                });
+            }
+
             if (CHDNumber>0){
-                $("#ADT").after($("#ADT").clone().attr('id','CHD'));
-                $("#CHD .h4Passenger").text('اطلاعات مسافران (کودک)');
-                $("#CHD .passengerBody").attr('id','CHD0')
+                // $("#ADT").after($("#ADT0").clone().attr('id','CHD0'));
+                // $("#CHD .h4Passenger").text('اطلاعات مسافران (کودک)');
+                // $('#CHD .passengerBody').remove();
+                $('#CHD').css("visibility", "visible");
+                $('#CHD').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateCHD'))
+                for(i=0;i<CHDNumber;i++){
+                    var template     = "passengerBody",
+                        $templateEle = $('#' + template + 'TemplateCHD'),
+                        $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
 
+                    var    $el          = $row.find('select').eq(0).attr('name', template + '[]');
+                    $('#defaultForm').bootstrapValidator('addField', $el);
+
+
+                    for (j=0;j<=3;j++)
+                    {
+                        var  $el = $row.find('input').eq(j).attr('name', template + '[]');
+                        $('#defaultForm').bootstrapValidator('addField', $el);
+                        // $el.attr('placeholder', 'Textbox #' + index);
+
+                    }
+
+
+
+                    $row.on('click', '.removeButton', function(e) {
+                        $('#defaultForm').bootstrapValidator('removeField', $el);
+                        $row.remove();
+                    });
+                }
             }
 
-            if (INFNumber>0) {
-                $("#CHD").after($("#ADT").clone().attr('id', 'INF'));
-                $("#INF .h4Passenger").text('اطلاعات مسافران (نوزاد)');
-                $("#INF .passengerBody").attr('id','INF0')
+            if (INFNumber>0){
+                $('#INF').css("visibility", "visible");
+                $('#INF').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateINF'))
+                for(i=0;i<INFNumber;i++){
+                    var template     = "passengerBody",
+                        $templateEle = $('#' + template + 'TemplateINF'),
+                        $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
 
-            }
-
-            for (i=1;i<ADTNumber;i++){
-                $("#ADT").append($('#ADT0').clone().attr('id','ADT'+i));
-                if (i!= ADTNumber-1)
-                    $('#passengerBodyADT'+i).after('<hr>');
-            }
+                    var $el= $row.find('select').eq(0).attr('name', template + '[]');
+                    $('#defaultForm').bootstrapValidator('addField', $el);
 
 
+                    for (j=0;j<=3;j++)
+                    {
+                        var  $el = $row.find('input').eq(j).attr('name', template + '[]');
+                        $('#defaultForm').bootstrapValidator('addField', $el);
+                        // $el.attr('placeholder', 'Textbox #' + index);
 
-            for (i=1;i<CHDNumber;i++){
-                $("#CHD").append($('#CHD0').clone().attr('id','CHD'+i));
-                if (i!= CHDNumber-1)
-                    $('#passengerBodyCHD'+i).after('<hr>');
+                    }
 
-            }
 
-            for (i=1;i<INFNumber;i++){
-                $("#INF").append($('#INF0').clone().attr('id','INF'+i));
-                if (i!= CHDNumber-1)
-                    $('#passengerBodyINF'+i).after('<hr>');
-
+                    $row.on('click', '.removeButton', function(e) {
+                        $('#defaultForm').bootstrapValidator('removeField', $el);
+                        $row.remove();
+                    });
+                }
             }
 
 
         });
+
+
+
+
     </script>
 
 
@@ -160,6 +213,7 @@
                             </div>
 
 
+
                             <form id="defaultForm" method="post" action="target.php">
                                 {{csrf_field()}}
                                 <div class="formContent">
@@ -201,25 +255,26 @@
                                 </div>
 
                                 {{--add field--}}
+
                                 <div class="addFieldContent">
                                     <div class="row">
                                         <div class="col-md-6 col-lg-7 m-passengers__section addFieldLabel">
                                             مشخصات مسافران را وارد کنید:
                                         </div>
                                         <div class="col-md-6 col-lg-5 addField">
-                                            <button class="btn add-passenger m-passengers__addp addFieldBtn" data-age="0">
+                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addADT" data-template="passengerBody">
                                                 <span class="addFieldSpan" >
                                                     <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
                                                 </span>
                                                 بزرگسال
                                             </button>
-                                            <button class="btn add-passenger m-passengers__addp addFieldBtn" data-age="0">
+                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addCHD" data-template="passengerBody">
                                                 <span class="addFieldSpan" >
                                                     <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
                                                 </span>
                                                 کودک
                                             </button>
-                                            <button class="btn add-passenger m-passengers__addp addFieldBtn" data-age="0">
+                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addINF" data-template="passengerBodyTemplateADT">
                                                 <span class="addFieldSpan" >
                                                     <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
                                                 </span>
@@ -243,7 +298,7 @@
                                         <div class="row">
                                             <div class="passengerPastPassenger">
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                                                <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-remove removeButton"></i></button>
                                             </div>
 
                                         </div>
@@ -251,7 +306,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" id="gender" name="gender" required>
+                                                    <select class="form-control" name="gender[]" required>
                                                         <option value="">انتخاب</option>
                                                         <option value="female">زن</option>
                                                         <option value="male">مرد</option>
@@ -262,28 +317,28 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname">
+                                                    <input class="form-control" type="text" name="passenger-fname[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname">
+                                                    <input class="form-control" type="text" name="passenger-lname[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id">
+                                                    <input class="form-control" type="text" name="passenger-id[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday">
+                                                    <label for="customer-name" class="formLabel" >تاریخ تولد</label>
+                                                    <input class="form-control" type="text" name="passenger-birthday[]">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -291,9 +346,83 @@
                                         </div>
 
                                     </div>
-                                    <hr>
+
+
+                                    <div class="passengerBody hide" id="passengerBodyTemplateADT">
+                                        <div class="row">
+                                            <div class="passengerPastPassenger">
+                                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
+                                                <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-remove removeButton"></i></button>
+                                            </div>
+
+                                        </div>
+                                        <div class="row passengerInfo">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="sex" class="formLabel">جنسیت</label>
+                                                    <select class="form-control" name="gender[]" required>
+                                                        <option value="">انتخاب</option>
+                                                        <option value="female">زن</option>
+                                                        <option value="male">مرد</option>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group ">
+                                                    <label for="customer-name" class="formLabel">نام</label>
+                                                    <input class="form-control" type="text" name="passenger-fname[]">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group ">
+                                                    <label for="customer-name" class="formLabel">نام خانوادگی</label>
+                                                    <input class="form-control" type="text" name="passenger-lname[]">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group ">
+                                                    <label for="customer-name" class="formLabel">کد ملی</label>
+                                                    <input class="form-control" type="text" name="passenger-id[]">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group ">
+                                                    <label for="customer-name" class="formLabel" >تاریخ تولد</label>
+                                                    <input class="form-control" type="text" name="passenger-birthday[]">
+                                                    <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                {{--CHD info--}}
+                                <div class="passengerContent" id="CHD" style="visibility: hidden">
+                                    <div class="passengerHeader">
+                                        <h4 class="h4Passenger">
+                                            اطلاعات مسافران (کودک)
+                                        </h4>
+                                    </div>
 
                                 </div>
+
+                                {{--INF info--}}
+                                <div class="passengerContent" id="INF" style="visibility: hidden">
+                                    <div class="passengerHeader">
+                                        <h4 class="h4Passenger">
+                                            اطلاعات مسافران (نوزاد)
+                                        </h4>
+                                    </div>
+
+                                </div>
+
+
 
 
                                 <div class="row">
