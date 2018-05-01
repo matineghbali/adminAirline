@@ -1,51 +1,5 @@
 $(document).ready(function() {
 
-    $('.addADT').on('click', function () {
-        AddPassengerBody('TemplateADT')
-
-    });
-    $('.addCHD').on('click', function () {
-        if ($('#CHD').css("visibility", "hidden")){
-            $('#CHD').css("visibility", "visible");
-            $('#CHD').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateCHD'));
-        }
-        AddPassengerBody('TemplateCHD')
-
-    });
-    $('.addINF').on('click', function () {
-        if ($('#INF').css("visibility", "hidden")){
-            $('#INF').css("visibility", "visible");
-            $('#INF').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateINF'));
-        }
-
-        AddPassengerBody('TemplateINF')
-    });
-
-    function AddPassengerBody(passenger) {
-        var template     = "passengerBody",
-        $templateEle = $('#' + template + passenger),
-
-        $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
-
-        var $el = $row.find('select').eq(0).attr('name', template + '[]');
-        $('#defaultForm').bootstrapValidator('addField', $el);
-
-
-        for (i = 0; i <= 3; i++) {
-            var $el = $row.find('input').eq(i).attr('name', template + '[]');
-            $('#defaultForm').bootstrapValidator('addField', $el);
-            // $el.attr('placeholder', 'Textbox #' + index);
-
-        }
-
-
-        $row.on('click', '.removeButton', function (e) {
-            $('#defaultForm').bootstrapValidator('removeField', $el);
-            $row.remove();
-        });
-
-    }
-
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -58,34 +12,33 @@ $(document).ready(function() {
             'customer-name': {
                 validators: {
                     notEmpty: {
-                        message: 'The first name is required and cannot be empty'
+                        message: 'نام مشتری نمی تواند خالی باشد.'
                     }
                 }
             },
             'email': {
                 validators: {
                     notEmpty: {
-                        message: 'The first name is required and cannot be empty'
+                        message: 'ایمیل را وارد کنید'
                     },
                     emailAddress: {
-                        message: 'The input is not a valid email address'
+                        message: 'آدرس ایمیل معتبر نیست'
                     }
                 }
             },
             'tel': {
-                message: 'The username is not valid',
                 validators: {
                     notEmpty: {
-                        message: 'The tel is required and cannot be empty'
+                        message: 'شماره تلفن را وارد کنید'
                     },
                     stringLength: {
                         min: 11,
                         max: 12,
-                        message: 'The tel must be more 11 characters'
+                        message: 'شماره تلفن باید 11 رقم باشد'
                     },
                     regexp: {
-                        regexp: /^[0-9]+$/,
-                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+                        regexp:  /^[0-9]+$/,
+                        message: 'شماره تلفن را با ارقام انگلیسی وارد کنید'
                     },
 
 
@@ -94,46 +47,45 @@ $(document).ready(function() {
             'gender[]': {
                 validators: {
                     notEmpty: {
-                        message: 'The gender is required'
+                        message: 'جنسیت را انتخاب کنید'
                     }
                 }
             },
             'passenger-fname[]': {
                 validators: {
                     notEmpty: {
-                        message: 'The passenger-fname is required and cannot be empty'
+                        message: 'نام مسافر را وارد کنید'
                     }
                 }
             },
             'passenger-lname[]': {
                 validators: {
                     notEmpty: {
-                        message: 'The passenger-lname is required and cannot be empty'
+                        message: 'نام خانوادگی را وارد کنید'
                     }
                 }
             },
             'passenger-id[]': {
                 validators: {
                     notEmpty: {
-                        message: 'The passenger-id is required and cannot be empty'
+                        message: 'کد ملی را وارد کنید'
                     },
+
                     stringLength: {
                         min: 10,
                         max: 10,
-                        message: 'The tel must be more 10 characters'
+                        message: 'کد ملی باید 10 رقم باشد'
                     },
                     regexp: {
                         regexp: /^[0-9]+$/,
-                        message: 'The passenger-id can only consist of number'
+                        message: 'کد ملی را ارقام انگلیسی وارد کنید'
                     },
-
-
                 }
             },
             'passenger-birthday[]': {
                 validators: {
                     notEmpty: {
-                        message: 'The passenger-birthday is required and cannot be empty'
+                        message: 'تاریخ تولد خود را انتخاب کنید'
                     }
                 }
             },
@@ -173,6 +125,85 @@ $(document).ready(function() {
     $('#validateBtn').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
+
+
+    $('.removeBTN').on('click',function () {
+        alert('tghsgh');
+    });
+
+    for(i=1;i<ADTNumber;i++)
+        AddPassengerBody('ADT');
+
+    if (CHDNumber>0){
+        $('#CHD').css("visibility", "visible");
+        $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
+        $('#CHD .removeBTN').attr('id','removeCHD');
+        for(i=0;i<CHDNumber;i++)
+            AddPassengerBody('CHD');
+    }
+
+    if (INFNumber>0){
+        $('#INF').css("visibility", "visible");
+        $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
+        $('#INF .removeBTN').attr('id','removeINF');
+        for(i=0;i<INFNumber;i++)
+            AddPassengerBody('INF');
+    }
+
+
+    $('.addADT').on('click', function () {
+        AddPassengerBody('ADT');
+    });
+
+    $('.addCHD').on('click', function () {
+        if ($('#CHD').css("visibility", "hidden")){
+            $('#CHD').css("visibility", "visible");
+            $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
+        }
+        AddPassengerBody('CHD');
+    });
+
+    $('.addINF').on('click', function () {
+        if ($('#INF').css("visibility", "hidden")){
+            $('#INF').css("visibility", "visible");
+            $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
+        }
+
+        AddPassengerBody('INF');
+
+    });
+
+
+
+    function AddPassengerBody(passenger) {
+        var template     = "passengerBody",
+        $templateEle = $('#' + template + passenger),
+
+        $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
+
+        $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
+
+
+        var $el = $row.find('select').eq(0).attr('name', template + '[]');
+        $('#defaultForm').bootstrapValidator('addField', $el);
+
+
+        for (j = 0; j <= 3; j++) {
+            var $el = $row.find('input').eq(j).attr('name', template + '[]');
+            $('#defaultForm').bootstrapValidator('addField', $el);
+
+        }
+        $('#remove' + passenger).on('click',function () {
+            alert('#remove' + passenger);
+            // $(this).parents('.passengerBody').remove();
+
+        });
+    }
+
+
+
+
+
 });
 
 

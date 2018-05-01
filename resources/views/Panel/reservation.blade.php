@@ -18,8 +18,15 @@
 
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
-    <script type="text/javascript" src="/assets/js/reservation.js"></script>
+    <script >
+            var ADTNumber= {{$data['ADTNumber']}};
+            var CHDNumber= {{$data['CHDNumber']}};
+            var INFNumber= {{$data['INFNumber']}};
+    </script>
+
+    <script src="/assets/js/reservation.js"></script>
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -27,109 +34,10 @@
 
 
     {{--js for toggleButton--}}
-    <script src="/assets/js/bootstrap.min.js"></script>
     <script src="/assets/js/jquery.metisMenu.js"></script>
     {{--<script src="/assets/js/custom.js"></script>--}}
 
 
-    <script>
-        $(document).ready(function() {
-            var ADTNumber= {{$data['ADTNumber']}};
-            var CHDNumber= {{$data['CHDNumber']}};
-            var INFNumber= {{$data['INFNumber']}};
-
-
-            for(i=1;i<ADTNumber;i++){
-                var template     = "passengerBody",
-                    $templateEle = $('#' + template + 'TemplateADT'),
-                    $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
-
-                var $el= $row.find('select').eq(0).attr('name', template + '[]');
-                $('#defaultForm').bootstrapValidator('addField', $el);
-
-
-                for (j=0;j<=3;j++)
-                {
-                    var  $el = $row.find('input').eq(j).attr('name', template + '[]');
-                    $('#defaultForm').bootstrapValidator('addField', $el);
-
-                }
-
-
-
-                $row.on('click', '.removeButton', function(e) {
-                    $('#defaultForm').bootstrapValidator('removeField', $el);
-                    $row.remove();
-                });
-            }
-
-            if (CHDNumber>0){
-                // $("#ADT").after($("#ADT0").clone().attr('id','CHD0'));
-                // $("#CHD .h4Passenger").text('اطلاعات مسافران (کودک)');
-                // $('#CHD .passengerBody').remove();
-                $('#CHD').css("visibility", "visible");
-                $('#CHD').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateCHD'))
-                for(i=0;i<CHDNumber;i++){
-                    var template     = "passengerBody",
-                        $templateEle = $('#' + template + 'TemplateCHD'),
-                        $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
-
-                    var    $el          = $row.find('select').eq(0).attr('name', template + '[]');
-                    $('#defaultForm').bootstrapValidator('addField', $el);
-
-
-                    for (j=0;j<=3;j++)
-                    {
-                        var  $el = $row.find('input').eq(j).attr('name', template + '[]');
-                        $('#defaultForm').bootstrapValidator('addField', $el);
-                        // $el.attr('placeholder', 'Textbox #' + index);
-
-                    }
-
-
-
-                    $row.on('click', '.removeButton', function(e) {
-                        $('#defaultForm').bootstrapValidator('removeField', $el);
-                        $row.remove();
-                    });
-                }
-            }
-
-            if (INFNumber>0){
-                $('#INF').css("visibility", "visible");
-                $('#INF').append($('#passengerBodyTemplateADT').clone().attr('id','passengerBodyTemplateINF'))
-                for(i=0;i<INFNumber;i++){
-                    var template     = "passengerBody",
-                        $templateEle = $('#' + template + 'TemplateINF'),
-                        $row         = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
-
-                    var $el= $row.find('select').eq(0).attr('name', template + '[]');
-                    $('#defaultForm').bootstrapValidator('addField', $el);
-
-
-                    for (j=0;j<=3;j++)
-                    {
-                        var  $el = $row.find('input').eq(j).attr('name', template + '[]');
-                        $('#defaultForm').bootstrapValidator('addField', $el);
-                        // $el.attr('placeholder', 'Textbox #' + index);
-
-                    }
-
-
-                    $row.on('click', '.removeButton', function(e) {
-                        $('#defaultForm').bootstrapValidator('removeField', $el);
-                        $row.remove();
-                    });
-                }
-            }
-
-
-        });
-
-
-
-
-    </script>
 
 
 
@@ -214,7 +122,7 @@
 
 
 
-                            <form id="defaultForm" method="post" action="target.php">
+                            <form id="defaultForm" method="post" action="{{route('reserve')}}">
                                 {{csrf_field()}}
                                 <div class="formContent">
                                     {{--customer info--}}
@@ -274,7 +182,7 @@
                                                 </span>
                                                 کودک
                                             </button>
-                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addINF" data-template="passengerBodyTemplateADT">
+                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addINF" data-template="passengerBodyADT">
                                                 <span class="addFieldSpan" >
                                                     <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
                                                 </span>
@@ -298,7 +206,7 @@
                                         <div class="row">
                                             <div class="passengerPastPassenger">
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-remove removeButton"></i></button>
+                                                <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
                                             </div>
 
                                         </div>
@@ -308,8 +216,8 @@
                                                     <label for="sex" class="formLabel">جنسیت</label>
                                                     <select class="form-control" name="gender[]" required>
                                                         <option value="">انتخاب</option>
-                                                        <option value="female">زن</option>
-                                                        <option value="male">مرد</option>
+                                                        <option value="0">زن</option>
+                                                        <option value="1">مرد</option>
                                                     </select>
 
                                                 </div>
@@ -348,11 +256,11 @@
                                     </div>
 
 
-                                    <div class="passengerBody hide" id="passengerBodyTemplateADT">
+                                    <div class="passengerBody hide" id="passengerBodyADT">
                                         <div class="row">
                                             <div class="passengerPastPassenger">
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-remove removeButton"></i></button>
+                                                <button type="button" class="btn btn-danger btn-xs removeBTN" id="removeADT"><i class="fa fa-remove removeButton"></i></button>
                                             </div>
 
                                         </div>
@@ -362,8 +270,8 @@
                                                     <label for="sex" class="formLabel">جنسیت</label>
                                                     <select class="form-control" name="gender[]" required>
                                                         <option value="">انتخاب</option>
-                                                        <option value="female">زن</option>
-                                                        <option value="male">مرد</option>
+                                                        <option value="0">زن</option>
+                                                        <option value="1">مرد</option>
                                                     </select>
 
                                                 </div>
@@ -423,8 +331,7 @@
                                 </div>
 
 
-
-
+                                {{--submit --}}
                                 <div class="row">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
@@ -434,8 +341,8 @@
 
                                         </div>
                                     </div>
-
                                 </div>
+
                             </form>
 
 

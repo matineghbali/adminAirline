@@ -489,19 +489,20 @@ class AdminController extends Controller
     }
 
     public function reserve(Request $request){
-        return $request->validate([
-            'customer-name'=>'required',
-            'email'=>'required|email',
-            'tel'=>'required|digits:11',
-            'sex' => [
-                'required',
-                Rule::notIn(['select']),
-            ],
-            'passenger-fname'=>'required',
-            'passenger-lname'=>'required',
-            'passenger-id'=>'required|digits:10',
-            'passenger-birthday'=>'required',
-        ]);
+        return $request->all();
+//        return $request->validate([
+//            'customer-name'=>'required',
+//            'email'=>'required|email',
+//            'tel'=>'required|digits:11',
+//            'sex' => [
+//                'required',
+//                Rule::notIn(['select']),
+//            ],
+//            'passenger-fname'=>'required',
+//            'passenger-lname'=>'required',
+//            'passenger-id'=>'required|digits:10',
+//            'passenger-birthday'=>'required',
+//        ]);
 
 
     }
