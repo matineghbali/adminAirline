@@ -127,9 +127,9 @@ $(document).ready(function() {
     });
 
 
-    $('.removeBTN').on('click',function () {
-        alert('tghsgh');
-    });
+    // $('.removeBTN').on('click',function () {
+    //     alert('tghsgh');
+    // });
 
     for(i=1;i<ADTNumber;i++)
         AddPassengerBody('ADT');
