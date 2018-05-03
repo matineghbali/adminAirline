@@ -126,20 +126,22 @@ $(document).ready(function() {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
-    // $(document).on("click", "#removeADT", function(){
-    //     $(this).parents('.passengerBody').remove();
-    // });
-    //
-    //
-    // $(document).on("click", "#removeCHD", function(){
-    //
-    //     $(this).parents('.passengerBody').remove();
-    // });
-    //
-    // $(document).on("click", "#removeINF", function(){
-    //     console.log($('#INF').find('.passengerBody').length);
-    //     // $(this).parents('.passengerBody').remove();
-    // });
+    $(document).on("click", "#removeADT", function(){
+        $(this).parents('.passengerBody').remove();
+    });
+
+
+    $(document).on("click", "#removeCHD", function(){
+        if (($('#CHD').find('.passengerBody').length)-1==1)
+            $('#CHD').css("visibility","hidden");
+        $(this).parents('.passengerBody').remove();
+    });
+
+    $(document).on("click", "#removeINF", function(){
+        if (($('#INF').find('.passengerBody').length)-1==1)
+            $('#INF').css("visibility","hidden");
+        $(this).parents('.passengerBody').remove();
+    });
 
     for(i=1;i<ADTNumber;i++)
         AddPassengerBody('ADT');
@@ -167,7 +169,10 @@ $(document).ready(function() {
     });
 
     $('.addCHD').on('click', function () {
-        if ($('#CHD').css("visibility", "hidden")){
+        if ($('#CHD').css("visibility")=="hidden" && ($('#CHD').find('.passengerBody').length)==1){
+            $('#CHD').css("visibility", "visible");
+        }
+        else if ($('#CHD').css("visibility")=="hidden"){
             $('#CHD').css("visibility", "visible");
             $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
         }
@@ -175,7 +180,10 @@ $(document).ready(function() {
     });
 
     $('.addINF').on('click', function () {
-        if ($('#INF').css("visibility", "hidden")){
+        if ($('#INF').css("visibility")=="hidden" && ($('#INF').find('.passengerBody').length)==1){
+            $('#INF').css("visibility", "visible");
+        }
+        else if ($('#INF').css("visibility")=="hidden"){
             $('#INF').css("visibility", "visible");
             $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
         }
