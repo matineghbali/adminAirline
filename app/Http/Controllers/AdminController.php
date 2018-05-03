@@ -485,6 +485,22 @@ class AdminController extends Controller
                                     </div>
 
                                </div>";
+
+        session(['data'=>[
+            'DepartureAirport'=>'thr',
+            'ArrivalAirport' => 'mhd',
+            'DepartureDate' => '2018-05-04T00:00:00',
+            'DepartureTime' => '2018-05-04T00:00:00',
+            'MarketingAirline' => 'sahar',
+            'FlightNumber' => '123455',
+            'cabinType' => 'economy',
+            'passengerNumber'=>'10',
+            'price'=>'50000',
+            'AirEquipType'=>'yjyj',
+            'ADTNumber'=>'3',
+            'CHDNumber'=>'1',
+            'INFNumber'=>'1'
+        ]]);
         return view('Panel/reservation',['data'=>session('data'),'PassengerInfo'=>$passengerInfo]);
     }
 

@@ -126,9 +126,19 @@ $(document).ready(function() {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
-
-    // $('.removeBTN').on('click',function () {
-    //     alert('tghsgh');
+    // $(document).on("click", "#removeADT", function(){
+    //     $(this).parents('.passengerBody').remove();
+    // });
+    //
+    //
+    // $(document).on("click", "#removeCHD", function(){
+    //
+    //     $(this).parents('.passengerBody').remove();
+    // });
+    //
+    // $(document).on("click", "#removeINF", function(){
+    //     console.log($('#INF').find('.passengerBody').length);
+    //     // $(this).parents('.passengerBody').remove();
     // });
 
     for(i=1;i<ADTNumber;i++)
@@ -137,6 +147,7 @@ $(document).ready(function() {
     if (CHDNumber>0){
         $('#CHD').css("visibility", "visible");
         $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
+        
         $('#CHD .removeBTN').attr('id','removeCHD');
         for(i=0;i<CHDNumber;i++)
             AddPassengerBody('CHD');
@@ -193,11 +204,11 @@ $(document).ready(function() {
             $('#defaultForm').bootstrapValidator('addField', $el);
 
         }
-        $('#remove' + passenger).on('click',function () {
-            alert('#remove' + passenger);
-            // $(this).parents('.passengerBody').remove();
-
-        });
+        // $('#remove' + passenger).on('click',function () {
+        //     alert('#remove' + passenger);
+        //     // $(this).parents('.passengerBody').remove();
+        //
+        // });
     }
 
 
