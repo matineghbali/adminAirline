@@ -20,13 +20,19 @@
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
-    <script >
-        var ADTNumber= {{$data['ADTNumber']}};
-        var CHDNumber= {{$data['CHDNumber']}};
-        var INFNumber= {{$data['INFNumber']}};
-    </script>
 
-    <script src="/assets/js/reservation.js"></script>
+
+
+    {{--<script >--}}
+            {{--var ADTNumber= {{$data['ADTNumber']}};--}}
+            {{--var CHDNumber= {{$data['CHDNumber']}};--}}
+            {{--var INFNumber= {{$data['INFNumber']}};--}}
+    {{--</script>--}}
+
+    {{--<script src="/assets/js/reservation.js"></script>--}}
+
+
+
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -70,7 +76,7 @@
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
                 </li>
             </ul>
 
@@ -84,6 +90,8 @@
             adt:{{$data['ADTNumber']}}
             chd:{{$data['CHDNumber']}}
             inf:{{$data['INFNumber']}}
+
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -123,7 +131,6 @@
 
 
                             <form id="defaultForm" method="post" action="{{route('reserve')}}">
-                                <input type="hidden" id="number" name="number" >
                                 {{csrf_field()}}
                                 <div class="formContent">
                                     {{--customer info--}}
@@ -337,7 +344,7 @@
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
                                         <div class="passengerBtn">
-                                            <button class="btn btn-primary btn-block" type="submit" id="submit" name="submit">ثبت اطلاعات</button>
+                                            <button class="btn btn-primary btn-block" type="submit">ثبت اطلاعات</button>
                                             <button type="button" class="btn btn-info" id="validateBtn">Manual validate</button>
 
                                         </div>
@@ -356,22 +363,4 @@
             </div>
             <!-- /. ROW  -->
 
-
-
-
-{{--<script>--}}
-    {{--$('#number').val(number);--}}
-{{--</script>--}}
-
-        </div>
-        <!-- /. PAGE INNER  -->
-    </div>
-    <!-- /. PAGE WRAPPER  -->
-</div>
-<!-- /. WRAPPER  -->
-
-
-
-
-</body>
-</html>
+@include('Section.Footer')

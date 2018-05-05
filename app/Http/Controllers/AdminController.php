@@ -305,7 +305,10 @@ class AdminController extends Controller
                         'AirEquipType'=>$AirEquipType,
                         'ADTNumber'=>$ADTNumber,
                         'CHDNumber'=>$CHDNumber,
-                        'INFNumber'=>$INFNumber
+                        'INFNumber'=>$INFNumber,
+                        'ADTPrice' => $price['INF'][0],
+                        'CHDPrice' => $price['CHD'][0],
+                        'INFPrice' => $price['INF'][0]
                     ]]);
 
 
@@ -426,86 +429,146 @@ class AdminController extends Controller
 
 
 
-    public function reservation(){
-        $passengerInfo="<div class=\"passengerContent\">
-                                    <div class=\"passengerHeader\">
-                                        <h4>
-                                            اطلاعات مسافران (بزرگسال)
-                                        </h4>
-                                    </div>
+    public function reservation()
+    {
+//        session(['data'=>[
+//            'DepartureAirport'=>'thr',
+//            'ArrivalAirport' => 'mhd',
+//            'DepartureDate' => '2018-05-04T00:00:00',
+//            'DepartureTime' => '2018-05-04T00:00:00',
+//            'MarketingAirline' => 'sahar',
+//            'FlightNumber' => '123455',
+//            'cabinType' => 'economy',
+//            'passengerNumber'=>'10',
+//            'price'=>'50000',
+//            'AirEquipType'=>'yjyj',
+//            'ADTNumber'=>'3',
+//            'CHDNumber'=>'1',
+//            'INFNumber'=>'1'
+//        ]]);
 
-                                    <div class=\"row\">
-                                        <div class=\"passengerPastPassenger\">
-                                            <button type=\"button\" class=\"btn btn-primary btn-xs\"><i class=\"fa fa-th-list\"></i> مسافران سابق</button>
-                                            <button class=\"btn btn-danger btn-xs\"><i class=\"fa fa-remove\"></i></button>
-                                        </div>
+        return view('Panel/reservation',['data'=>session('data')]);
 
-                                    </div>
-                                    <div class=\"row passengerInfo\">
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"form-group\">
-                                                <label for=\"sex\" class=\"formLabel\">جنسیت</label>
-                                                <select class=\"form-control\" id=\"sex\" name=\"sex\" >
-                                                    <option  value=\"female\">انتخاب</option>
-                                                    <option  value=\"female\">زن</option>
-                                                    <option value=\"male\">مرد</option>
-                                                </select>
-
-                                            </div>
-                                        </div>
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"form-group \">
-                                                <label for=\"customer-name\" class=\"formLabel\">نام</label>
-                                                <input class=\"form-control\" type=\"text\" name=\"passenger-fname\" value=".old('passenger-fname').">
-
-                                            </div>
-                                        </div>
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"form-group \">
-                                                <label for=\"customer-name\" class=\"formLabel\">نام خانوادگی</label>
-                                                <input class=\"form-control\" type=\"text\" name=\"passenger-lname\" value=".old('passenger-lname').">
-
-                                            </div>
-                                        </div>
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"form-group \">
-                                                <label for=\"customer-name\" class=\"formLabel\">کد ملی</label>
-                                                <input class=\"form-control\" type=\"text\" name=\"passenger-id\" value=".old('passenger-id').">
-
-                                            </div>
-                                        </div>
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"form-group \">
-                                                <label for=\"customer-name\" class=\"formLabel\">تاریخ تولد</label>
-                                                <input class=\"form-control\" type=\"text\" name=\"passenger-birthday\" value=".old('passenger-birthday').">
-                                                    <small id=\"telHelp\" class=\"form-text text-muted\">مثال: ۱۳۹۱/۰۲/۰۶</small>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                               </div>";
-
-        session(['data'=>[
-            'DepartureAirport'=>'thr',
-            'ArrivalAirport' => 'mhd',
-            'DepartureDate' => '2018-05-04T00:00:00',
-            'DepartureTime' => '2018-05-04T00:00:00',
-            'MarketingAirline' => 'sahar',
-            'FlightNumber' => '123455',
-            'cabinType' => 'economy',
-            'passengerNumber'=>'10',
-            'price'=>'50000',
-            'AirEquipType'=>'yjyj',
-            'ADTNumber'=>'3',
-            'CHDNumber'=>'1',
-            'INFNumber'=>'1'
-        ]]);
-        return view('Panel/reservation',['data'=>session('data'),'PassengerInfo'=>$passengerInfo]);
     }
 
     public function reserve(Request $request){
-        return $request->all();
+
+
+        $array=explode('.',$request['number']);
+
+        return $array[1];
+
+        session(['reserve'=>[
+            'DepartureAirport'=>session('data')['DepartureAirport'],
+            'ArrivalAirport' => session('data')['ArrivalAirport'],
+            'DepartureDate' =>session('data')['DepartureDate'],
+            'DepartureTime' =>session('data')['DepartureTime'],
+            'MarketingAirline' => session('data')['MarketingAirline'],
+            'FlightNumber' => session('data')['FlightNumber'],
+            'cabinType' => session('data')['cabinType'],
+            'passengerNumber'=>$array[0],
+            'AirEquipType'=>session('data')['AirEquipType'],
+            'ADTPrice' => session('data')['ADTPrice'],
+            'CHDPrice' => session('data')['CHDPrice'],
+            'INFPrice' => session('data')['INFPrice'],
+            'price'=>(int) session('data')['ADTPrice']*(int) $array[1],
+        ]]);
+
+        return session('reserve');
+
+
+
+
+        $request=[
+            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
+            "customer-name" => "matin",
+            "email" => "matin.eqbali74@gmail.com",
+            "tel" => "09367687492",
+
+            "gender" => [
+                "0",
+                null,
+                null,
+                null
+            ],
+            "passenger-fname" => [
+                "b1",
+                null,
+                null,
+                null
+            ],
+            "passenger-lname" => [
+                "b11",
+                null,
+                null,
+                null
+            ],
+            "passenger-id" => [
+                "4310924366",
+                null,
+                null,
+                null
+            ],
+            "passenger-birthday" => [
+                "۱۳۹۱/۰۲/۰۶",
+                null,
+                null,
+                null
+            ],
+            "passengerBody" => [
+                "0",
+                "b2",
+                "b22",
+                "4310924362",
+                "93/2/1",
+                "1",
+                "k1",
+                "k11",
+                "4310924361",
+                "93/8/8",
+                "0",
+                "n1",
+                "n11",
+                "4310924367",
+                "93/7/7"
+            ],
+        ];
+
+
+
+        $passengerBody=$request['passengerBody'];
+        $end=count($passengerBody)/5;
+        $j=0;
+
+        $passenger[0][0]=$request['gender'][0];
+        $passenger[0][1]=$request['passenger-fname'][0];
+        $passenger[0][2]=$request['passenger-lname'][0];
+        $passenger[0][3]=$request['passenger-id'][0];
+        $passenger[0][4]=$request['passenger-birthday'][0];
+
+        for ($i=1;$i<=$end;$i++){
+            $inc=0;
+            while ($inc < '5'){
+//                echo $j;
+                $passenger[$i][$inc]=$passengerBody[$j];
+                $j++;
+                $inc++;
+            }
+        }
+
+        //end=5
+        $check_id='false';
+        for ($i=0;$i<=$end;$i++) { //0 1 2 3 4 5
+            for($j=$i+1;$j<=$end;$j++){
+                if (in_array($passenger[$i][3],[$passenger[$j][3]])){  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
+                    $check_id='true';
+                }
+            }
+        }
+
+        return view('Panel.reserved');
+
+
 //        return $request->validate([
 //            'customer-name'=>'required',
 //            'email'=>'required|email',

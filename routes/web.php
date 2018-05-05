@@ -27,9 +27,6 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('getFlight3','AdminController@getFlight3' )->name('getFlight3');
 
     $this->get('reservation','AdminController@reservation' )->name('reservation');
-    $this->get('dynamic',function (){
-        return view('Panel.dynamic');
-    });
 
     $this->post('reserve','AdminController@reserve' )->name('reserve');
 
