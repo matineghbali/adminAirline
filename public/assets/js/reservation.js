@@ -7,7 +7,6 @@ $(document).ready(function() {
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-
             'customer-name': {
                 validators: {
                     notEmpty: {
@@ -140,6 +139,7 @@ $(document).ready(function() {
         $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
 
         $('#CHD .removeBTN').attr('id','removeCHD');
+        $('#CHD .PassengerType').val('CHD');
         for(i=0;i<CHDNumber;i++)
             AddPassengerBody('CHD');
     }
@@ -148,6 +148,7 @@ $(document).ready(function() {
         $('#INF').css("visibility", "visible");
         $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
         $('#INF .removeBTN').attr('id','removeINF');
+        $('#INF .PassengerType').val('INF')
         for(i=0;i<INFNumber;i++)
             AddPassengerBody('INF');
     }
@@ -183,6 +184,7 @@ $(document).ready(function() {
             CHDNumber++;
             numberOfPassengers++;
             $('#CHD .removeBTN').attr('id','removeCHD');
+            $('#CHD .PassengerType').val('CHD');
             AddPassengerBody('CHD');
 
         }
@@ -206,6 +208,7 @@ $(document).ready(function() {
             INFNumber++;
             numberOfPassengers++;
             $('#INF .removeBTN').attr('id','removeINF');
+            $('#INF .PassengerType').val('INF');
             AddPassengerBody('INF');
 
         }

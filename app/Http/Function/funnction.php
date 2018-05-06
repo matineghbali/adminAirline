@@ -143,6 +143,21 @@ function  toPersianNum($number)
         return $number;
 }
 
+function  toEnglishNum($number)
+{
+    $number = str_replace("۱","1",$number);
+    $number = str_replace("۲","2",$number);
+    $number = str_replace("۳","3",$number);
+    $number = str_replace("۴","4",$number);
+    $number = str_replace("۵","5",$number);
+    $number = str_replace("۶","6",$number);
+    $number = str_replace("۷","7",$number);
+    $number = str_replace("۸","8",$number);
+    $number = str_replace("۹","9",$number);
+    $number = str_replace("۰","0",$number);
+    return $number;
+}
+
 function div($a,$b) {
     return (int) ($a / $b);
 }

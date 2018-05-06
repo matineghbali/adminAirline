@@ -20,19 +20,13 @@
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
+    <script >
+        var ADTNumber= {{$data['ADTNumber']}};
+        var CHDNumber= {{$data['CHDNumber']}};
+        var INFNumber= {{$data['INFNumber']}};
+    </script>
 
-
-
-    {{--<script >--}}
-            {{--var ADTNumber= {{$data['ADTNumber']}};--}}
-            {{--var CHDNumber= {{$data['CHDNumber']}};--}}
-            {{--var INFNumber= {{$data['INFNumber']}};--}}
-    {{--</script>--}}
-
-    {{--<script src="/assets/js/reservation.js"></script>--}}
-
-
-
+    <script src="/assets/js/reservation.js"></script>
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -76,7 +70,7 @@
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
+                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
                 </li>
             </ul>
 
@@ -90,39 +84,38 @@
             adt:{{$data['ADTNumber']}}
             chd:{{$data['CHDNumber']}}
             inf:{{$data['INFNumber']}}
-
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-12" >
-                            <div class="panelTitle">اطلاعات بلیط {{$data['DepartureAirport']}} به {{$data['ArrivalAirport']}} {{$data['DepartureDate']}}</div>
+                            <div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
+                                {{$data['DepartureDate']}}</div>
 
                             <div class="panel">
                                 <div class="row panelContent" >
                                     <div class="col-md-3">
                                         <h3>{{$data['DepartureTime']}}</h3>
-                                        <span>{{$data['DepartureAirport']}}  {{$data['ArrivalAirport']}}</span>
+                                        <span>{{CodeToCity($data['DepartureAirport'])}}  {{CodeToCity($data['ArrivalAirport'])}}</span>
                                     </div>
                                     <div class="col-md-2" style="padding-top: 20px">
-                                        <span class="text-muted" >هواپیمایی {{$data['MarketingAirline']}}</span>
+                                        <span class="text-muted" >هواپیمایی {{$data['MarketingAirlineFA']}}</span>
                                     </div>
                                     <div class="col-md-2">
                                         <ul>
                                             <li>هواپیما: <b>{{$data['AirEquipType']}} </b></li>
-                                            <li>شماره پرواز: <b>{{$data['FlightNumber']}}</b></li>
+                                            <li>شماره پرواز: <b>{{toPersianNum($data['FlightNumber'])}}</b></li>
                                         </ul>
                                     </div>
                                     <div class="col-md-2">
                                         <ul>
                                             <li>پرواز  <b>چارتر </b></li>
-                                            <li>کلاس پروازی: <b>{{$data['cabinType']}}</b></li>
+                                            <li>کلاس پروازی: <b>{{$data['cabinTypeFA']}}</b></li>
                                         </ul>
 
                                     </div>
                                     <div class="col-md-3">
-                                        <h3>{{$data['passengerNumber']}} نفر </h3>
-                                        <span>{{$data['price']}} تومان</span>
+                                        <h3>{{toPersianNum($data['passengerNumber'])}} نفر </h3>
+                                        <span>{{toPersianNum($data['price'])}} تومان</span>
                                     </div>
 
                                 </div>
@@ -131,212 +124,96 @@
 
 
                             <form id="defaultForm" method="post" action="{{route('reserve')}}">
+                                <input type="hidden" id="number" name="number" >
                                 {{csrf_field()}}
-                                <div class="formContent">
-                                    {{--customer info--}}
-                                    <div class="customerInfo">
-                                        <div class="row" >
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name" >
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="email1" class="formLabel">ایمیل</label>
-                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email">
-                                                        <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
-
-                                                </div>
-
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="tel" class="formLabel">شماره تماس</label>
-                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel">
-                                                        <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <small style="color: #0275d8">این قسمت مربوط به مشخصات خریدار است.</small>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                {{--add field--}}
-
-                                <div class="addFieldContent">
-                                    <div class="row">
-                                        <div class="col-md-6 col-lg-7 m-passengers__section addFieldLabel">
-                                            مشخصات مسافران را وارد کنید:
-                                        </div>
-                                        <div class="col-md-6 col-lg-5 addField">
-                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addADT" data-template="passengerBody">
-                                                <span class="addFieldSpan" >
-                                                    <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
-                                                </span>
-                                                بزرگسال
-                                            </button>
-                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addCHD" data-template="passengerBody">
-                                                <span class="addFieldSpan" >
-                                                    <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
-                                                </span>
-                                                کودک
-                                            </button>
-                                            <button type="button" class="btn add-passenger m-passengers__addp addFieldBtn addINF" data-template="passengerBodyADT">
-                                                <span class="addFieldSpan" >
-                                                    <svg class="addFieldSVG"  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42 42"><polygon points="42,20 22,20 22,0 20,0 20,20 0,20 0,22 20,22 20,42 22,42 22,22 42,22"></polygon></svg>
-                                                </span>
-                                                نوزاد
-                                            </button>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                {{--adult info--}}
+                                {{--customer info--}}
                                 <div class="passengerContent" id="ADT">
                                     <div class="passengerHeader">
                                         <h4 class="h4Passenger">
-                                            اطلاعات مسافران (بزرگسال)
+                                            اطلاعات خریدار
                                         </h4>
                                     </div>
 
-                                    <div class="passengerBody" id="ADT0">
-                                        <div class="row">
-                                            <div class="passengerPastPassenger">
-                                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
-                                            </div>
-
-                                        </div>
-                                        <div class="row passengerInfo">
+                                    <div class="passengerBody">
+                                        <div class="row passengerInfo " style="padding: 10px">
                                             <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" name="gender[]" required>
-                                                        <option value="">انتخاب</option>
-                                                        <option value="0">زن</option>
-                                                        <option value="1">مرد</option>
-                                                    </select>
-
-                                                </div>
+                                                <span>نام:</span>
+                                                {{$customer['name']}}
                                             </div>
                                             <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]">
-
-                                                </div>
+                                                <span>ایمیل:</span>
+                                                {{$customer['email']}}
                                             </div>
                                             <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday[]">
-                                                        <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="passengerBody hide" id="passengerBodyADT">
-                                        <div class="row">
-                                            <div class="passengerPastPassenger">
-                                                <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                <button type="button" class="btn btn-danger btn-xs removeBTN" id="removeADT"><i class="fa fa-remove removeButton"></i></button>
-                                            </div>
-
-                                        </div>
-                                        <div class="row passengerInfo">
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" name="gender[]" required>
-                                                        <option value="">انتخاب</option>
-                                                        <option value="0">زن</option>
-                                                        <option value="1">مرد</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group ">
-                                                    <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday[]">
-                                                    <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
-
-                                                </div>
+                                                <span>شماره موبایل:</span>
+                                                {{toPersianNum($customer['tel'])}}
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
 
-                                {{--CHD info--}}
-                                <div class="passengerContent" id="CHD" style="visibility: hidden">
+
+                                {{--Passenger info--}}
+                                <div class="passengerContent" style="margin-top: 30px">
                                     <div class="passengerHeader">
                                         <h4 class="h4Passenger">
-                                            اطلاعات مسافران (کودک)
+                                            اطلاعات مسافران
                                         </h4>
                                     </div>
+                                    <div class="passengerBody" >
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover">
+                                                <thead>
+                                                <tr class="small">
+                                                    <th>#</th>
+                                                    <th>نوع</th>
+                                                    <th>جنسیت</th>
+                                                    <th>نام</th>
+                                                    <th>کد ملی</th>
+                                                    <th>تاریخ تولد</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
 
-                                </div>
+                                                <?php $i=0 ?>
+                                                @foreach($passenger as $item)
+                                                    <tr>
+                                                        <td>
+                                                            {{toPersianNum(++$i)}}
+                                                        </td>
+                                                        <td>
 
-                                {{--INF info--}}
-                                <div class="passengerContent" id="INF" style="visibility: hidden">
-                                    <div class="passengerHeader">
-                                        <h4 class="h4Passenger">
-                                            اطلاعات مسافران (نوزاد)
-                                        </h4>
+                                                        </td>
+                                                        <td>
+                                                            @if($item['gender']==0)
+                                                                <b>خانم</b>
+                                                            @else
+                                                                <b>آقا</b>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            {{$item['fname'].' '. $item['lname'] }}
+                                                        </td>
+                                                        <td class="nowrap">
+                                                            <strong>
+                                                                {{toPersianNum($item['id'])}}
+                                                            </strong>
+                                                        </td>
+                                                        <td>
+                                                            {{toPersianNum($item['birthday'])}}
+                                                        </td>
+                                                    </tr>
+
+                                                @endforeach
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-
                                 </div>
+
 
 
                                 {{--submit --}}
@@ -344,7 +221,7 @@
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
                                         <div class="passengerBtn">
-                                            <button class="btn btn-primary btn-block" type="submit">ثبت اطلاعات</button>
+                                            <button class="btn btn-primary btn-block" type="submit" id="submit" name="submit">ثبت اطلاعات</button>
                                             <button type="button" class="btn btn-info" id="validateBtn">Manual validate</button>
 
                                         </div>
@@ -363,4 +240,22 @@
             </div>
             <!-- /. ROW  -->
 
-@include('Section.Footer')
+
+
+
+            {{--<script>--}}
+            {{--$('#number').val(number);--}}
+            {{--</script>--}}
+
+        </div>
+        <!-- /. PAGE INNER  -->
+    </div>
+    <!-- /. PAGE WRAPPER  -->
+</div>
+<!-- /. WRAPPER  -->
+
+
+
+
+</body>
+</html>

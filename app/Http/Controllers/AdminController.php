@@ -201,32 +201,36 @@ class AdminController extends Controller
 
                 foreach($responses['PricedItineraries'] as $response){
                     // شرکت هواپیمایی
-                    $MarketingAirline=$response['AirItinerary']['OriginDestinationOptions']
+                    $MarketingAirlineEN=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['MarketingAirline']['Value'];
-                    if ($MarketingAirline=="QESHM AIR")
-                        $MarketingAirline='قشم ایر';
-                    else if ($MarketingAirline=="MERAJ")
-                        $MarketingAirline='معراج';
-                    else if ($MarketingAirline=="TABAN")
-                        $MarketingAirline='تابان ایر';
-                    else if ($MarketingAirline=="ZAGROS")
-                        $MarketingAirline='زاگرس';
+                    if ($MarketingAirlineEN=="QESHM AIR")
+                        $MarketingAirlineFA='قشم ایر';
+                    else if ($MarketingAirlineEN=="MERAJ")
+                        $MarketingAirlineFA='معراج';
+                    else if ($MarketingAirlineEN=="TABAN")
+                        $MarketingAirlineFA='تابان ایر';
+                    else if ($MarketingAirlineEN=="ZAGROS")
+                        $MarketingAirlineFA='زاگرس';
+                    else
+                        $MarketingAirlineFA=$MarketingAirlineEN;
 
                     // تجهیزات هواپیمایی
                     $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
 
                     //مبدا
-                    $DepartureAirport=CodeToCity($response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['DepartureAirport']['LocationCode']);
+                    $DepartureAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['DepartureAirport']['LocationCode'];
 
                     //مقصد
-                    $ArrivalAirport=CodeToCity($response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode']);
+                    $ArrivalAirport=$response['AirItinerary']['OriginDestinationOptions'][0]['FlightSegment'][0]['ArrivalAirport']['LocationCode'];
 
 
                     // شماره پرواز
-                    $FlightNumber=toPersianNum($response['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['FlightNumber']);
+                    $FlightNumber=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['FlightNumber'];
 
+                    $FareBasisCode=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['FareBasisCode'];
 
                     // زمان حرکت
 
@@ -239,15 +243,17 @@ class AdminController extends Controller
 
 
                     // ظرفیت
-                    $AvailableSeatQuantity=toPersianNum($response['AirItinerary']['OriginDestinationOptions']
-                    [0]['FlightSegment'][0]['AvailableSeatQuantity']);
+                    $AvailableSeatQuantity=$response['AirItinerary']['OriginDestinationOptions']
+                    [0]['FlightSegment'][0]['AvailableSeatQuantity'];
 
                     // نوع بلیط
-                    $cabinType=$response['AirItinerary']['OriginDestinationOptions']
+                    $cabinTypeEN=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['CabinType'];
 
-                    if ($cabinType=="Economy")
-                        $cabinType='اکونومی';
+                    if ($cabinTypeEN=="Economy")
+                        $cabinTypeFA='اکونومی';
+                    else
+                        $cabinTypeFA=$cabinTypeEN;
 
                     $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
@@ -260,55 +266,88 @@ class AdminController extends Controller
                      foreach ($response["AirItineraryPricingInfo"]["PTC_FareBreakdowns"] as $prices){
                          $passengerNumber+=$prices["PassengerTypeQuantity"]['Quantity'];
                          $price[$prices["PassengerTypeQuantity"]['Code']]=
-                             [toPersianNum($prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]['Quantity']),$prices["PassengerTypeQuantity"]['Quantity']];
+                             [$prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]
+                                 ['Quantity'],$prices["PassengerTypeQuantity"]['Quantity']];
 
                      }
+
+
 
                      $ADT='';$CHD='';$INF='';$ADTNumber=0;$CHDNumber=0;$INFNumber=0;
                      if (array_key_exists('ADT',$price)){
                          $ADT="<tr>
                                   <th class=\"col - sm - 5\">قیمت برای بزرگسال</th>
-                                  <td class=\"col - sm - 5\">".$price['ADT'][0]."</td>
+                                  <td class=\"col - sm - 5\">".toPersianNum($price['ADT'][0])."</td>
                              </tr>";
                          $ADTNumber=$price['ADT'][1];
                      }
+                     else
+                         $price['ADT'][0]=0;
                      if (array_key_exists('CHD',$price)){
                          $CHD=
                              "<tr>
                                 <th class=\"col-sm-5\">قیمت برای کودک</th>
-                                <td class=\"col-sm-5\">".$price['CHD'][0]."</td>
+                                <td class=\"col-sm-5\">".toPersianNum($price['CHD'][0])."</td>
                             </tr>";
                          $CHDNumber=$price['CHD'][1];
                      }
+                     else
+                         $price['CHD'][0]=0;
                      if (array_key_exists('INF',$price)){
                          $INF="<tr>
                                  <th class=\"col - sm - 5\">قیمت برای نوزاد</th>
-                                 <td class=\"col - sm - 5\">".$price['INF'][0]."</td>
+                                 <td class=\"col - sm - 5\">".toPersianNum($price['INF'][0])."</td>
                               </tr>";
                          $INFNumber=$price['INF'][1];
 
                      }
+                     else
+                         $price['INF'][0]=0;
+
+
 
                     $dateTime=explode('T',$DepartureDateTime);
                     $time=explode(':',$dateTime[1]);
 
                     session(['data'=>[
-                        'DepartureAirport'=>$DepartureAirport,
+
+                        'DepartureAirport' => $DepartureAirport,
                         'ArrivalAirport' => $ArrivalAirport,
+
+                        'DepartureDateTimeEN' => $DepartureDateTime,
+                        'ArrivalDateTimeEN' => $ArrivalDateTime,
+                        'DepartureDateTimeFA' => toPersianNum(jdate($DepartureDateTime)->format('%d %B، %Y H:i')),
+                        'ArrivalDateTimeFA' => toPersianNum(jdate($ArrivalDateTime)->format('%d %B، %Y H:i')),
+
                         'DepartureDate' => toPersianNum(jdate($dateTime[0])->format('%A	%d	%B	%Y	')) ,
                         'DepartureTime' => toPersianNum($time[0].':'.$time[1]),
-                        'MarketingAirline' => $MarketingAirline,
+
+                        'AvailableSeatQuantity' => $AvailableSeatQuantity,
+
                         'FlightNumber' => $FlightNumber,
-                        'cabinType' => $cabinType,
-                        'passengerNumber'=>$passengerNumber,
-                        'price'=>toPersianNum($ItinTotalFare),
+
+                        'FareBasisCode' => $FareBasisCode,
+
+                        'MarketingAirlineEN' => $MarketingAirlineEN,
+                        'MarketingAirlineFA' => $MarketingAirlineFA,
+
+                        'cabinTypeEN' => $cabinTypeEN,
+                        'cabinTypeFA' => $cabinTypeFA,
+
                         'AirEquipType'=>$AirEquipType,
+
+                        'passengerNumber'=>$passengerNumber,
+
+                        'price'=>$ItinTotalFare,
+
                         'ADTNumber'=>$ADTNumber,
                         'CHDNumber'=>$CHDNumber,
                         'INFNumber'=>$INFNumber,
-                        'ADTPrice' => $price['INF'][0],
+
+                        'ADTPrice' => $price['ADT'][0],
                         'CHDPrice' => $price['CHD'][0],
                         'INFPrice' => $price['INF'][0]
+
                     ]]);
 
 
@@ -328,25 +367,25 @@ class AdminController extends Controller
                     $html.="<div class='row'>
                                 <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #ddd;border-radius: 3px;overflow: auto\">
                                         <div id=\"div1\" class=\"col-sm-2 col-xs-6\">
-                                            <h5 id=\"ch1\">$MarketingAirline</h5>
+                                            <h5 id=\"ch1\">$MarketingAirlineFA</h5>
                                             <br>
-                                            <h5 id=\"ch11\">$FlightNumber</h5>
+                                            <h5 id=\"ch11\">".toPersianNum($FlightNumber)."</h5>
 
                                         </div>
                                         <div id=\"div2\" class=\"col-sm-4 col-xs-6\">
                                             <h5 id=\"ch2\">تاریخ پرواز</h5>
                                             <br>
-                                            <h5 id=\"ch22\">$DepartureDateTime</h5>
+                                            <h5 id=\"ch22\">".session('data')['DepartureDateTimeFA']."</h5>
                                         </div>
                                         <div id=\"div4\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch4\">ظرفیت</h5>
                                             <br>
-                                            <h5 id=\"ch44\">$AvailableSeatQuantity نفر</h5>
+                                            <h5 id=\"ch44\">".toPersianNum($AvailableSeatQuantity)." نفر</h5>
                                         </div>
                                         <div id=\"div5\" class=\"col-sm-2 col-xs-6\">
-                                            <h5 id=\"ch5\">$cabinType</h5>
+                                            <h5 id=\"ch5\">".session('data')['cabinTypeFA']."</h5>
                                             <br>
-                                            <h5 id=\"ch55\">".$price['ADT'][0]."</h5>
+                                            <h5 id=\"ch55\">".toPersianNum($price['ADT'][0])."</h5>
                                         </div>
                                         <!-- Button trigger modal -->
                                         <button type=\"button\" id=\"buy\" style=\"margin-top: 30px\" class=\"btn btn-success col-sm-2 col-xs-12\" data-toggle=\"modal\" data-target=\"#exampleModalCenter\">
@@ -368,15 +407,15 @@ class AdminController extends Controller
                                                         <table class=\"table table-striped table-responsive col-sm-10 p-4\" style='border-radius: 5px;margin: 0px auto;float: none;' >
                                                             <tr>
                                                               <th class=\"col-sm-5\">مسیر پروازی</th>
-                                                              <td class=\"col-sm-5\">از $DepartureAirport به $ArrivalAirport</td>
+                                                              <td class=\"col-sm-5\">از ".CodeToCity($DepartureAirport)." به ".CodeToCity($ArrivalAirport)."</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">شماره پرواز</th>
-                                                              <td class=\"col-sm-5\">$FlightNumber</td>
+                                                              <td class=\"col-sm-5\">".toPersianNum($FlightNumber)."</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">هواپیمایی</th>
-                                                              <td class=\"col-sm-5\">$MarketingAirline</td>
+                                                              <td class=\"col-sm-5\">$MarketingAirlineFA</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">هواپیما</th>
@@ -384,18 +423,18 @@ class AdminController extends Controller
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">ظرفیت</th>
-                                                              <td class=\"col-sm-5\">$AvailableSeatQuantity نفر</td>
+                                                              <td class=\"col-sm-5\">".toPersianNum($AvailableSeatQuantity)."  نفر</td>
                                                             </tr>
                                                             $ADT
                                                             $CHD      
                                                             $INF                                                     
                                                             <tr>
                                                               <th class=\"col-sm-5\">تاریخ پرواز</th>
-                                                              <td class=\"col-sm-5\">$DepartureDateTime</td>
+                                                              <td class=\"col-sm-5\">".session('data')['DepartureDateTimeFA']."</td>
                                                             </tr>
                                                             <tr>
                                                               <th class=\"col-sm-5\">تاریخ رسیدن به مقصد</th>
-                                                              <td class=\"col-sm-5\">$ArrivalDateTime</td>
+                                                              <td class=\"col-sm-5\">".session('data')['ArrivalDateTimeFA']."</td>
                                                             </tr>
                                                         </table>
 
@@ -431,157 +470,113 @@ class AdminController extends Controller
 
     public function reservation()
     {
-//        session(['data'=>[
-//            'DepartureAirport'=>'thr',
-//            'ArrivalAirport' => 'mhd',
-//            'DepartureDate' => '2018-05-04T00:00:00',
-//            'DepartureTime' => '2018-05-04T00:00:00',
-//            'MarketingAirline' => 'sahar',
-//            'FlightNumber' => '123455',
-//            'cabinType' => 'economy',
-//            'passengerNumber'=>'10',
-//            'price'=>'50000',
-//            'AirEquipType'=>'yjyj',
-//            'ADTNumber'=>'3',
-//            'CHDNumber'=>'1',
-//            'INFNumber'=>'1'
-//        ]]);
-
         return view('Panel/reservation',['data'=>session('data')]);
-
     }
 
     public function reserve(Request $request){
 
 
-        $array=explode('.',$request['number']);
+        $sessionArray=session('data');
+        $Number=explode('.',$request['number']);
+        $sessionArray['passengerNumber']=$Number[0];
+        $sessionArray['ADTNumber']=$Number[1];
+        $sessionArray['CHDNumber']=$Number[2];
+        $sessionArray['INFNumber']=$Number[3];
+        $sessionArray['price']=$sessionArray['ADTPrice']*$Number[1] + $sessionArray['CHDPrice']*$Number[2] + $sessionArray['INFPrice']*$Number[3];
 
-        return $array[1];
-
-        session(['reserve'=>[
-            'DepartureAirport'=>session('data')['DepartureAirport'],
-            'ArrivalAirport' => session('data')['ArrivalAirport'],
-            'DepartureDate' =>session('data')['DepartureDate'],
-            'DepartureTime' =>session('data')['DepartureTime'],
-            'MarketingAirline' => session('data')['MarketingAirline'],
-            'FlightNumber' => session('data')['FlightNumber'],
-            'cabinType' => session('data')['cabinType'],
-            'passengerNumber'=>$array[0],
-            'AirEquipType'=>session('data')['AirEquipType'],
-            'ADTPrice' => session('data')['ADTPrice'],
-            'CHDPrice' => session('data')['CHDPrice'],
-            'INFPrice' => session('data')['INFPrice'],
-            'price'=>(int) session('data')['ADTPrice']*(int) $array[1],
-        ]]);
-
-        return session('reserve');
-
-
-
-
-        $request=[
-            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
-            "customer-name" => "matin",
-            "email" => "matin.eqbali74@gmail.com",
-            "tel" => "09367687492",
-
-            "gender" => [
-                "0",
-                null,
-                null,
-                null
-            ],
-            "passenger-fname" => [
-                "b1",
-                null,
-                null,
-                null
-            ],
-            "passenger-lname" => [
-                "b11",
-                null,
-                null,
-                null
-            ],
-            "passenger-id" => [
-                "4310924366",
-                null,
-                null,
-                null
-            ],
-            "passenger-birthday" => [
-                "۱۳۹۱/۰۲/۰۶",
-                null,
-                null,
-                null
-            ],
-            "passengerBody" => [
-                "0",
-                "b2",
-                "b22",
-                "4310924362",
-                "93/2/1",
-                "1",
-                "k1",
-                "k11",
-                "4310924361",
-                "93/8/8",
-                "0",
-                "n1",
-                "n11",
-                "4310924367",
-                "93/7/7"
-            ],
-        ];
+//        $request=[
+//            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
+//            "customer-name" => "matin",
+//            "email" => "matin.eqbali74@gmail.com",
+//            "tel" => "09367687492",
+//
+//            "gender" => [
+//                "0",
+//                null,
+//                null,
+//                null
+//            ],
+//            "passenger-fname" => [
+//                "b1",
+//                null,
+//                null,
+//                null
+//            ],
+//            "passenger-lname" => [
+//                "b11",
+//                null,
+//                null,
+//                null
+//            ],
+//            "passenger-id" => [
+//                "4310924361",
+//                null,
+//                null,
+//                null
+//            ],
+//            "passenger-birthday" => [
+//                "۱۳۹۱/۰۲/۰۶",
+//                null,
+//                null,
+//                null
+//            ],
+//            "passengerBody" => [
+//                "0",
+//                "b2",
+//                "b22",
+//                "4310924362",
+//                "93/2/1",
+//                "1",
+//                "k1",
+//                "k11",
+//                "4310924311",
+//                "93/8/8",
+//                "0",
+//                "n1",
+//                "n11",
+//                "4310924367",
+//                "93/7/7"
+//            ],
+//        ];
 
 
+        $customer['name']=$request['customer-name'];
+        $customer['email']=$request['email'];
+        $customer['tel']=$request['tel'];
 
-        $passengerBody=$request['passengerBody'];
-        $end=count($passengerBody)/5;
+
         $j=0;
+//        $passenger[0]['type']=$request['type'];
+        $passenger[0]['gender']=$request['gender'][0];
+        $passenger[0]['fname']=$request['passenger-fname'][0];
+        $passenger[0]['lname']=$request['passenger-lname'][0];
+        $passenger[0]['id']=$request['passenger-id'][0];
+        $passenger[0]['birthday']=$request['passenger-birthday'][0];
 
-        $passenger[0][0]=$request['gender'][0];
-        $passenger[0][1]=$request['passenger-fname'][0];
-        $passenger[0][2]=$request['passenger-lname'][0];
-        $passenger[0][3]=$request['passenger-id'][0];
-        $passenger[0][4]=$request['passenger-birthday'][0];
+        if (isset($request['passengerBody'])){
+            $end=count($request['passengerBody'])/5; //5 => number of field of passenger
 
-        for ($i=1;$i<=$end;$i++){
-            $inc=0;
-            while ($inc < '5'){
-//                echo $j;
-                $passenger[$i][$inc]=$passengerBody[$j];
-                $j++;
-                $inc++;
+            for ($i=1;$i<=$end;$i++){
+//                $passenger[$i]['type']=$request['type'][$j++];
+                $passenger[$i]['gender']=$request['passengerBody'][$j++];
+                $passenger[$i]['fname']=$request['passengerBody'][$j++];
+                $passenger[$i]['lname']=$request['passengerBody'][$j++];
+                $passenger[$i]['id']=$request['passengerBody'][$j++];
+                $passenger[$i]['birthday']=$request['passengerBody'][$j++];
             }
-        }
 
-        //end=5
-        $check_id='false';
-        for ($i=0;$i<=$end;$i++) { //0 1 2 3 4 5
-            for($j=$i+1;$j<=$end;$j++){
-                if (in_array($passenger[$i][3],[$passenger[$j][3]])){  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
-                    $check_id='true';
+            //end=5
+            $check_id='false';
+            for ($i=0;$i<=$end;$i++) { //0 1 2 3 4 5
+                for($j=$i+1;$j<=$end;$j++){
+                    if (in_array($passenger[$i]['id'],[$passenger[$j]['id']])){  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
+                        $check_id='true';
+                    }
                 }
             }
         }
 
-        return view('Panel.reserved');
-
-
-//        return $request->validate([
-//            'customer-name'=>'required',
-//            'email'=>'required|email',
-//            'tel'=>'required|digits:11',
-//            'sex' => [
-//                'required',
-//                Rule::notIn(['select']),
-//            ],
-//            'passenger-fname'=>'required',
-//            'passenger-lname'=>'required',
-//            'passenger-id'=>'required|digits:10',
-//            'passenger-birthday'=>'required',
-//        ]);
+        return view('Panel.reserved',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
 
 
     }

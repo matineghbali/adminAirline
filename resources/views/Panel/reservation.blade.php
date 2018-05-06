@@ -88,33 +88,34 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-12" >
-                            <div class="panelTitle">اطلاعات بلیط {{$data['DepartureAirport']}} به {{$data['ArrivalAirport']}} {{$data['DepartureDate']}}</div>
+                            <div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
+                                {{$data['DepartureDate']}}</div>
 
                             <div class="panel">
                                 <div class="row panelContent" >
                                     <div class="col-md-3">
                                         <h3>{{$data['DepartureTime']}}</h3>
-                                        <span>{{$data['DepartureAirport']}}  {{$data['ArrivalAirport']}}</span>
+                                        <span>{{CodeToCity($data['DepartureAirport'])}}  {{CodeToCity($data['ArrivalAirport'])}}</span>
                                     </div>
                                     <div class="col-md-2" style="padding-top: 20px">
-                                        <span class="text-muted" >هواپیمایی {{$data['MarketingAirline']}}</span>
+                                        <span class="text-muted" >هواپیمایی {{$data['MarketingAirlineFA']}}</span>
                                     </div>
                                     <div class="col-md-2">
                                         <ul>
                                             <li>هواپیما: <b>{{$data['AirEquipType']}} </b></li>
-                                            <li>شماره پرواز: <b>{{$data['FlightNumber']}}</b></li>
+                                            <li>شماره پرواز: <b>{{toPersianNum($data['FlightNumber'])}}</b></li>
                                         </ul>
                                     </div>
                                     <div class="col-md-2">
                                         <ul>
                                             <li>پرواز  <b>چارتر </b></li>
-                                            <li>کلاس پروازی: <b>{{$data['cabinType']}}</b></li>
+                                            <li>کلاس پروازی: <b>{{$data['cabinTypeFA']}}</b></li>
                                         </ul>
 
                                     </div>
                                     <div class="col-md-3">
-                                        <h3>{{$data['passengerNumber']}} نفر </h3>
-                                        <span>{{$data['price']}} تومان</span>
+                                        <h3>{{toPersianNum($data['passengerNumber'])}} نفر </h3>
+                                        <span>{{toPersianNum($data['price'])}} تومان</span>
                                     </div>
 
                                 </div>
@@ -123,10 +124,10 @@
 
 
                             <form id="defaultForm" method="post" action="{{route('reserve')}}">
-                                <input type="hidden" id="number" name="number" >
+                                <input type="hidden" id="number" name="number">
                                 {{csrf_field()}}
-                                <div class="formContent">
-                                    {{--customer info--}}
+                                {{--customer info--}}
+                                <div class="customerContent">
                                     <div class="customerInfo">
                                         <div class="row" >
                                             <div class="col-sm-4">
@@ -209,9 +210,9 @@
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
                                                 <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
                                             </div>
-
                                         </div>
                                         <div class="row passengerInfo">
+                                            {{--<input type="hidden" value="ADT" name="type[]" class="PassengerType" >--}}
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
@@ -258,14 +259,15 @@
 
 
                                     <div class="passengerBody hide" id="passengerBodyADT">
+
                                         <div class="row">
                                             <div class="passengerPastPassenger">
                                                 <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
                                                 <button type="button" class="btn btn-danger btn-xs removeBTN" id="removeADT"><i class="fa fa-remove removeButton"></i></button>
                                             </div>
-
                                         </div>
                                         <div class="row passengerInfo">
+                                            {{--<input type="hidden" value="ADT" name="type[]" class="PassengerType" >--}}
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
