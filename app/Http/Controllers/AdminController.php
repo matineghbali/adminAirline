@@ -481,7 +481,9 @@ class AdminController extends Controller
 
     public function reserve(Request $request){
 
+//        return $request->all();
 
+        $check_id = 'false';
         $sessionArray=session('data');
         $Number=explode('.',$request['number']);
         $sessionArray['passengerNumber']=$Number[0];
@@ -494,7 +496,6 @@ class AdminController extends Controller
 
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
-
 
 //        $request=[
 //            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
@@ -550,8 +551,6 @@ class AdminController extends Controller
 //                "1397/2/18"
 //            ],
 //        ];
-
-
         $customer['name']=$request['customer-name'];
         $customer['email']=$request['email'];
         $customer['tel']=$request['tel'];
@@ -565,32 +564,36 @@ class AdminController extends Controller
         $passenger[0]['id']=$request['passenger-id'][0];
         $passenger[0]['birthday']=$request['passenger-birthday'][0];
 
-        if (isset($request['passengerBody'])){
-            $end=count($request['passengerBody'])/5; //5 => number of field of passenger
+        if (isset($request['passengerBody'])) {
+            $end = count($request['passengerBody']) / 5; //5 => number of field of passenger
 
-            for ($i=1;$i<=$end;$i++){
+            for ($i = 1; $i <= $end; $i++) {
 //                $passenger[$i]['type']=$request['type'][$j++];
-                $passenger[$i]['gender']=$request['passengerBody'][$j++];
-                $passenger[$i]['fname']=$request['passengerBody'][$j++];
-                $passenger[$i]['lname']=$request['passengerBody'][$j++];
-                $passenger[$i]['id']=$request['passengerBody'][$j++];
-                $passenger[$i]['birthday']=$request['passengerBody'][$j++];
+                $passenger[$i]['gender'] = $request['passengerBody'][$j++];
+                $passenger[$i]['fname'] = $request['passengerBody'][$j++];
+                $passenger[$i]['lname'] = $request['passengerBody'][$j++];
+                $passenger[$i]['id'] = $request['passengerBody'][$j++];
+                $passenger[$i]['birthday'] = $request['passengerBody'][$j++];
             }
 
             //end=5
-            $check_id='false';
-            for ($i=0;$i<=$end;$i++) { //0 1 2 3 4 5
-                for($j=$i+1;$j<=$end;$j++){
-                    if (in_array($passenger[$i]['id'],[$passenger[$j]['id']])){  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
-                        $check_id='true';
+            for ($i = 0; $i <= $end; $i++) { //0 1 2 3 4 5
+                for ($j = $i + 1; $j <= $end; $j++) {
+                    if (in_array($passenger[$i]['id'], [$passenger[$j]['id']])) {  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
+                        $check_id = 'true';
+                        $repeat_id= $passenger[$i]['id'];
                     }
                 }
             }
         }
+        if ($check_id=='true')
+            return redirect()->back()->with('message', "کد ملی $repeat_id تکراریست.")->withInput();
+        else{
+            session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
 
-        session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
+            return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
 
-        return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
+        }
 
     }
 
@@ -599,6 +602,7 @@ class AdminController extends Controller
 
         $TravelerInfo[]='';
 
+        //receive passengers info
         for ($i=0;$i<$count;$i++) {
             $TravelerInfo[$i]=
                     [
@@ -632,11 +636,7 @@ class AdminController extends Controller
         }
 
 
-
-
-
-        $json =
-                [
+        $json =[
                     "POS" => [
                         "Source" => [
                             "RequestorID" => [
@@ -721,12 +721,11 @@ class AdminController extends Controller
 
         curl_close($curl);
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            $response=json_decode($response,true);
-            return $response;
-        }
+        $response=json_decode($response,true);
+        return $response;
+
+
+
 
     }
 

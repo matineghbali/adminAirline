@@ -69,21 +69,28 @@ $(document).ready(function() {
                         message: 'کد ملی را وارد کنید'
                     },
 
-                    stringLength: {
-                        min: 10,
-                        max: 10,
-                        message: 'کد ملی باید 10 رقم باشد'
-                    },
-                    regexp: {
-                        regexp: /^[0-9]+$/,
-                        message: 'کد ملی را ارقام انگلیسی وارد کنید'
-                    },
+                    // stringLength: {
+                    //     min: 10,
+                    //     max: 10,
+                    //     message: 'کد ملی باید 10 رقم باشد'
+                    // },
+                    // regexp: {
+                    //     regexp: /^[0-9]+$/,
+                    //     message: 'کد ملی را ارقام انگلیسی وارد کنید'
+                    // },
                 }
             },
             'passenger-birthday[]': {
                 validators: {
                     notEmpty: {
                         message: 'تاریخ تولد خود را انتخاب کنید'
+                    }
+                }
+            },
+            'type': {
+                validators: {
+                    notEmpty: {
+                        message: 'required'
                     }
                 }
             },
@@ -126,7 +133,7 @@ $(document).ready(function() {
 
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
 
-    $('#submit').click(function () {
+    $('.btnSubmit').click(function () {
         $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
     });
 

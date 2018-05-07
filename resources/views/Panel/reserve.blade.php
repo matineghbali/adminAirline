@@ -213,11 +213,22 @@
 
 
                                 {{--submit --}}
-                                <div class="row">
+                                <div class="row" style="margin-top: 20px">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
-                                        <div class="passengerBtn">
-                                            <button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="passengerBtn">
+                                                    <a href="{{route('reservation')}}" ><button class="btn btn-primary btn-block" type="button" id="editBtn">اصلاح اطلاعات</button></a>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="passengerBtn">
+                                                    <a href="{{route('reserved')}}" ><button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button></a>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -236,19 +247,19 @@
 
 
 
-            <script>
-                $('#btn').click(function () {
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/reserved',
-                        contentType : false,
-                        processData: false,
+            {{--<script>--}}
+                {{--$('#btn').click(function () {--}}
+                    {{--$.ajax({--}}
+                        {{--method: 'get',--}}
+                        {{--url: '/admin/reserved',--}}
+                        {{--contentType : false,--}}
+                        {{--processData: false,--}}
 
-                    }).done(function (response) {
-                        console.log(response);
-                    });
-                })
-            </script>
+                    {{--}).done(function (response) {--}}
+                        {{--console.log(response);--}}
+                    {{--});--}}
+                {{--})--}}
+            {{--</script>--}}
 
         </div>
         <!-- /. PAGE INNER  -->
