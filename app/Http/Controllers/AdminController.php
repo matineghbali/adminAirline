@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use function MongoDB\BSON\toJSON;
 
 class AdminController extends Controller
 {
@@ -24,6 +25,8 @@ class AdminController extends Controller
         //input:1397/1/21
         //input for api :"2018-04-16T00:00:00"
         //output of carbon : 2018-04-18 10:20:30
+
+
         $myarray = explode('/', $date);
 
         $miladi = jalali_to_gregorian($myarray[0], $myarray[1], $myarray[2], 0);
@@ -80,72 +83,79 @@ class AdminController extends Controller
             session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
 
         else{
-            $json=[
-                "POS"=> [
-                    "Source"=> [
-                        "RequestorID"=> [
-                            "MessagePassword"=> "6eeb834b13420733904e2ae33b3d8821",
-                            "Name"=> "ghasedak"
-                        ],
-                        "Language"=> null
-                    ]
-                ],
-                "OriginDestinationInformation"=> [
-                    "OriginLocation"=> [
-                        "LocationCode"=> $request['OriginLocation']
-                    ],
-                    "DestinationLocation"=> [
-                        "LocationCode"=> $request['DestinationLocation']
-                    ],
-                    "DepartureDateTime"=> [
-                        "WindowBefore"=> 0,
-                        "WindowAfter"=> 0,
-                        "Value"=> $this->getDate($request['DepartureDateTime'])
-                    ]
-                ],
-                "TravelPreferences"=> null,
-                "TravelerInfoSummary"=> [
-                    "AirTravelerAvail"=> [
-                        "PassengerTypeQuantity"=> [
-                            [
-                                "Code"=> "ADT",
-                                "Quantity"=> $request['ADT']
-                            ],
-                            [
-                                "Code"=> "CHD",
-                                "Quantity"=> $request['CHD']
-                            ],
-                            [
-                                "Code"=> "INF",
-                                "Quantity"=> $request['INF']
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirLowFareSearchV6",
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS =>json_encode($json),
-                CURLOPT_HTTPHEADER => array(
-                    "content-type: application/json",
-                ),
-            ));
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-            curl_close($curl);
-            $response=json_decode($response,true);
+            $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->getDate($request['DepartureDateTime']),
+            $request['ADT'],$request['CHD'],$request['INF']);
+
             session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
 
 
         }
     }
+    public function ApiForSearchFlight($OriginLocation,$DestinationLocation,$DepartureDateTime,$ADT,$CHD,$INF){
+        $json=[
+            "POS"=> [
+                "Source"=> [
+                    "RequestorID"=> [
+                        "MessagePassword"=> "6eeb834b13420733904e2ae33b3d8821",
+                        "Name"=> "ghasedak"
+                    ],
+                    "Language"=> null
+                ]
+            ],
+            "OriginDestinationInformation"=> [
+                "OriginLocation"=> [
+                    "LocationCode"=> $OriginLocation
+                ],
+                "DestinationLocation"=> [
+                    "LocationCode"=> $DestinationLocation
+                ],
+                "DepartureDateTime"=> [
+                    "WindowBefore"=> 0,
+                    "WindowAfter"=> 0,
+                    "Value"=> $DepartureDateTime
+                ]
+            ],
+            "TravelPreferences"=> null,
+            "TravelerInfoSummary"=> [
+                "AirTravelerAvail"=> [
+                    "PassengerTypeQuantity"=> [
+                        [
+                            "Code"=> "ADT",
+                            "Quantity"=> $ADT
+                        ],
+                        [
+                            "Code"=> "CHD",
+                            "Quantity"=> $CHD
+                        ],
+                        [
+                            "Code"=> "INF",
+                            "Quantity"=> $INF
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirLowFareSearchV6",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS =>json_encode($json),
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/json",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+        $response=json_decode($response,true);
+        return $response;
+    }
+
 
     public function getFlight3(){
 
@@ -344,10 +354,6 @@ class AdminController extends Controller
                         'CHDNumber'=>$CHDNumber,
                         'INFNumber'=>$INFNumber,
 
-                        'ADTPrice' => $price['ADT'][0],
-                        'CHDPrice' => $price['CHD'][0],
-                        'INFPrice' => $price['INF'][0]
-
                     ]]);
 
 
@@ -482,7 +488,13 @@ class AdminController extends Controller
         $sessionArray['ADTNumber']=$Number[1];
         $sessionArray['CHDNumber']=$Number[2];
         $sessionArray['INFNumber']=$Number[3];
-        $sessionArray['price']=$sessionArray['ADTPrice']*$Number[1] + $sessionArray['CHDPrice']*$Number[2] + $sessionArray['INFPrice']*$Number[3];
+
+        $response=$this->ApiForSearchFlight($sessionArray['DepartureAirport'],$sessionArray['ArrivalAirport'],$sessionArray['DepartureDateTimeEN'],
+            $sessionArray['ADTNumber'],$sessionArray['CHDNumber'],$sessionArray['INFNumber']);
+
+
+        $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
+
 
 //        $request=[
 //            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
@@ -515,7 +527,7 @@ class AdminController extends Controller
 //                null
 //            ],
 //            "passenger-birthday" => [
-//                "۱۳۹۱/۰۲/۰۶",
+//                "1397/2/18",
 //                null,
 //                null,
 //                null
@@ -525,17 +537,17 @@ class AdminController extends Controller
 //                "b2",
 //                "b22",
 //                "4310924362",
-//                "93/2/1",
+//                "1397/2/18",
 //                "1",
 //                "k1",
 //                "k11",
 //                "4310924311",
-//                "93/8/8",
+//                "1397/2/18",
 //                "0",
 //                "n1",
 //                "n11",
 //                "4310924367",
-//                "93/7/7"
+//                "1397/2/18"
 //            ],
 //        ];
 
@@ -576,10 +588,148 @@ class AdminController extends Controller
             }
         }
 
-        return view('Panel.reserved',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
+        session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
 
+        return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
 
     }
+
+    public function reserved(){
+        $count=count(session('dataForPayment')['passenger']);
+
+        $TravelerInfo[]='';
+
+        for ($i=0;$i<$count;$i++) {
+            $TravelerInfo[$i]=
+                    [
+                          "PersonName"=> [
+                            "NamePrefix"=> null,
+                            "GivenName"=> session('dataForPayment')['passenger'][$i]['fname'],
+                            "Surname"=> session('dataForPayment')['passenger'][$i]['lname']
+                          ],
+                          "Telephone"=> [
+                            "CountryAccessCode"=> null,
+                            "AreaCityCode"=> null,
+                            "PhoneNumber"=> session('dataForPayment')['customer']['tel']
+                          ],
+                          "Email"=> [
+                            "Value"=> session('dataForPayment')['customer']['email']
+                          ],
+                          "Document"=> [
+                            "DocID"=> session('dataForPayment')['passenger'][$i]['id'],
+                            "DocType"=> 5,
+                            "ExpireDate"=> "2020-03-27T13:51:40",
+                            "DocIssueCountry"=> "IR",
+                            "BirthCountry"=> null,
+                            "DocHolderNationality"=> "IR"
+                          ],
+                          "Gender"=> 0,
+                          "BirthDate"=> $this->getDate(session('dataForPayment')['passenger'][$i]['birthday']),
+                          "PassengerTypeCode"=> "ADT",
+                          "AccompaniedByInfantInd"=> true
+                    ] ;
+
+        }
+
+
+
+
+
+        $json =
+                [
+                    "POS" => [
+                        "Source" => [
+                            "RequestorID" => [
+                                "MessagePassword" => "6eeb834b13420733904e2ae33b3d8821",
+                                "Name" => "ghasedak"
+                            ],
+                            "Language" => null
+                        ]
+                    ],
+
+                    "AirItinerary" => [
+                        "OriginDestinationOptions" => [
+                            [
+                                "FlightSegment" => [
+                                    [
+                                        "DepartureAirport" => [
+                                            "LocationCode" => session('dataForPayment')['data']['DepartureAirport'],
+                                            "Terminal" => null
+                                        ],
+                                        "ArrivalAirport" => [
+                                            "LocationCode" => session('dataForPayment')['data']['ArrivalAirport'],
+                                            "Terminal" => null
+                                        ],
+                                        "Equipment" => null,
+                                        "DepartureDateTime" => session('dataForPayment')['data']['DepartureDateTimeEN'],
+                                        "ArrivalDateTime" => session('dataForPayment')['data']['ArrivalDateTimeEN'],
+                                        "StopQuantity" => null,
+                                        "RPH" => 0,
+                                        "MarketingAirline" => null,
+                                        "FlightNumber" => session('dataForPayment')['data']['FlightNumber'],
+                                        "FareBasisCode" => session('dataForPayment')['data']['FareBasisCode'],
+                                        "CabinType" => null,
+                                        "ResBookDesigCode" => null,
+                                        "Comment" => null,
+                                        "LockId" => null
+                                    ]
+                                ]
+                            ]
+                        ],
+                        "DirectionInd" => 0
+                    ],
+                    "PriceInfo" => null,
+
+                    "TravelerInfo" =>$TravelerInfo,
+
+                    "Fulfillment" => [
+                        "PaymentDetails" => [
+                            [
+                                "PaymentAmount" => [
+                                    "CurrencyCode" => "IRR",
+                                    "Amount" => session('dataForPayment')['data']['price']
+                                ]
+                            ]
+                        ]
+                    ],
+                    "BookingReferenceID" => [
+                        "ID" => "A00001554"
+                    ]
+                ];
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://sepehrapitest.ir/api/OpenTravelAlliance/Air/AirBookV6",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30000,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($json),
+            CURLOPT_HTTPHEADER => array(
+                // Set here requred headers
+//                "accept: */*",
+//                "accept-language: en-US,en;q=0.8",
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            $response=json_decode($response,true);
+            return $response;
+        }
+
+    }
+
 
 
 

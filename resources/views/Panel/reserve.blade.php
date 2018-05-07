@@ -123,9 +123,6 @@
 
 
 
-                            <form id="defaultForm" method="post" action="{{route('reserve')}}">
-                                <input type="hidden" id="number" name="number" >
-                                {{csrf_field()}}
                                 {{--customer info--}}
                                 <div class="passengerContent" id="ADT">
                                     <div class="passengerHeader">
@@ -152,7 +149,6 @@
 
                                     </div>
                                 </div>
-
 
                                 {{--Passenger info--}}
                                 <div class="passengerContent" style="margin-top: 30px">
@@ -221,14 +217,11 @@
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
                                         <div class="passengerBtn">
-                                            <button class="btn btn-primary btn-block" type="submit" id="submit" name="submit">ثبت اطلاعات</button>
-                                            <button type="button" class="btn btn-info" id="validateBtn">Manual validate</button>
-
+                                            <button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button>
                                         </div>
                                     </div>
                                 </div>
 
-                            </form>
 
 
 
@@ -243,9 +236,19 @@
 
 
 
-            {{--<script>--}}
-            {{--$('#number').val(number);--}}
-            {{--</script>--}}
+            <script>
+                $('#btn').click(function () {
+                    $.ajax({
+                        method: 'get',
+                        url: '/admin/reserved',
+                        contentType : false,
+                        processData: false,
+
+                    }).done(function (response) {
+                        console.log(response);
+                    });
+                })
+            </script>
 
         </div>
         <!-- /. PAGE INNER  -->
