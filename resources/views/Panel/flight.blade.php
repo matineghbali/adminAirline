@@ -7,7 +7,7 @@
 
                             <div class="row">
                                 <div class="col-sm-2 form-group">
-                                    <input type="text"  id="datepicker" class="form-control"  placeholder="تاریخ پرواز" >
+                                    <input type="text"  id="datepicker" class="form-control"  placeholder="تاریخ پرواز" readonly>
                                 </div>
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="OriginLocation" tabindex="0" data-live-search-style="startsWith" class="selectpicker form-control" >

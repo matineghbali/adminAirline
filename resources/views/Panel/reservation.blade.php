@@ -38,9 +38,6 @@
     {{--<script src="/assets/js/custom.js"></script>--}}
 
 
-
-
-
 </head>
 <body>
 <div id="wrapper">
@@ -80,13 +77,6 @@
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper" >
         <div id="page-inner">
-
-            @if(session()->has('message'))
-                <div class="alert alert-danger">
-                    {{ session()->get('message') }}
-                </div>
-            @endif
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -125,7 +115,6 @@
                             </div>
 
 
-
                             <form id="defaultForm" method="post" action="{{route('reserve')}}">
                                 <input type="hidden" id="number" name="number">
                                 {{csrf_field()}}
@@ -136,14 +125,14 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name" value="{{old('customer-name')}}">
+                                                    <input class="form-control" type="text" name="customer-name" value="matin">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="email1" class="formLabel">ایمیل</label>
-                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="{{old('email')}}">
+                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="matin.eghbali74@gmail.com">
                                                         <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
 
                                                 </div>
@@ -152,7 +141,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="tel" class="formLabel">شماره تماس</label>
-                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="{{old('tel')}}">
+                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="09367687492">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
 
                                                 </div>
@@ -168,7 +157,6 @@
                                 </div>
 
                                 {{--add field--}}
-
                                 <div class="addFieldContent">
                                     <div class="row">
                                         <div class="col-md-6 col-lg-7 m-passengers__section addFieldLabel">
@@ -199,6 +187,11 @@
 
                                 </div>
 
+                                {{--alert for id--}}
+                                <div id="alert">
+
+                                </div>
+
                                 {{--adult info--}}
                                 <div class="passengerContent" id="ADT">
                                     <div class="passengerHeader">
@@ -215,13 +208,13 @@
                                             </div>
                                         </div>
                                         <div class="row passengerInfo">
-                                            {{--<input type="hidden" value="ADT" name="type" class="PassengerType" >--}}
+                                            <input type="hidden" value="ADT" name="typeADT" class="PassengerType" >
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
                                                     <select class="form-control" name="gender[]" required>
                                                         <option value="">انتخاب</option>
-                                                        <option value="0">زن</option>
+                                                        <option value="0" selected>زن</option>
                                                         <option value="1">مرد</option>
                                                     </select>
 
@@ -230,41 +223,46 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passenger-fname[0]')}}">
+                                                    <input class="form-control" type="text" name="passenger-fname[]" >
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passenger-lname[0]')}}">
+                                                    <input class="form-control" type="text" name="passenger-lname[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passenger-id[0]')}}">
+                                                    <input class="form-control" type="text" name="passenger-id[]">
 
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday[]" value="{{old('passenger-birthday[]')}}">
+                                                    <input class="form-control " type="text" name="passenger-birthday[]" readonly>
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
                                             </div>
-                                            {{--<div class="col-sm-1">--}}
-                                                {{--<div class="form-group ">--}}
-                                                    {{--<input type="text" value="ADT" name="type[]" class="PassengerType" >--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
                                         </div>
 
                                     </div>
+                                    {{--<input class="form-control " type="text" name="passenger-birthday[]" readonly="" data-bv-field="passenger-birthday[]">--}}
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-3301237">--}}
 
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
+                                    {{----}}
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
+
+
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
+                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
 
                                     <div class="passengerBody hide" id="passengerBodyADT">
                                         <div class="row">
@@ -274,12 +272,15 @@
                                             </div>
                                         </div>
                                         <div class="row passengerInfo">
+                                            <div class="form-group">
+                                                <input type="hidden" value="ADT" name="type" class="PassengerType">
+                                            </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
                                                     <select class="form-control" name="gender[]" required>
-                                                        <option value="">انتخاب</option>
-                                                        <option value="0">زن</option>
+                                                        <option value="" >انتخاب</option>
+                                                        <option value="0" selected>زن</option>
                                                         <option value="1">مرد</option>
                                                     </select>
 
@@ -288,37 +289,32 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passenger-fname[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-fname[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passenger-lname[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-lname[]">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passenger-id[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-id[]">
 
                                                 </div>
                                             </div>
-                                            <div class="col-sm-3">
+
+                                            <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control" type="text" name="passenger-birthday[]" value="{{old('passenger-birthday[]')}}">
+                                                    <input class="form-control ADTdatepicker" type="text" name="passenger-birthday[]" readonly>
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
                                             </div>
-                                            {{--<div class="col-sm-1">--}}
-                                                {{--<div class="form-group ">--}}
-                                                    {{--<input type="text" value="ADT" name="type[]" class="PassengerType" >--}}
-                                                {{--</div>--}}
-                                            {{--</div>--}}
-
                                         </div>
 
                                     </div>
@@ -354,11 +350,12 @@
                                                 <div class="passengerBtn">
                                                     <button type="button" class=" btn btn-block btn-info" id="validateBtn">رفع ارور</button>
                                                 </div>
-
                                             </div>
                                             <div class="col-sm-6">
-                                                <div class="passengerBtn">
-                                                    <button class="btn btn-block btn-primary  btnSubmit" type="submit">ثبت اطلاعات</button>
+                                                <div class="passengerBtn" >
+                                                     <button class="btn btn-block btn-primary  btnSubmit" type="submit">
+                                                          ثبت اطلاعات
+                                                     </button>
                                                 </div>
                                             </div>
 

@@ -131,6 +131,8 @@ $(document).ready(function() {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
+
+
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
 
     $('.btnSubmit').click(function () {
@@ -155,7 +157,7 @@ $(document).ready(function() {
         $('#INF').css("visibility", "visible");
         $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
         $('#INF .removeBTN').attr('id','removeINF');
-        $('#INF .PassengerType').val('INF')
+        $('#INF .PassengerType').val('INF');
         for(i=0;i<INFNumber;i++)
             AddPassengerBody('INF');
     }
@@ -245,8 +247,42 @@ $(document).ready(function() {
         $(this).parents('.passengerBody').remove();
     });
 
+    $(this).on('submit', function (event) {
+        nIds = [];
+        $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
+            if ($(this).val()) nIds.push($(this).val());
+        });
+        nIds.sort();
+        nIdsDId=false;
+        for (var i = 0; i < nIds.length - 1; i++) {
+            if (nIds[i + 1] == nIds[i]) {
+                nIdsDId = true;
+                tekrariid=nIds[i];
+                // alert('tekrari');
+                // toastr.clear();
+                // toastr.error('کد ملی ' + self.en2fa(nIds[i]) + ' تکراریست.');
+                // event.preventDefault();
+                // $('[type=submit]').removeAttr('disabled');
+            }
+        }
+
+        if (nIdsDId){
+            // toastr.clear();
+            // toastr.error('کد ملی ' + self.en2fa(nIds[i]) + ' تکراریست.');
+            $('#alert').text('');
+            $('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                '<span aria-hidden="true">&times;</span></button>  کد ملی  '+tekrariid+' تکراریست. </div>').appendTo('#alert');
+            // alert('کد ملی ' + tekrariid + ' تکراریست.');
+            event.preventDefault();
+            $('.btnSubmit').attr('disabled', 'disabled');
+        }
+        // else
+        //     alert(nIdsDId);
+
+    });
 
     function AddPassengerBody(passenger) {
+
         var template     = "passengerBody",
         $templateEle = $('#' + template + passenger),
 
@@ -254,17 +290,44 @@ $(document).ready(function() {
 
         $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
 
-
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
 
+        // alert($('#' + passenger + ' .ADTdatepicker').attr('data-bv-field'));
 
-        for (j = 0; j <= 3; j++) {
+        // $('#' + passenger + ' .ADTdatepicker').persianDatepicker({
+        //     startDate: 'today',
+        //     endDate: '1400/2/2'
+        // });
+
+        if (passenger=='ADT'){
+            startDate='today';
+            endDate='1397/2/19';
+        }
+        else if (passenger=='CHD'){
+            startDate='today';
+            endDate='1397/2/20';
+        }
+        else if (passenger=='INF'){
+            startDate='today';
+            endDate='1397/2/21';
+        }
+
+        $('input[data-bv-field^="passenger-birthday[]"]').each(function(e) {
+            $(this).persianDatepicker({
+                 startDate: startDate,
+                 endDate: endDate
+            });
+        });
+
+            for (j = 0; j <= 4; j++) {
             var $el = $row.find('input').eq(j).attr('name', template + '[]');
             $('#defaultForm').bootstrapValidator('addField', $el);
 
         }
     }
+
+
 
 
 

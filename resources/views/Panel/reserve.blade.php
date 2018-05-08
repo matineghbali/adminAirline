@@ -20,11 +20,7 @@
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
-    <script >
-        var ADTNumber= {{$data['ADTNumber']}};
-        var CHDNumber= {{$data['CHDNumber']}};
-        var INFNumber= {{$data['INFNumber']}};
-    </script>
+
 
     <script src="/assets/js/reservation.js"></script>
 
@@ -36,9 +32,6 @@
     {{--js for toggleButton--}}
     <script src="/assets/js/jquery.metisMenu.js"></script>
     {{--<script src="/assets/js/custom.js"></script>--}}
-
-
-
 
 
 </head>
@@ -80,10 +73,6 @@
     <!-- /. NAV SIDE  -->
     <div id="page-wrapper" >
         <div id="page-inner">
-
-            adt:{{$data['ADTNumber']}}
-            chd:{{$data['CHDNumber']}}
-            inf:{{$data['INFNumber']}}
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
@@ -179,7 +168,13 @@
                                                             {{toPersianNum(++$i)}}
                                                         </td>
                                                         <td>
-
+                                                            @if($item['type']=='ADT')
+                                                                بزرگسال
+                                                            @elseif($item['type']=='CHD')
+                                                                کودک
+                                                            @else
+                                                                نوزاد
+                                                            @endif
                                                         </td>
                                                         <td>
                                                             @if($item['gender']==0)

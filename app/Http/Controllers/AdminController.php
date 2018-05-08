@@ -21,7 +21,7 @@ class AdminController extends Controller
 
     }
 
-    public function getDate($date){
+    public function DateFormatOfAPI($date){
         //input:1397/1/21
         //input for api :"2018-04-16T00:00:00"
         //output of carbon : 2018-04-18 10:20:30
@@ -36,25 +36,8 @@ class AdminController extends Controller
             $miladi[2]="0$miladi[2]";
 
 
-        $myDate = "$miladi[0]-$miladi[1]-$miladi[2]";
-        $carbon=explode(' ',Carbon::now());
-
-        if ($myDate < $carbon[0]){
-            $myDateForApi = "$carbon[0]T00:00:00";
-            $carbon=explode('-',$carbon[0]);
-            session(['Date'=>gregorian_to_jalali($carbon[0],$carbon[1],$carbon[2],1)]);
-//            $this->date=gregorian_to_jalali($carbon[0],$carbon[1],$carbon[2],1);
-
-        }
-        else{
-            $myDateForApi = $myDate.'T00:00:00';
-            session(['Date'=>'false']);
-
-//            $this->date="false";
-        }
-
-        return $myDateForApi;
-
+        $myDate = "$miladi[0]-$miladi[1]-$miladi[2]T00:00:00";
+        return $myDate;
     }
 
     public function getFlight2(Request $request){
@@ -83,7 +66,7 @@ class AdminController extends Controller
             session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
 
         else{
-            $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->getDate($request['DepartureDateTime']),
+            $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->DateFormatOfAPI($request['DepartureDateTime']),
             $request['ADT'],$request['CHD'],$request['INF']);
 
             session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
@@ -91,6 +74,7 @@ class AdminController extends Controller
 
         }
     }
+
     public function ApiForSearchFlight($OriginLocation,$DestinationLocation,$DepartureDateTime,$ADT,$CHD,$INF){
         $json=[
             "POS"=> [
@@ -481,8 +465,6 @@ class AdminController extends Controller
 
     public function reserve(Request $request){
 
-//        return $request->all();
-
         $check_id = 'false';
         $sessionArray=session('data');
         $Number=explode('.',$request['number']);
@@ -557,7 +539,7 @@ class AdminController extends Controller
 
 
         $j=0;
-//        $passenger[0]['type']=$request['type'];
+        $passenger[0]['type']=$request['typeADT'];
         $passenger[0]['gender']=$request['gender'][0];
         $passenger[0]['fname']=$request['passenger-fname'][0];
         $passenger[0]['lname']=$request['passenger-lname'][0];
@@ -565,10 +547,9 @@ class AdminController extends Controller
         $passenger[0]['birthday']=$request['passenger-birthday'][0];
 
         if (isset($request['passengerBody'])) {
-            $end = count($request['passengerBody']) / 5; //5 => number of field of passenger
-
+            $end = count($request['passengerBody']) / 6; //6 => number of field of passenger
             for ($i = 1; $i <= $end; $i++) {
-//                $passenger[$i]['type']=$request['type'][$j++];
+                $passenger[$i]['type']=$request['passengerBody'][$j++];
                 $passenger[$i]['gender'] = $request['passengerBody'][$j++];
                 $passenger[$i]['fname'] = $request['passengerBody'][$j++];
                 $passenger[$i]['lname'] = $request['passengerBody'][$j++];
@@ -576,24 +557,24 @@ class AdminController extends Controller
                 $passenger[$i]['birthday'] = $request['passengerBody'][$j++];
             }
 
-            //end=5
-            for ($i = 0; $i <= $end; $i++) { //0 1 2 3 4 5
+            //end=6
+            for ($i = 0; $i <= $end; $i++) { //0 1 2 3 4 5 6
                 for ($j = $i + 1; $j <= $end; $j++) {
-                    if (in_array($passenger[$i]['id'], [$passenger[$j]['id']])) {  //0=>1 2 3 4 5  //1=>2 3 4 5 //2=>3 4 5  //3=>4 5 //4=>4 5 //5=>5
+                    if (in_array($passenger[$i]['id'], [$passenger[$j]['id']])) {  //0=>1 2 3 4 5 6  //1=>2 3 4 5 6 //2=>3 4 5 6 //3=>4 5 6 //4=>4 5 6 //5=>5 6 //6=>6
                         $check_id = 'true';
                         $repeat_id= $passenger[$i]['id'];
                     }
                 }
             }
         }
-        if ($check_id=='true')
-            return redirect()->back()->with('message', "کد ملی $repeat_id تکراریست.")->withInput();
-        else{
-            session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
 
+//        if ($check_id=='true')
+//            return redirect()->back()->with('message', "کد ملی $repeat_id تکراریست.")->withInput();
+//        else{
+            session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
             return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
 
-        }
+//        }
 
     }
 
@@ -628,12 +609,13 @@ class AdminController extends Controller
                             "DocHolderNationality"=> "IR"
                           ],
                           "Gender"=> 0,
-                          "BirthDate"=> $this->getDate(session('dataForPayment')['passenger'][$i]['birthday']),
-                          "PassengerTypeCode"=> "ADT",
+                          "BirthDate"=> $this->DateFormatOfAPI(session('dataForPayment')['passenger'][$i]['birthday']),
+                          "PassengerTypeCode"=> session('dataForPayment')['passenger'][$i]['type'],
                           "AccompaniedByInfantInd"=> true
                     ] ;
 
         }
+
 
 
         $json =[
@@ -709,9 +691,6 @@ class AdminController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => json_encode($json),
             CURLOPT_HTTPHEADER => array(
-                // Set here requred headers
-//                "accept: */*",
-//                "accept-language: en-US,en;q=0.8",
                 "content-type: application/json",
             ),
         ));
