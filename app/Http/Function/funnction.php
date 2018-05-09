@@ -281,4 +281,36 @@ function comparedate($_date_mix_jalaly,$_date_mix_gregorian)
     return true ;
 }
 
+function getBirthday($passenger){
+//    $date=explode(' ',\Carbon\Carbon::now());
+//    $array=explode('-',$date[0]);
+//    $y=$array[0];$m=$array[1];$d=$array[2];
+
+    $y='1397';$m='02';$d='19';
+
+
+    if ($passenger=='INF'){
+        $infY=$y-2;
+        $start=$infY.'-'.$m.'-'.$d;
+        $infD='0'.($d-10);
+        $end=$y.'-'.$m.'-'.$infD;
+    }
+    else if ($passenger=='CHD'){
+        $chdSY=$y-12;
+        $start=$chdSY.'-'.$m.'-'.$d;
+        $chdEY=$y-2;
+        $end=$chdEY.'-'.$m.'-'.($d-1);
+    }
+    else {
+        $adtSY='1300';
+        $start=$adtSY.'-'.$m.'-'.$d;
+        $adtEY=$y-12;
+        $end=$adtEY.'-'.$m.'-'.($d-1);
+    }
+
+    return 'start:'.$start.'<br>'.'end:'.$end;
+
+
+}
+
 ?>

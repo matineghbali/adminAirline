@@ -14,16 +14,20 @@
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
     <script >
         var ADTNumber= {{$data['ADTNumber']}};
         var CHDNumber= {{$data['CHDNumber']}};
         var INFNumber= {{$data['INFNumber']}};
+
     </script>
 
     <script src="/assets/js/reservation.js"></script>
@@ -125,14 +129,14 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name" value="matin">
+                                                    <input class="form-control" type="text" name="customer-name" value="{{auth()->user()->name}}">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="email1" class="formLabel">ایمیل</label>
-                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="matin.eghbali74@gmail.com">
+                                                    <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="{{auth()->user()->email}}">
                                                         <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
 
                                                 </div>
@@ -141,7 +145,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="tel" class="formLabel">شماره تماس</label>
-                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="09367687492">
+                                                    <input type="tel" class="form-control" id="tel" aria-describedby="telHelp" name="tel" value="{{auth()->user()->tel}}">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۰۹۱۲۱۲۳۴۵۶۷</small>
 
                                                 </div>
@@ -187,11 +191,7 @@
 
                                 </div>
 
-                                {{--alert for id--}}
-                                <div id="alert">
-
-                                </div>
-
+                                <script>toastr.error( 'iliuluil' ,'' , {timeOut: 3000})</script>
                                 {{--adult info--}}
                                 <div class="passengerContent" id="ADT">
                                     <div class="passengerHeader">
@@ -244,7 +244,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control " type="text" name="passenger-birthday[]" readonly>
+                                                    <input class="form-control " type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -252,17 +252,6 @@
                                         </div>
 
                                     </div>
-                                    {{--<input class="form-control " type="text" name="passenger-birthday[]" readonly="" data-bv-field="passenger-birthday[]">--}}
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-3301237">--}}
-
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
-                                    {{----}}
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
-
-
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
-                                    {{--<input class="form-control ADTdatepicker pdp-el" type="text" name="passengerBody[]" readonly="" data-bv-field="passenger-birthday[]" pdp-id="pdp-1403283">--}}
 
                                     <div class="passengerBody hide" id="passengerBodyADT">
                                         <div class="row">
@@ -310,7 +299,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control ADTdatepicker" type="text" name="passenger-birthday[]" readonly>
+                                                    <input class="form-control ADTdatepicker" type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>

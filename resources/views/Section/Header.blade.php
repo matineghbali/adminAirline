@@ -19,8 +19,6 @@
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
 
-    <script type="text/javascript" src="/assests/js/bootstrapValidator.js"></script>
-
 
     {{--persianDatepicker--}}
     <script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>

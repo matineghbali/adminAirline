@@ -258,21 +258,11 @@ $(document).ready(function() {
             if (nIds[i + 1] == nIds[i]) {
                 nIdsDId = true;
                 tekrariid=nIds[i];
-                // alert('tekrari');
-                // toastr.clear();
-                // toastr.error('کد ملی ' + self.en2fa(nIds[i]) + ' تکراریست.');
-                // event.preventDefault();
-                // $('[type=submit]').removeAttr('disabled');
             }
         }
 
         if (nIdsDId){
-            // toastr.clear();
-            // toastr.error('کد ملی ' + self.en2fa(nIds[i]) + ' تکراریست.');
-            $('#alert').text('');
-            $('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                '<span aria-hidden="true">&times;</span></button>  کد ملی  '+tekrariid+' تکراریست. </div>').appendTo('#alert');
-            // alert('کد ملی ' + tekrariid + ' تکراریست.');
+            toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
             event.preventDefault();
             $('.btnSubmit').attr('disabled', 'disabled');
         }

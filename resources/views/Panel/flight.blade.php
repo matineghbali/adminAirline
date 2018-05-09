@@ -7,7 +7,7 @@
 
                             <div class="row">
                                 <div class="col-sm-2 form-group">
-                                    <input type="text"  id="datepicker" class="form-control"  placeholder="تاریخ پرواز" readonly>
+                                    <input type="text"  id="datepicker" class="form-control"  placeholder="تاریخ پرواز" readonly style="background-color: white;cursor: context-menu">
                                 </div>
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="OriginLocation" tabindex="0" data-live-search-style="startsWith" class="selectpicker form-control" >
@@ -313,9 +313,7 @@
                                         <option value="8">8 نوزاد</option>
                                         <option value="9">9 نوزاد</option>
                                     </select>
-
                                 </div>
-
 
                             </div>
                             <div class="row">
@@ -387,10 +385,6 @@
                                 console.log(response);
                                 $('#contentResult').attr('style','visibility:visible');
                                 $('#contentResult').html(response['html']);
-                                if (response['date'] != 'false')
-                                    $('#datepicker').val(response['date']);
-
-
                             });//end function of ajax2
 
                         });//end function of ajax1

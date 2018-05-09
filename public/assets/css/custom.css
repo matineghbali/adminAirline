@@ -266,13 +266,14 @@ background-color: #FFF;
 }
 
 .passengerHeader{
-    background: #d6e9c6;
-    border-bottom: 1px solid #d6e9c6;
+    background: #646464;
+    border-bottom: 1px solid #646464;
 }
 .passengerHeader h4{
     padding: 10px;
     font-size: 13px;
     margin: 0px;
+    color: white;
 }
 .passengerPastPassenger{
     float: left;
@@ -280,7 +281,7 @@ background-color: #FFF;
     padding-left: 20px;
 }
 .passengerContent{
-    border: 1px solid #d6e9c6;
+    border: 1px solid #646464;
     border-radius: 3px;
     background: white;
     margin-top: 20px;

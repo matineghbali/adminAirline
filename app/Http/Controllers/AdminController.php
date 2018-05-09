@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 
+use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,15 +12,6 @@ use function MongoDB\BSON\toJSON;
 class AdminController extends Controller
 {
     public $date="false";
-
-    public function index(){
-        return view('Panel/panel');
-
-    }
-    public function getFlight(){
-        return view('Panel/flight');
-
-    }
 
     public function DateFormatOfAPI($date){
         //input:1397/1/21
@@ -38,41 +30,6 @@ class AdminController extends Controller
 
         $myDate = "$miladi[0]-$miladi[1]-$miladi[2]T00:00:00";
         return $myDate;
-    }
-
-    public function getFlight2(Request $request){
-
-        session()->forget('Errors');
-        session()->forget('PassengerNumERR');
-        session()->forget('Response');
-
-
-        //$validation
-        if ($request['OriginLocation']=='null')
-            $request['OriginLocation']='';
-        if ($request['DestinationLocation']=='null')
-            $request['DestinationLocation']='';
-        $validation=Validator::make($request->all(),[
-            'DepartureDateTime' => 'required',
-            'OriginLocation' => 'required',
-            'DestinationLocation' => 'required'
-        ]);
-        if ($validation->fails())
-            session(['Errors'=>$validation->errors()]);
-        elseif (($request['INF']+$request['ADT']+$request['CHD'])>9)
-            session(['PassengerNumERR'=>"تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید"]);
-
-        elseif ($request['INF']>$request['ADT'])
-            session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
-
-        else{
-            $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->DateFormatOfAPI($request['DepartureDateTime']),
-            $request['ADT'],$request['CHD'],$request['INF']);
-
-            session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
-
-
-        }
     }
 
     public function ApiForSearchFlight($OriginLocation,$DestinationLocation,$DepartureDateTime,$ADT,$CHD,$INF){
@@ -141,6 +98,53 @@ class AdminController extends Controller
     }
 
 
+    public function index(){
+        return view('Panel/panel');
+
+    }
+
+//    search flight
+
+    public function getFlight(){
+        return view('Panel/flight');
+
+    }
+
+    public function getFlight2(Request $request){
+
+        session()->forget('Errors');
+        session()->forget('PassengerNumERR');
+        session()->forget('Response');
+
+
+        //$validation
+        if ($request['OriginLocation']=='null')
+            $request['OriginLocation']='';
+        if ($request['DestinationLocation']=='null')
+            $request['DestinationLocation']='';
+        $validation=Validator::make($request->all(),[
+            'DepartureDateTime' => 'required',
+            'OriginLocation' => 'required',
+            'DestinationLocation' => 'required'
+        ]);
+        if ($validation->fails())
+            session(['Errors'=>$validation->errors()]);
+        elseif (($request['INF']+$request['ADT']+$request['CHD'])>9)
+            session(['PassengerNumERR'=>"تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید"]);
+
+        elseif ($request['INF']>$request['ADT'])
+            session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
+
+        else{
+            $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->DateFormatOfAPI($request['DepartureDateTime']),
+            $request['ADT'],$request['CHD'],$request['INF']);
+
+            session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
+
+
+        }
+    }
+
     public function getFlight3(){
 
         // ارورهای ولیدیشن
@@ -163,6 +167,7 @@ class AdminController extends Controller
         //اارور های تعداد مسافران
         elseif (session()->has('PassengerNumERR')){
             $error=session('PassengerNumERR');
+
             $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
                 $error. '</div></div><br>';
 
@@ -453,9 +458,11 @@ class AdminController extends Controller
 
             }
         }
-        return ['html'=>$html,'date'=>session('Date')];
+        return ['html'=>$html];
     }
 
+
+//    reserve flight
 
 
     public function reservation()
@@ -707,9 +714,6 @@ class AdminController extends Controller
 
 
     }
-
-
-
 
 
 }
