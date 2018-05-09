@@ -303,16 +303,39 @@ $(document).ready(function() {
             endDate='1397/2/21';
         }
 
-        $('input[data-bv-field^="passenger-birthday[]"]').each(function(e) {
-            $(this).persianDatepicker({
-                 startDate: startDate,
-                 endDate: endDate
+
+        // $.get("/admin/getBirthday", function(data, status){
+        //     alert("Data: " + data['start'] + "\nStatus: " + status);
+        // });
+
+
+        passenger='CHD';
+
+        $.ajax({
+            method: 'get',
+            url: '/admin/getBirthday/'+passenger,
+            // data: formData,
+            contentType : false,
+            processData: false,
+        }).done(function (data) {
+            console.log(data);
+            start=data['start'];
+            end=data['end'];
+            $('input[data-bv-field^="passenger-birthday[]"]').each(function(e) {
+                $(this).persianDatepicker({
+                    startDate: start,
+                    endDate: end
+                });
             });
+
+
         });
 
-            for (j = 0; j <= 4; j++) {
-            var $el = $row.find('input').eq(j).attr('name', template + '[]');
-            $('#defaultForm').bootstrapValidator('addField', $el);
+
+
+        for (j = 0; j <= 4; j++) {
+        var $el = $row.find('input').eq(j).attr('name', template + '[]');
+        $('#defaultForm').bootstrapValidator('addField', $el);
 
         }
     }

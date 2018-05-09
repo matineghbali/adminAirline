@@ -281,35 +281,54 @@ function comparedate($_date_mix_jalaly,$_date_mix_gregorian)
     return true ;
 }
 
+function daysOfMonth($m){
+    if (1<= $m && $m <= 6)
+        return 31;
+    elseif (7 <= $m && $m <= 7)
+        return 30;
+    elseif ( $m==12 )
+        return 29;
+}
+
 function getBirthday($passenger){
 //    $date=explode(' ',\Carbon\Carbon::now());
 //    $array=explode('-',$date[0]);
 //    $y=$array[0];$m=$array[1];$d=$array[2];
 
-    $y='1397';$m='02';$d='19';
-
+    $y='1397';$m='12';$d='5';
 
     if ($passenger=='INF'){
         $infY=$y-2;
-        $start=$infY.'-'.$m.'-'.$d;
-        $infD='0'.($d-10);
-        $end=$y.'-'.$m.'-'.$infD;
+        $infM=$m;
+        if ($d>10){
+            $infD=$d-10;
+            if ($infD<10)
+                $infD='0'.$infD;
+        }
+        else{
+            $infM=$m-1;
+            $infD=(daysOfMonth($m)+$d)-10;
+        }
+        $start=$infY.'/'.$infM.'/'.$infD;
+
+        $end=$y.'/'.$infM.'/'.$infD;
     }
+
+
     else if ($passenger=='CHD'){
         $chdSY=$y-12;
-        $start=$chdSY.'-'.$m.'-'.$d;
+        $start=$chdSY.'/'.$m.'/'.$d;
         $chdEY=$y-2;
-        $end=$chdEY.'-'.$m.'-'.($d-1);
+        $end=$chdEY.'/'.$m.'/'.$d;
     }
     else {
         $adtSY='1300';
-        $start=$adtSY.'-'.$m.'-'.$d;
+        $start=$adtSY.'/'.$m.'/'.$d;
         $adtEY=$y-12;
-        $end=$adtEY.'-'.$m.'-'.($d-1);
+        $end=$adtEY.'/'.$m.'/'.($d-1);
     }
 
-    return 'start:'.$start.'<br>'.'end:'.$end;
-
+    return 'startDate:'. $start.',endDate: '.$end;
 
 }
 

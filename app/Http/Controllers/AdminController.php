@@ -716,6 +716,51 @@ class AdminController extends Controller
     }
 
 
+    public function getBirthday($passenger){
+//    $date=explode(' ',\Carbon\Carbon::now());
+//    $array=explode('-',$date[0]);
+//    $y=$array[0];$m=$array[1];$d=$array[2];
+
+        $y='1397';$m='12';$d='5';
+//        $passenger=$_GET['passenger'];
+        var_dump($passenger);
+        exit();
+
+        if ($passenger=='INF'){
+            $infY=$y-2;
+            $infM=$m;
+            if ($d>10){
+                $infD=$d-10;
+                if ($infD<10)
+                    $infD='0'.$infD;
+            }
+            else{
+                $infM=$m-1;
+                $infD=(daysOfMonth($m)+$d)-10;
+            }
+            $start=$infY.'/'.$infM.'/'.$infD;
+
+            $end=$y.'/'.$infM.'/'.$infD;
+        }
+
+
+        else if ($passenger=='CHD'){
+            $chdSY=$y-12;
+            $start=$chdSY.'/'.$m.'/'.$d;
+            $chdEY=$y-2;
+            $end=$chdEY.'/'.$m.'/'.$d;
+        }
+        else {
+            $adtSY='1300';
+            $start=$adtSY.'/'.$m.'/'.$d;
+            $adtEY=$y-12;
+            $end=$adtEY.'/'.$m.'/'.($d-1);
+        }
+
+        return ['start'=> $start,'end'=>$end];
+    }
+
+
 }
 
 

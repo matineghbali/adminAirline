@@ -14,11 +14,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->post('reserve','AdminController@reserve' )->name('reserve');
     $this->get('reserved','AdminController@reserved' )->name('reserved');
 
-    $this->get('birthday',function (){
-        return auth()->user();
-       return getBirthday('INF');
-    });
-
+    $this->get('getBirthday/{passenger}','AdminController@getBirthday' )->name('getBirthday');
 
 
 });
