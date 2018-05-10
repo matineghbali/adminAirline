@@ -11,7 +11,8 @@
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "morilog/jalali": "^2.3",
-        "nesbot/carbon": "^1.25"
+        "nesbot/carbon": "^1.25",
+        "realrashid/sweet-alert": "^1.1"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

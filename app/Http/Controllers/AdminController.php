@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use function MongoDB\BSON\toJSON;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
 {

@@ -267,6 +267,7 @@ $(document).ready(function() {
         }
 
         if (nIdsDId){
+            toastr.clear();
             toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
             event.preventDefault();
             $('.btnSubmit').attr('disabled', 'disabled');
