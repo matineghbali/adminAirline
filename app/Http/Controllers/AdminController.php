@@ -564,25 +564,10 @@ class AdminController extends Controller
                 $passenger[$i]['birthday'] = $request['passengerBody'][$j++];
             }
 
-            //end=6
-            for ($i = 0; $i <= $end; $i++) { //0 1 2 3 4 5 6
-                for ($j = $i + 1; $j <= $end; $j++) {
-                    if (in_array($passenger[$i]['id'], [$passenger[$j]['id']])) {  //0=>1 2 3 4 5 6  //1=>2 3 4 5 6 //2=>3 4 5 6 //3=>4 5 6 //4=>4 5 6 //5=>5 6 //6=>6
-                        $check_id = 'true';
-                        $repeat_id= $passenger[$i]['id'];
-                    }
-                }
-            }
         }
 
-//        if ($check_id=='true')
-//            return redirect()->back()->with('message', "کد ملی $repeat_id تکراریست.")->withInput();
-//        else{
             session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
             return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
-
-//        }
-
     }
 
     public function reserved(){
@@ -722,9 +707,8 @@ class AdminController extends Controller
 //    $y=$array[0];$m=$array[1];$d=$array[2];
 
         $y='1397';$m='12';$d='5';
-//        $passenger=$_GET['passenger'];
-        var_dump($passenger);
-        exit();
+//        var_dump($passenger);
+//        exit();
 
         if ($passenger=='INF'){
             $infY=$y-2;

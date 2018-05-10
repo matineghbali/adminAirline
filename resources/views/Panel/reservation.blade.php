@@ -85,9 +85,10 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-12" >
+
+                            {{--flight info--}}
                             <div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
                                 {{$data['DepartureDate']}}</div>
-
                             <div class="panel">
                                 <div class="row panelContent" >
                                     <div class="col-md-3">
@@ -191,7 +192,6 @@
 
                                 </div>
 
-                                <script>toastr.error( 'iliuluil' ,'' , {timeOut: 3000})</script>
                                 {{--adult info--}}
                                 <div class="passengerContent" id="ADT">
                                     <div class="passengerHeader">
@@ -244,7 +244,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control " type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
+                                                    <input class="form-control datepicker"  type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -299,7 +299,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control ADTdatepicker" type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
+                                                    <input class="form-control datepicker" type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>

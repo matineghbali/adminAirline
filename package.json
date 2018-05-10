@@ -20,6 +20,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "sweetalert2": "^7.19.3",
         "toastr": "^2.1.4"
     }
 }

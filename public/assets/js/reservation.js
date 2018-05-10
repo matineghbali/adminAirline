@@ -131,13 +131,13 @@ $(document).ready(function() {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
-
-
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
 
     $('.btnSubmit').click(function () {
         $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
     });
+
+    getBithday('ADT');  //set birthday for first ADT passenger
 
 
     for(i=1;i<ADTNumber;i++)
@@ -167,7 +167,8 @@ $(document).ready(function() {
 
     $('.addADT').on('click', function () {
         if (numberOfPassengers == 9){
-            alert(PassengerNumERR)
+            toastr.clear();
+            toastr.error(PassengerNumERR,'',{timeOut:3000});
         }
         else{
             ADTNumber++;
@@ -180,7 +181,8 @@ $(document).ready(function() {
 
     $('.addCHD').on('click', function () {
         if (numberOfPassengers == 9){
-            alert(PassengerNumERR)
+            toastr.clear();
+            toastr.error(PassengerNumERR,'',{timeOut:3000});
         }
         else{
             if ($('#CHD').css("visibility")=="hidden" && ($('#CHD').find('.passengerBody').length)==1){
@@ -202,10 +204,14 @@ $(document).ready(function() {
 
     $('.addINF').on('click', function () {
         if (numberOfPassengers == 9){
-            alert(PassengerNumERR);
+            toastr.clear();
+            toastr.error(PassengerNumERR,'',{timeOut:3000});
         }
-        else if (INFNumber>=ADTNumber)
-            alert(PassengerINFERR);
+        else if (INFNumber>=ADTNumber){
+            toastr.clear();
+            toastr.error(PassengerINFERR,'',{timeOut:3000});
+
+        }
         else{
             if ($('#INF').css("visibility")=="hidden" && ($('#INF').find('.passengerBody').length)==1){
                 $('#INF').css("visibility", "visible");
@@ -228,7 +234,6 @@ $(document).ready(function() {
         numberOfPassengers--;
         $(this).parents('.passengerBody').remove();
     });
-
 
     $(document).on("click", "#removeCHD", function(){
         if (($('#CHD').find('.passengerBody').length)-1 == 1){
@@ -283,55 +288,7 @@ $(document).ready(function() {
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
 
-        // alert($('#' + passenger + ' .ADTdatepicker').attr('data-bv-field'));
-
-        // $('#' + passenger + ' .ADTdatepicker').persianDatepicker({
-        //     startDate: 'today',
-        //     endDate: '1400/2/2'
-        // });
-
-        if (passenger=='ADT'){
-            startDate='today';
-            endDate='1397/2/19';
-        }
-        else if (passenger=='CHD'){
-            startDate='today';
-            endDate='1397/2/20';
-        }
-        else if (passenger=='INF'){
-            startDate='today';
-            endDate='1397/2/21';
-        }
-
-
-        // $.get("/admin/getBirthday", function(data, status){
-        //     alert("Data: " + data['start'] + "\nStatus: " + status);
-        // });
-
-
-        passenger='CHD';
-
-        $.ajax({
-            method: 'get',
-            url: '/admin/getBirthday/'+passenger,
-            // data: formData,
-            contentType : false,
-            processData: false,
-        }).done(function (data) {
-            console.log(data);
-            start=data['start'];
-            end=data['end'];
-            $('input[data-bv-field^="passenger-birthday[]"]').each(function(e) {
-                $(this).persianDatepicker({
-                    startDate: start,
-                    endDate: end
-                });
-            });
-
-
-        });
-
-
+        getBithday(passenger);
 
         for (j = 0; j <= 4; j++) {
         var $el = $row.find('input').eq(j).attr('name', template + '[]');
@@ -339,6 +296,38 @@ $(document).ready(function() {
 
         }
     }
+
+
+    function getBithday(passenger) {
+        $.ajax({
+            method: 'get',
+            url: '/admin/getBirthday/'+passenger,
+            contentType : false,
+            processData: false,
+        }).done(function (data) {
+            console.log(data);
+            start=data['start'];
+            end=data['end'];
+            $('#' + passenger + ' .datepicker').each(function(e) {
+                $(this).persianDatepicker({
+
+                    cellWidth: 50,
+                    cellHeight: 30,
+                    fontSize: 18,
+
+                    startDate: start,
+                    endDate: end,
+                });
+            });
+        });
+
+
+    }
+
+
+
+
+
 
 
 
