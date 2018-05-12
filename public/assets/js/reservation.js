@@ -137,7 +137,7 @@ $(document).ready(function() {
         $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
     });
 
-    getBithday('ADT');  //set birthday for first ADT passenger
+    getBirthday('ADT');  //set birthday for first ADT passenger
 
 
     for(i=1;i<ADTNumber;i++)
@@ -289,7 +289,7 @@ $(document).ready(function() {
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
 
-        getBithday(passenger);
+        getBirthday(passenger);
 
         for (j = 0; j <= 4; j++) {
         var $el = $row.find('input').eq(j).attr('name', template + '[]');
@@ -299,7 +299,7 @@ $(document).ready(function() {
     }
 
 
-    function getBithday(passenger) {
+    function getBirthday(passenger) {
         $.ajax({
             method: 'get',
             url: '/admin/getBirthday/'+passenger,
@@ -316,8 +316,10 @@ $(document).ready(function() {
                     cellHeight: 30,
                     fontSize: 18,
 
+
                     startDate: start,
                     endDate: end,
+
                 });
             });
         });

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+require_once __DIR__ . '/../Function/funnction.php';
 
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -8,11 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use function MongoDB\BSON\toJSON;
+use Morilog\Jalali\jDate;
+use Morilog\Jalali\jDateTime;
 use RealRashid\SweetAlert\Facades\Alert;
-
 class AdminController extends Controller
 {
     public $date="false";
+
+//    functions
 
     public function DateFormatOfAPI($date){
         //input:1397/1/21
@@ -98,13 +102,76 @@ class AdminController extends Controller
         return $response;
     }
 
+    public function getBirthday($passenger){
+        $date=jdate()->format('%y/%m/%d');
+        $array=explode('/',$date);
+        $y='13'.$array[0];$m=$array[1];$d=$array[2];
+
+        $infM=0;$infD=0;
+        if ($passenger=='INF'){
+            $infY=$y-2;
+            $infM=$m;
+            if ($d>7){
+                $infD=$d-7;
+                if ($infD<10)
+                    $infD='0'.$infD;
+            }
+            else{
+                $infM=$m-1;
+                $infD=(daysOfMonth($m)+$d)-7;
+            }
+            $start=$infY.'/'.$infM.'/'.$infD;
+
+            $end=$y.'/'.$infM.'/'.$infD;
+        }
+
+
+        else if ($passenger=='CHD'){
+            $infM=$m;
+            if ($d>7){
+                $infD=$d-7;
+                if ($infD<10)
+                    $infD='0'.$infD;
+            }
+            else{
+                $infM=$m-1;
+                $infD=(daysOfMonth($m)+$d)-7;
+            }
+
+            $chdSY=$y-12;
+            $start=$chdSY.'/'.$infM.'/'.($infD-1);
+            $chdEY=$y-2;
+            $end=$chdEY.'/'.$infM.'/'.($infD-1);
+        }
+        else {
+            $infM=$m;
+            if ($d>7){
+                $infD=$d-7;
+                if ($infD<10)
+                    $infD='0'.$infD;
+            }
+            else{
+                $infM=$m-1;
+                $infD=(daysOfMonth($m)+$d)-7;
+            }
+            $adtSY='1300';
+            $start=$adtSY.'/'.$infM.'/'.($infD-2);
+            $adtEY=$y-12;
+            $end=$adtEY.'/'.$infM.'/'.($infD-2);
+        }
+
+        return ['start'=> $start,'end'=>$end];
+    }
+
+//    end functions
+
+
+//    start of search flight
 
     public function index(){
         return view('Panel/panel');
 
     }
-
-//    search flight
 
     public function getFlight(){
         return view('Panel/flight');
@@ -140,7 +207,7 @@ class AdminController extends Controller
             $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->DateFormatOfAPI($request['DepartureDateTime']),
             $request['ADT'],$request['CHD'],$request['INF']);
 
-            session(['Response'=>['response'=>$response,'date'=> session('Date')]]);
+            session(['Response'=>['response'=>$response]]);
 
 
         }
@@ -177,9 +244,6 @@ class AdminController extends Controller
          //ارورهای سرور
         else{
             $myRes=session('Response');
-
-            if (session('Date') == false)
-                session(['Date'=>'false']);
 
             if ($myRes['response']['Errors']!=null){
                 if($myRes['response']['Errors'][0]['Code'] =="IpNotTrustedException")
@@ -344,6 +408,12 @@ class AdminController extends Controller
                         'CHDNumber'=>$CHDNumber,
                         'INFNumber'=>$INFNumber,
 
+                        'ADTPrice'=>$price['ADT'][0],
+                        'CHDPrice'=>$price['CHD'][0],
+                        'INFPrice'=>$price['INF'][0],
+
+
+
                     ]]);
 
 
@@ -462,9 +532,10 @@ class AdminController extends Controller
         return ['html'=>$html];
     }
 
+//    end of search flight
 
-//    reserve flight
 
+//    start of reserve flight
 
     public function reservation()
     {
@@ -484,6 +555,30 @@ class AdminController extends Controller
         $response=$this->ApiForSearchFlight($sessionArray['DepartureAirport'],$sessionArray['ArrivalAirport'],$sessionArray['DepartureDateTimeEN'],
             $sessionArray['ADTNumber'],$sessionArray['CHDNumber'],$sessionArray['INFNumber']);
 
+
+        foreach ($response['PricedItineraries'][0]["AirItineraryPricingInfo"]["PTC_FareBreakdowns"] as $prices){
+            $price[$prices["PassengerTypeQuantity"]['Code']]=
+                [$prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]
+                    ['Quantity'],$prices["PassengerTypeQuantity"]['Quantity']];
+
+        }
+
+
+        if (array_key_exists('ADT',$price)){
+            $sessionArray['ADTPrice']=$price['ADT'][0];
+        }
+        else
+            $sessionArray['ADTPrice']=0;
+        if (array_key_exists('CHD',$price)){
+            $sessionArray['CHDPrice']=$price['CHD'][0];
+        }
+        else
+            $sessionArray['CHDPrice']=0;
+        if (array_key_exists('INF',$price)){
+            $sessionArray['INFPrice']=$price['INF'][0];
+        }
+        else
+            $sessionArray['INFPrice']=0;
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
 
@@ -606,7 +701,6 @@ class AdminController extends Controller
                           "PassengerTypeCode"=> session('dataForPayment')['passenger'][$i]['type'],
                           "AccompaniedByInfantInd"=> true
                     ] ;
-
         }
 
 
@@ -694,57 +788,39 @@ class AdminController extends Controller
         curl_close($curl);
 
         $response=json_decode($response,true);
-        return $response;
 
-
-
-
-    }
-
-
-    public function getBirthday($passenger){
-//    $date=explode(' ',\Carbon\Carbon::now());
-//    $array=explode('-',$date[0]);
-//    $y=$array[0];$m=$array[1];$d=$array[2];
-
-        $y='1397';$m='12';$d='5';
-//        var_dump($passenger);
-//        exit();
-
-        if ($passenger=='INF'){
-            $infY=$y-2;
-            $infM=$m;
-            if ($d>10){
-                $infD=$d-10;
-                if ($infD<10)
-                    $infD='0'.$infD;
+        if ($response['Errors']!=null) {
+            if ($response['Errors'][0]['Code'] == "AirBookValidationException"){
+                if ($response['Errors'][0]['ShortText']=="flight departure date can not be earlier than today.")
+                    $response='تاریخ پرواز نمی تواند قبل از امروز باشد!';
             }
             else{
-                $infM=$m-1;
-                $infD=(daysOfMonth($m)+$d)-10;
+                $response=$response['Errors'][0]['ShortText'];
             }
-            $start=$infY.'/'.$infM.'/'.$infD;
-
-            $end=$y.'/'.$infM.'/'.$infD;
+            $status='Error';
         }
-
-
-        else if ($passenger=='CHD'){
-            $chdSY=$y-12;
-            $start=$chdSY.'/'.$m.'/'.$d;
-            $chdEY=$y-2;
-            $end=$chdEY.'/'.$m.'/'.$d;
+        else{
+            $response=$response['AirReservation']['BookingReferenceID']['ID'];
+            $status='Success';
+            session(['ticketResponse' => $response]);
         }
-        else {
-            $adtSY='1300';
-            $start=$adtSY.'/'.$m.'/'.$d;
-            $adtEY=$y-12;
-            $end=$adtEY.'/'.$m.'/'.($d-1);
-        }
+        return ['response' => $response,'status' => $status];
 
-        return ['start'=> $start,'end'=>$end];
     }
 
+    public function ticket(){
+                return session('ticketResponse');
+
+        return view('Panel.ticket',[
+            'data'=>session('dataForPayment')['data'],
+            'passenger'=>session('dataForPayment')['passenger'],
+            'customer'=>session('dataForPayment')['customer'],
+            'ticketInfo' => session('ticketResponse')]);
+
+    }
+
+
+//    end of reserve flight
 
 }
 

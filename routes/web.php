@@ -16,6 +16,9 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
     $this->get('getBirthday/{passenger}','AdminController@getBirthday' )->name('getBirthday');
 
+    $this->get('ticket','AdminController@ticket' )->name('ticket');
+
+
 
 });
 
@@ -40,6 +43,4 @@ Route::group(['namespace' => 'Auth'] , function (){
     $this->post('password/reset', 'ResetPasswordController@reset');
 });
 
-Route::get('/home', function (){
-    return 'hello';
-});
+

@@ -216,16 +216,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="passengerBtn">
-                                                <a href="{{route('reservation')}}" ><button class="btn btn-primary btn-block" type="button" id="editBtn">اصلاح اطلاعات</button></a>
-                                            </div>
-
-                                        </div>
+                                        <div class="col-sm-3"></div>
                                         <div class="col-sm-6">
                                             <div class="passengerBtn">
                                                 {{--<a href="{{route('reserved')}}" >--}}
-                                                    <button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button>
+                                                    <button class="btn btn-primary btn-block" type="button" id="btn">چاپ بلیت</button>
                                                 {{--</a>--}}
                                             </div>
                                         </div>
@@ -240,36 +235,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 </div>
             </div>
             <!-- /. ROW  -->
-            {{--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>--}}
-            <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
-
-            <script>
-                $('#btn').click(function () {
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/reserved',
-                        contentType : false,
-                        processData: false
-
-                    }).done(function (data) {
-                        console.log(data);
-
-                        if (data['status']=='Error'){
-                            swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}) ;
-                        }
-                        else {
-
-                            SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت'}).
-                                then(function() {
-                                    window.location.replace("{{route('ticket')}}");
-
-                            });
-
-                        }
-
-                    });
-                })
-            </script>
 
         </div>
         <!-- /. PAGE INNER  -->
