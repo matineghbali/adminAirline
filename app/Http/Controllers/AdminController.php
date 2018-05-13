@@ -467,51 +467,56 @@ class AdminController extends Controller
                                                             <span aria-hidden=\"true\">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <div class=\"modal-body\">
-                                                    
-                                                        <div class='row'>
-                                                        <table class=\"table table-striped table-responsive col-sm-10 p-4\" style='border-radius: 5px;margin: 0px auto;float: none;' >
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">مسیر پروازی</th>
-                                                              <td class=\"col-sm-5\">از ".CodeToCity($DepartureAirport)." به ".CodeToCity($ArrivalAirport)."</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">شماره پرواز</th>
-                                                              <td class=\"col-sm-5\">".toPersianNum($FlightNumber)."</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">هواپیمایی</th>
-                                                              <td class=\"col-sm-5\">$MarketingAirlineFA</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">هواپیما</th>
-                                                              <td class=\"col-sm-5\">$AirEquipType</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">ظرفیت</th>
-                                                              <td class=\"col-sm-5\">".toPersianNum($AvailableSeatQuantity)."  نفر</td>
-                                                            </tr>
-                                                            $ADT
-                                                            $CHD      
-                                                            $INF                                                     
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">تاریخ پرواز</th>
-                                                              <td class=\"col-sm-5\">".session('data')['DepartureDateTimeFA']."</td>
-                                                            </tr>
-                                                            <tr>
-                                                              <th class=\"col-sm-5\">تاریخ رسیدن به مقصد</th>
-                                                              <td class=\"col-sm-5\">".session('data')['ArrivalDateTimeFA']."</td>
-                                                            </tr>
-                                                        </table>
-
+                
+                                                    <form action='/admin/reservation' method='get'>
+                                                        <div class=\"modal-body\">                                                  
+                                                            <div class='row'>
+                                                            <table class=\"table table-striped table-responsive col-sm-10 p-4\" style='border-radius: 5px;margin: 0px auto;float: none;' >
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">مسیر پروازی</th>
+                                                                  <td class=\"col-sm-5\">از ".CodeToCity($DepartureAirport)." به ".CodeToCity($ArrivalAirport)."</td>
+                                                                </tr>
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">شماره پرواز</th>
+                                                                  <td class=\"col-sm-5\">".toPersianNum($FlightNumber)."</td>
+                                                                </tr>
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">هواپیمایی</th>
+                                                                  <td class=\"col-sm-5\">$MarketingAirlineFA</td>
+                                                                </tr>
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">هواپیما</th>
+                                                                  <td class=\"col-sm-5\">$AirEquipType</td>
+                                                                </tr>
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">ظرفیت</th>
+                                                                  <td class=\"col-sm-5\">".toPersianNum($AvailableSeatQuantity)."  نفر</td>
+                                                                </tr>
+                                                                $ADT
+                                                                $CHD      
+                                                                $INF                                                     
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">تاریخ پرواز</th>
+                                                                  <td class=\"col-sm-5\">".session('data')['DepartureDateTimeFA']."</td>
+                                                                </tr>
+                                                                <tr>
+                                                                  <th class=\"col-sm-5\">تاریخ رسیدن به مقصد</th>
+                                                                  <td class=\"col-sm-5\">".session('data')['ArrivalDateTimeFA']."</td>
+                                                                </tr>
+                                                            </table>
+    
+                                                            </div>
+    
+                                                            
                                                         </div>
-
-                                                        
-                                                    </div>
-                                                    <div class=\"modal-footer\">
-                                                            <a href='/admin/reservation'><button type=\"button\" class=\"btn btn-primary\" >رزرو</button></a>
-                                                            <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>
-                                                    </div>
+                                                        <div class=\"modal-footer\">
+                                                                <button type=\"submit\" class=\"btn btn-primary\" >رزرو</button>
+                                                                <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">بستن</button>
+                                                        </div>
+ 
+                                                   
+                                                    </form>
+                
                                                 </div>
                                             </div>
                                         </div>
@@ -529,6 +534,8 @@ class AdminController extends Controller
 
             }
         }
+        session()->forget('dataForPayment');
+
         return ['html'=>$html];
     }
 
@@ -543,7 +550,7 @@ class AdminController extends Controller
     }
 
     public function reserve(Request $request){
-
+        return $request->all();
         $check_id = 'false';
         $sessionArray=session('data');
         $Number=explode('.',$request['number']);
@@ -663,7 +670,9 @@ class AdminController extends Controller
         }
 
             session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
-            return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
+        session(['data'=>session('dataForPayment')['data']]) ;
+
+        return view('Panel.reserve',['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer]);
     }
 
     public function reserved(){

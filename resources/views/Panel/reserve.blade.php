@@ -216,10 +216,12 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="passengerBtn">
-                                                <a href="{{route('reservation')}}" ><button class="btn btn-primary btn-block" type="button" id="editBtn">اصلاح اطلاعات</button></a>
-                                            </div>
+                                        <div class="col-sm-3">
+                                            {{--<div class="passengerBtn">--}}
+                                                {{--<a href="{{route('reservation')}}">--}}
+                                                    {{--<button class="btn btn-primary btn-block" type="button" id="editBtn">اصلاح اطلاعات</button>--}}
+                                                {{--</a>--}}
+                                            {{--</div>--}}
 
                                         </div>
                                         <div class="col-sm-6">
@@ -255,7 +257,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                         console.log(data);
 
                         if (data['status']=='Error'){
-                            swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}) ;
+                            swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).
+                            then(function() {
+                                window.location.replace("{{route('reservation')}}");
+                            });
                         }
                         else {
 

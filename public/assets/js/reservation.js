@@ -133,9 +133,71 @@ $(document).ready(function() {
 
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
 
-    $('.btnSubmit').click(function () {
-        $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
+    $('.btnSubmit').click(function (event) {
+        nIds = [];
+        $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
+            if ($(this).val()) nIds.push($(this).val());
+        });
+        nIds.sort();
+        nIdsDId=false;
+        for (var i = 0; i < nIds.length - 1; i++) {
+            if (nIds[i + 1] == nIds[i]) {
+                nIdsDId = true;
+                tekrariid=nIds[i];
+            }
+        }
+
+        if (nIdsDId){
+            toastr.clear();
+            toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
+            event.preventDefault();
+            $('.btnSubmit').attr('disabled', 'disabled');
+        }
+
+            var i=0;var passenger_id=[];
+            $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
+                if ($(this).val()){
+                    passenger_id[i]=$(this).val();
+                    i++;
+                }
+            });
+            alert(passenger_id);
+
+
+
+
+
+
+
+
+        // $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
+        // var _token=$('input[name="_token"]').val();
+        //
+        // var formData=new  FormData();
+        // formData.append('number',numberOfPassengers);
+        // formData.append('customer-name',$('#DestinationLocation').val());
+        // formData.append('DepartureDateTime',$('#datepicker').val());
+        // formData.append('ADT',$('#ADT').val());
+        // formData.append('CHD',$('#CHD').val());
+        // formData.append('INF',$('#INF').val());
+        // $.ajax({
+        //     method: 'POST',
+        //     url: '/admin/getFlight2',
+        //     data: formData,
+        //     contentType : false,
+        //     processData: false,
+        //     headers: {
+        //         'X_CSRF-TOKEN': _token
+        //     },
+        //
+        // }).done(function (data) {
+        //     console.log(data);
+        // });
     });
+
+
+
+
 
     getBirthday('ADT');  //set birthday for first ADT passenger
 
@@ -252,30 +314,6 @@ $(document).ready(function() {
         $(this).parents('.passengerBody').remove();
     });
 
-    $(this).on('submit', function (event) {
-        nIds = [];
-        $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
-            if ($(this).val()) nIds.push($(this).val());
-        });
-        nIds.sort();
-        nIdsDId=false;
-        for (var i = 0; i < nIds.length - 1; i++) {
-            if (nIds[i + 1] == nIds[i]) {
-                nIdsDId = true;
-                tekrariid=nIds[i];
-            }
-        }
-
-        if (nIdsDId){
-            toastr.clear();
-            toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
-            event.preventDefault();
-            $('.btnSubmit').attr('disabled', 'disabled');
-        }
-        // else
-        //     alert(nIdsDId);
-
-    });
 
     function AddPassengerBody(passenger) {
 
@@ -304,7 +342,7 @@ $(document).ready(function() {
             method: 'get',
             url: '/admin/getBirthday/'+passenger,
             contentType : false,
-            processData: false,
+            processData: false
         }).done(function (data) {
             console.log(data);
             start=data['start'];
@@ -318,7 +356,7 @@ $(document).ready(function() {
 
 
                     startDate: start,
-                    endDate: end,
+                    endDate: 'today'
 
                 });
             });

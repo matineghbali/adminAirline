@@ -26,9 +26,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
     <script >
-        var ADTNumber= {{$data['ADTNumber']}};
-        var CHDNumber= {{$data['CHDNumber']}};
-        var INFNumber= {{$data['INFNumber']}};
+        var ADTNumber = {{$data['ADTNumber']}};
+        var CHDNumber = {{$data['CHDNumber']}};
+        var INFNumber = {{$data['INFNumber']}};
 
     </script>
 
@@ -122,7 +122,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                             </div>
 
 
-                            <form id="defaultForm" method="post" action="{{route('reserve')}}">
+                            <form id="defaultForm" >
                                 <input type="hidden" id="number" name="number">
                                 {{csrf_field()}}
                                 {{--customer info--}}
@@ -225,28 +225,28 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]" >
+                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passenger-fname[]')}}">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]">
+                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passenger-lname[]')}}">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]">
+                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passenger-id[]')}}">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control datepicker"  type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
+                                                    <input class="form-control datepicker"  type="text" name="passenger-birthday[]" value="{{old('passenger-birthday[]')}}" readonly style="background-color: white;cursor: context-menu" >
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -280,20 +280,20 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]">
+                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passengerBody[]')}}">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]">
+                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passengerBody[]')}}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]">
+                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passengerBody[]')}}">
 
                                                 </div>
                                             </div>
@@ -301,7 +301,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control datepicker" type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
+                                                    <input class="form-control datepicker" type="text" name="passenger-birthday[]" value="{{old('passengerBody[]')}}" readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -344,7 +344,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="passengerBtn" >
-                                                     <button class="btn btn-block btn-primary  btnSubmit" type="submit">
+                                                     <button class="btn btn-block btn-primary  btnSubmit" type="button">
                                                           ثبت اطلاعات
                                                      </button>
                                                 </div>
