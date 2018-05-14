@@ -132,7 +132,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام و نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="customer-name" value="{{auth()->user()->name}}">
+                                                    <input id="customer_name" class="form-control" type="text" name="customer-name" value="{{auth()->user()->name}}">
 
                                                 </div>
                                             </div>
@@ -210,7 +210,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             </div>
                                         </div>
                                         <div class="row passengerInfo">
-                                            <input type="hidden" value="ADT" name="typeADT" class="PassengerType" >
+                                            <input type="hidden" value="ADT" name="typeADT" class="PassengerType">
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
@@ -344,7 +344,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="passengerBtn" >
-                                                     <button class="btn btn-block btn-primary  btnSubmit" type="submit" id="btnSubmit">
+                                                     <button class="btn btn-block btn-primary  btnSubmit" type="submit">
                                                           ثبت اطلاعات
                                                      </button>
                                                 </div>

@@ -99,7 +99,7 @@ $(document).ready(function() {
     })
         .on('error.form.bv', function (e) {
             error_formValid='true';
-            console.log(error_formValid);
+            console.log('error.form.bv');
 
             // You can get the form instance and then access API
             var $form = $(e.target);
@@ -109,18 +109,24 @@ $(document).ready(function() {
             // e.preventDefault();
         })
         .on('success.form.bv', function (e) {
-            // console.log('success.form.bv');
             error_formValid='false';
-            console.log(error_formValid);
+            console.log('success.form.bv');
 
             // If you want to prevent the default handler (bootstrapValidator._onSuccess(e))
             // e.preventDefault();
         })
         .on('error.field.bv', function (e, data) {
-            // console.log('error.field.bv -->', data);
+            error_formValid='true';
+            // console.log('error.field.bv');
+
+            console.log('error.field.bv -->', data);
         })
         .on('success.field.bv', function (e, data) {
-            // console.log('success.field.bv -->', data);
+            error_formValid='false';
+            // console.log('success.field.bv');
+
+
+            console.log('success.field.bv -->', data);
         })
         .on('status.field.bv', function (e, data) {
             // I don't want to add has-success class to valid field container
@@ -130,16 +136,18 @@ $(document).ready(function() {
             data.bv.disableSubmitButtons(false);
         });
 
-
     // Validate the form manually
     $('#validateBtn').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
+
     $('#defaultForm').on('submit',function (e) {
         e.preventDefault();
-        // $('.btnSubmit').attr('disabled', 'disabled');
+        $('.btnSubmit').attr('disabled', 'disabled');
+
+        console.log(error_formValid);
 
         if (error_formValid == 'false'){
             nIds = [];
@@ -161,7 +169,6 @@ $(document).ready(function() {
             }
             else {
                 var passenger_gender=[];var i=0;
-                // var passenger_fname=[];var passenger_lname=[];var passenger_id=[];var passenger_birthday=[];
 
                 $('.passenger-gender').each(function(e) {
                     if($(this).find(":selected").val()){
@@ -169,18 +176,14 @@ $(document).ready(function() {
                         i++;
                     }
                 });
-                // console.log(passenger_gender);
-                // console.log(passenger_fname=getFieldValue('fname'));
-                // console.log(passenger_lname=getFieldValue('lname'));
-                // console.log(passenger_id=getFieldValue('id'));
-                // console.log(passenger_birthday=getFieldValue('birthday'));
 
 
-
-                $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
                 var _token=$('input[name="_token"]').val();
-
                 var formData=new  FormData();
+                formData.append('customer_name',$('#customer_name').val());
+                formData.append('customer_email',$('#email').val());
+                formData.append('customer_tel',$('#tel').val());
+                formData.append('numberOfPassengers',numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
                 formData.append('gender',passenger_gender);
                 formData.append('fname',getFieldValue('fname'));
                 formData.append('lname',getFieldValue('lname'));
@@ -205,23 +208,6 @@ $(document).ready(function() {
         }
 
     });
-    // $('.btnSubmit').click(function (event) {
-    //
-    //
-    //
-    // });
-    function getFieldValue(field) {
-        var i=0;
-        var output=[];
-        $('input[data-bv-field^="passenger-'+field+'[]"]').each(function(e) {
-            if ($(this).val()){
-                output[i]=$(this).val();
-                i++;
-            }
-        });
-        return output;
-    }
-
 
 
 
@@ -388,10 +374,19 @@ $(document).ready(function() {
                 });
             });
         });
-
-
     }
 
+    function getFieldValue(field) {
+        var i=0;
+        var output=[];
+        $('input[data-bv-field^="passenger-'+field+'[]"]').each(function(e) {
+            if ($(this).val()){
+                output[i]=$(this).val();
+                i++;
+            }
+        });
+        return output;
+    }
 
 
 

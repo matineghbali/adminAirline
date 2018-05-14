@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 require_once __DIR__ . '/../Function/funnction.php';
 
+use App\Passenger;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -550,10 +551,29 @@ class AdminController extends Controller
     }
 
     public function reserve(Request $request){
-        return $request->all();
-        $check_id = 'false';
+        $gender=explode(',' , $request['gender']);
+        $fname=explode(',' , $request['fname']);
+        $lname=explode(',' , $request['lname']);
+        $doc_id=explode(',' , $request['id']);
+        $birthday=explode(',' , $request['birthday']);
+
+
+//        search flight again because may change the number of passengers
         $sessionArray=session('data');
-        $Number=explode('.',$request['number']);
+        $Number=explode('.',$request['numberOfPassengers']);
+        $j=0;
+        for ($i=0;$i<$Number[1];$i++){
+            $type[$j++]='ADT';
+
+        }
+        for ($i=0;$i<$Number[2];$i++){
+            $type[$j++]='CHD';
+
+        }
+        for ($i=0;$i<$Number[3];$i++){
+            $type[$j++]='INF';
+
+        }
         $sessionArray['passengerNumber']=$Number[0];
         $sessionArray['ADTNumber']=$Number[1];
         $sessionArray['CHDNumber']=$Number[2];
@@ -588,87 +608,30 @@ class AdminController extends Controller
             $sessionArray['INFPrice']=0;
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
+/////////////////////////////////////////////////////////////////////////////////
 
-//        $request=[
-//            "_token" => "UanEGMH8JwDd8qZgOtArxxMMtuV1uqlj0cPDjtkN",
-//            "customer-name" => "matin",
-//            "email" => "matin.eqbali74@gmail.com",
-//            "tel" => "09367687492",
-//
-//            "gender" => [
-//                "0",
-//                null,
-//                null,
-//                null
-//            ],
-//            "passenger-fname" => [
-//                "b1",
-//                null,
-//                null,
-//                null
-//            ],
-//            "passenger-lname" => [
-//                "b11",
-//                null,
-//                null,
-//                null
-//            ],
-//            "passenger-id" => [
-//                "4310924361",
-//                null,
-//                null,
-//                null
-//            ],
-//            "passenger-birthday" => [
-//                "1397/2/18",
-//                null,
-//                null,
-//                null
-//            ],
-//            "passengerBody" => [
-//                "0",
-//                "b2",
-//                "b22",
-//                "4310924362",
-//                "1397/2/18",
-//                "1",
-//                "k1",
-//                "k11",
-//                "4310924311",
-//                "1397/2/18",
-//                "0",
-//                "n1",
-//                "n11",
-//                "4310924367",
-//                "1397/2/18"
-//            ],
-//        ];
-        $customer['name']=$request['customer-name'];
-        $customer['email']=$request['email'];
-        $customer['tel']=$request['tel'];
+//        add passengers in passenger table
+
+        $count=count($gender);
+        for ($i=0;$i<$count;$i++){
+           Passenger::create([
+               'user_id'=>auth()->user()->id,
+               'type'=>$type[$i],
+               'gender'=>$gender[$i],
+               'fname'=>$fname[$i],
+               'lname'=>$lname[$i],
+               'doc_id'=>$doc_id[$i],
+               'birthday'=>$birthday[$i],
+               'email'=>$request['customer_email'],
+               'tel'=>$request['customer_tel'],
+               'reserve'=>1
+           ]) ;
+        };
 
 
-        $j=0;
-        $passenger[0]['type']=$request['typeADT'];
-        $passenger[0]['gender']=$request['gender'][0];
-        $passenger[0]['fname']=$request['passenger-fname'][0];
-        $passenger[0]['lname']=$request['passenger-lname'][0];
-        $passenger[0]['id']=$request['passenger-id'][0];
-        $passenger[0]['birthday']=$request['passenger-birthday'][0];
+        return;
 
-        if (isset($request['passengerBody'])) {
-            $end = count($request['passengerBody']) / 6; //6 => number of field of passenger
-            for ($i = 1; $i <= $end; $i++) {
-                $passenger[$i]['type']=$request['passengerBody'][$j++];
-                $passenger[$i]['gender'] = $request['passengerBody'][$j++];
-                $passenger[$i]['fname'] = $request['passengerBody'][$j++];
-                $passenger[$i]['lname'] = $request['passengerBody'][$j++];
-                $passenger[$i]['id'] = $request['passengerBody'][$j++];
-                $passenger[$i]['birthday'] = $request['passengerBody'][$j++];
-            }
-
-        }
-
+        ////////////////////////////////////////////////////////
             session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
         session(['data'=>session('dataForPayment')['data']]) ;
 
