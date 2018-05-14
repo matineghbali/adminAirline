@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var error_formValid='';
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -35,14 +36,14 @@ $(document).ready(function() {
                         message: 'شماره تلفن باید 11 رقم باشد'
                     },
                     regexp: {
-                        regexp:  /^[0-9]+$/,
+                        regexp: /^[0-9]+$/,
                         message: 'شماره تلفن را با ارقام انگلیسی وارد کنید'
                     },
 
 
                 }
             },
-            'gender[]': {
+            'passenger-gender[]': {
                 validators: {
                     notEmpty: {
                         message: 'جنسیت را انتخاب کنید'
@@ -93,30 +94,33 @@ $(document).ready(function() {
                         message: 'required'
                     }
                 }
-            },
+            }
         }
     })
         .on('error.form.bv', function (e) {
-            console.log('error.form.bv');
+            error_formValid='true';
+            console.log(error_formValid);
 
             // You can get the form instance and then access API
             var $form = $(e.target);
-            console.log($form.data('bootstrapValidator').getInvalidFields());
+            // console.log($form.data('bootstrapValidator').getInvalidFields());
 
             // If you want to prevent the default handler (bootstrapValidator._onError(e))
             // e.preventDefault();
         })
         .on('success.form.bv', function (e) {
-            console.log('success.form.bv');
+            // console.log('success.form.bv');
+            error_formValid='false';
+            console.log(error_formValid);
 
             // If you want to prevent the default handler (bootstrapValidator._onSuccess(e))
             // e.preventDefault();
         })
         .on('error.field.bv', function (e, data) {
-            console.log('error.field.bv -->', data);
+            // console.log('error.field.bv -->', data);
         })
         .on('success.field.bv', function (e, data) {
-            console.log('success.field.bv -->', data);
+            // console.log('success.field.bv -->', data);
         })
         .on('status.field.bv', function (e, data) {
             // I don't want to add has-success class to valid field container
@@ -126,74 +130,97 @@ $(document).ready(function() {
             data.bv.disableSubmitButtons(false);
         });
 
+
     // Validate the form manually
     $('#validateBtn').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
     var numberOfPassengers=ADTNumber+CHDNumber+INFNumber;
+    $('#defaultForm').on('submit',function (e) {
+        e.preventDefault();
+        // $('.btnSubmit').attr('disabled', 'disabled');
 
-    $('.btnSubmit').click(function (event) {
-        nIds = [];
-        $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
-            if ($(this).val()) nIds.push($(this).val());
-        });
-        nIds.sort();
-        nIdsDId=false;
-        for (var i = 0; i < nIds.length - 1; i++) {
-            if (nIds[i + 1] == nIds[i]) {
-                nIdsDId = true;
-                tekrariid=nIds[i];
-            }
-        }
-
-        if (nIdsDId){
-            toastr.clear();
-            toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
-            event.preventDefault();
-            $('.btnSubmit').attr('disabled', 'disabled');
-        }
-
-            var i=0;var passenger_id=[];
-            $('input[data-bv-field^="passenger-id[]"]').each(function(e) {
-                if ($(this).val()){
-                    passenger_id[i]=$(this).val();
-                    i++;
-                }
+        if (error_formValid == 'false'){
+            nIds = [];
+            $('input[data-bv-field^="passenger-id[]"]').each(function(event) {
+                if ($(this).val()) nIds.push($(this).val());
             });
-            alert(passenger_id);
+            nIds.sort();
+            nIdsDId=false;
+            for (var i = 0; i < nIds.length - 1; i++) {
+                if (nIds[i + 1] == nIds[i]) {
+                    nIdsDId = true;
+                    tekrariid=nIds[i];
+                }
+            }
+
+            if (nIdsDId){
+                toastr.clear();
+                toastr.error( "کد ملی " + tekrariid + " تکراریست",'' , {timeOut: 3000});
+            }
+            else {
+                var passenger_gender=[];var i=0;
+                // var passenger_fname=[];var passenger_lname=[];var passenger_id=[];var passenger_birthday=[];
+
+                $('.passenger-gender').each(function(e) {
+                    if($(this).find(":selected").val()){
+                        passenger_gender[i]=$(this).find(":selected").val();
+                        i++;
+                    }
+                });
+                // console.log(passenger_gender);
+                // console.log(passenger_fname=getFieldValue('fname'));
+                // console.log(passenger_lname=getFieldValue('lname'));
+                // console.log(passenger_id=getFieldValue('id'));
+                // console.log(passenger_birthday=getFieldValue('birthday'));
 
 
 
+                $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
+                var _token=$('input[name="_token"]').val();
 
+                var formData=new  FormData();
+                formData.append('gender',passenger_gender);
+                formData.append('fname',getFieldValue('fname'));
+                formData.append('lname',getFieldValue('lname'));
+                formData.append('id',getFieldValue('id'));
+                formData.append('birthday',getFieldValue('birthday'));
+                $.ajax({
+                    method: 'POST',
+                    url: '/admin/reserve',
+                    data: formData,
+                    contentType : false,
+                    processData: false,
+                    headers: {
+                        'X_CSRF-TOKEN': _token
+                    },
 
+                }).done(function (data) {
+                    console.log(data);
+                });
 
+            }//end else
 
+        }
 
-        // $('#number').val( numberOfPassengers + '.' + ADTNumber + '.' + CHDNumber + '.' + INFNumber );
-        // var _token=$('input[name="_token"]').val();
-        //
-        // var formData=new  FormData();
-        // formData.append('number',numberOfPassengers);
-        // formData.append('customer-name',$('#DestinationLocation').val());
-        // formData.append('DepartureDateTime',$('#datepicker').val());
-        // formData.append('ADT',$('#ADT').val());
-        // formData.append('CHD',$('#CHD').val());
-        // formData.append('INF',$('#INF').val());
-        // $.ajax({
-        //     method: 'POST',
-        //     url: '/admin/getFlight2',
-        //     data: formData,
-        //     contentType : false,
-        //     processData: false,
-        //     headers: {
-        //         'X_CSRF-TOKEN': _token
-        //     },
-        //
-        // }).done(function (data) {
-        //     console.log(data);
-        // });
     });
+    // $('.btnSubmit').click(function (event) {
+    //
+    //
+    //
+    // });
+    function getFieldValue(field) {
+        var i=0;
+        var output=[];
+        $('input[data-bv-field^="passenger-'+field+'[]"]').each(function(e) {
+            if ($(this).val()){
+                output[i]=$(this).val();
+                i++;
+            }
+        });
+        return output;
+    }
 
 
 
@@ -318,9 +345,9 @@ $(document).ready(function() {
     function AddPassengerBody(passenger) {
 
         var template     = "passengerBody",
-        $templateEle = $('#' + template + passenger),
+            $templateEle = $('#' + template + passenger),
 
-        $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
+            $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
 
         $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
 
@@ -330,8 +357,8 @@ $(document).ready(function() {
         getBirthday(passenger);
 
         for (j = 0; j <= 4; j++) {
-        var $el = $row.find('input').eq(j).attr('name', template + '[]');
-        $('#defaultForm').bootstrapValidator('addField', $el);
+            var $el = $row.find('input').eq(j).attr('name', template + '[]');
+            $('#defaultForm').bootstrapValidator('addField', $el);
 
         }
     }

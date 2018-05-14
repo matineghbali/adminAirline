@@ -214,9 +214,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" name="gender[]" required>
+                                                    <select class="form-control passenger-gender" name="passenger-gender[]" required>
                                                         <option value="">انتخاب</option>
-                                                        <option value="0" selected>زن</option>
+                                                        <option value="0" >زن</option>
                                                         <option value="1">مرد</option>
                                                     </select>
 
@@ -225,28 +225,28 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passenger-fname[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-fname[]">
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passenger-lname[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-lname[]" >
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passenger-id[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-id[]" >
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control datepicker"  type="text" name="passenger-birthday[]" value="{{old('passenger-birthday[]')}}" readonly style="background-color: white;cursor: context-menu" >
+                                                    <input class="form-control datepicker"  type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu" >
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -269,9 +269,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="sex" class="formLabel">جنسیت</label>
-                                                    <select class="form-control" name="gender[]" required>
+                                                    <select class="form-control passenger-gender" name="passenger-gender[]" required>
                                                         <option value="" >انتخاب</option>
-                                                        <option value="0" selected>زن</option>
+                                                        <option value="0" >زن</option>
                                                         <option value="1">مرد</option>
                                                     </select>
 
@@ -280,20 +280,20 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام</label>
-                                                    <input class="form-control" type="text" name="passenger-fname[]" value="{{old('passengerBody[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-fname[]" >
 
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                    <input class="form-control" type="text" name="passenger-lname[]" value="{{old('passengerBody[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-lname[]" >
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <label for="customer-name" class="formLabel">کد ملی</label>
-                                                    <input class="form-control" type="text" name="passenger-id[]" value="{{old('passengerBody[]')}}">
+                                                    <input class="form-control" type="text" name="passenger-id[]" >
 
                                                 </div>
                                             </div>
@@ -301,7 +301,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="col-sm-4">
                                                 <div class="form-group ">
                                                     <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                    <input class="form-control datepicker" type="text" name="passenger-birthday[]" value="{{old('passengerBody[]')}}" readonly style="background-color: white;cursor: context-menu">
+                                                    <input class="form-control datepicker" type="text" name="passenger-birthday[]"  readonly style="background-color: white;cursor: context-menu">
                                                     <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                 </div>
@@ -344,7 +344,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="passengerBtn" >
-                                                     <button class="btn btn-block btn-primary  btnSubmit" type="button">
+                                                     <button class="btn btn-block btn-primary  btnSubmit" type="submit" id="btnSubmit">
                                                           ثبت اطلاعات
                                                      </button>
                                                 </div>
