@@ -99,45 +99,26 @@ $(document).ready(function() {
     })
         .on('error.form.bv', function (e) {
             error_formValid='true';
-            console.log('error.form.bv');
-
-            // You can get the form instance and then access API
             var $form = $(e.target);
-            // console.log($form.data('bootstrapValidator').getInvalidFields());
-
-            // If you want to prevent the default handler (bootstrapValidator._onError(e))
-            // e.preventDefault();
         })
         .on('success.form.bv', function (e) {
             error_formValid='false';
-            console.log('success.form.bv');
-
-            // If you want to prevent the default handler (bootstrapValidator._onSuccess(e))
-            // e.preventDefault();
         })
         .on('error.field.bv', function (e, data) {
             error_formValid='true';
-            // console.log('error.field.bv');
-
-            console.log('error.field.bv -->', data);
         })
         .on('success.field.bv', function (e, data) {
             error_formValid='false';
-            // console.log('success.field.bv');
-
-
-            console.log('success.field.bv -->', data);
         })
         .on('status.field.bv', function (e, data) {
-            // I don't want to add has-success class to valid field container
-            // data.element.parents('.form-group').removeClass('has-success');
-
-            // I want to enable the submit button all the time
             data.bv.disableSubmitButtons(false);
         });
 
     // Validate the form manually
     $('#validateBtn').click(function () {
+        $('#defaultForm').bootstrapValidator('validate');
+    });
+    $('.btnSubmit').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
 
@@ -197,10 +178,14 @@ $(document).ready(function() {
                     processData: false,
                     headers: {
                         'X_CSRF-TOKEN': _token
-                    },
+                    }
 
                 }).done(function (data) {
                     console.log(data);
+                    $('#registerpage').css('visibility','hidden');
+                    $('#reservePage').css('visibility','visible');
+                    $('#reservePage').html(data);
+
                 });
 
             }//end else
@@ -208,8 +193,6 @@ $(document).ready(function() {
         }
 
     });
-
-
 
 
     getBirthday('ADT');  //set birthday for first ADT passenger
@@ -255,6 +238,7 @@ $(document).ready(function() {
     });
 
     $('.addCHD').on('click', function () {
+
         if (numberOfPassengers == 9){
             toastr.clear();
             toastr.error(PassengerNumERR,'',{timeOut:3000});
@@ -328,6 +312,9 @@ $(document).ready(function() {
     });
 
 
+
+    // functions
+
     function AddPassengerBody(passenger) {
 
         var template     = "passengerBody",
@@ -348,7 +335,6 @@ $(document).ready(function() {
 
         }
     }
-
 
     function getBirthday(passenger) {
         $.ajax({
@@ -390,6 +376,9 @@ $(document).ready(function() {
 
 
 
+    $(document).on("click", "#editBtn", function() {
+        $('#registerpage').css('visibility','visible');
+    });
 
 
 

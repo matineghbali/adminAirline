@@ -188,7 +188,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                     </td>
                                                     <td class="nowrap">
                                                         <strong>
-                                                            {{toPersianNum($item['id'])}}
+                                                            {{toPersianNum($item['doc_id'])}}
                                                         </strong>
                                                     </td>
                                                     <td>
@@ -217,18 +217,16 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                 <div class="col-sm-6">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            {{--<div class="passengerBtn">--}}
-                                                {{--<a href="{{route('reservation')}}">--}}
-                                                    {{--<button class="btn btn-primary btn-block" type="button" id="editBtn">اصلاح اطلاعات</button>--}}
-                                                {{--</a>--}}
-                                            {{--</div>--}}
+                                            <div class="passengerBtn">
+                                                <a href="{{route('reservation')}}">
+                                                    <button class="btn btn-primary btn-block" onclick="$('#registerpage').css('visibility','hidden');" type="button" id="editBtn">اصلاح اطلاعات</button>
+                                                </a>
+                                            </div>
 
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="passengerBtn">
-                                                {{--<a href="{{route('reserved')}}" >--}}
                                                     <button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button>
-                                                {{--</a>--}}
                                             </div>
                                         </div>
 
