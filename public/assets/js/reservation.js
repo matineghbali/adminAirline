@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
     var error_formValid='';
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
@@ -182,8 +183,8 @@ $(document).ready(function() {
 
                 }).done(function (data) {
                     console.log(data);
-                    $('#registerpage').css('visibility','hidden');
-                    $('#reservePage').css('visibility','visible');
+                    $('#registerPage').hide();
+                    $('#reservePage').show();
                     $('#reservePage').html(data);
 
                 });
@@ -377,14 +378,62 @@ $(document).ready(function() {
 
 
     $(document).on("click", "#editBtn", function() {
-        $('#registerpage').css('visibility','visible');
+        $.ajax({
+            method: 'get',
+            url: '/admin/unReserve',
+            contentType : false,
+            processData: false
+
+        });
+
+        $('#registerPage').show();
+        $('.btnSubmit').attr('disabled', false);
+
+        $('#reservePage').hide();
+
     });
 
 
 
+    $(document).on("click", "#reserveBtn", function() {
+        $.ajax({
+            method: 'get',
+            url: '/admin/reserved',
+            contentType : false,
+            processData: false
 
+        }).done(function (data) {
+            console.log(data);
 
+            if (data['status']=='Error'){
+                swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).
+                then(function() {
+                    $.ajax({
+                        method: 'get',
+                        url: '/admin/unReserve',
+                        contentType : false,
+                        processData: false
 
+                    });
+
+                    $('#registerPage').show();
+                    $('.btnSubmit').attr('disabled', false);
+
+                    $('#reservePage').hide();
+                });
+            }
+            else {
+
+                SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت'}).
+                then(function() {
+                    window.location.replace("/admin/ticket");
+
+                });
+
+            }
+
+        });
+    });
 
 
 });

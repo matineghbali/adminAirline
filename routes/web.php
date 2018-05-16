@@ -12,6 +12,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
     $this->get('reservation','AdminController@reservation' )->name('reservation');
     $this->post('reserve','AdminController@reserve' )->name('reserve');
+    $this->get('unReserve','AdminController@unReserve' )->name('unReserve');
     $this->get('reserved','AdminController@reserved' )->name('reserved');
 
     $this->get('getBirthday/{passenger}','AdminController@getBirthday' )->name('getBirthday');

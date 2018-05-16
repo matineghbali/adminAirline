@@ -32,6 +32,8 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     </script>
 
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
     <script src="/assets/js/reservation.js"></script>
 
     {{--persianDatepicker--}}
@@ -86,14 +88,14 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     <div id="page-wrapper" >
         <div id="page-inner">
-            <div id="registerpage" >
+            <div id="registerPage" >
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-sm-12" >
 
                                 {{--flight info--}}
-                                <div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
+                                <div class="panelTitle">اطلاعات بلیت {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
                                     {{$data['DepartureDate']}}</div>
                                 <div class="panel">
                                     <div class="row panelContent" >
@@ -337,7 +339,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
 
                                     {{--submit --}}
-                                    <div class="row" style="margin-top: 20px">
+                                    <div class="row" style="margin-top: 10px">
                                         <div class="col-sm-3"></div>
                                         <div class="col-sm-6">
                                             <div class="row">
@@ -373,7 +375,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
 
 
-            <div id="reservePage" style="visibility:hidden;">
+            <div id="reservePage" >
 
             </div>
 

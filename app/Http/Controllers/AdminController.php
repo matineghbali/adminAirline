@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 require_once __DIR__ . '/../Function/funnction.php';
 
 use App\Passenger;
+use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use function MongoDB\BSON\toJSON;
@@ -657,7 +660,7 @@ class AdminController extends Controller
             }
         };
 
-        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->get();
+        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
 
 
 //        search flight again because may change the number of passengers
@@ -704,9 +707,6 @@ class AdminController extends Controller
         session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
         session(['data'=>session('dataForPayment')['data']]) ;
 
-//        return CodeToCity($sessionArray['DepartureAirport']);
-//        return session('dataForPayment');
-
 
 
         $html="
@@ -717,7 +717,7 @@ class AdminController extends Controller
                         
                         
                             <div class=\"panelTitle\">اطلاعات بلیت ".CodeToCity($sessionArray['DepartureAirport'])." به
-                             ".CodeToCity($sessionArray['ArrivalAirport'])."</div>
+                             ".CodeToCity($sessionArray['ArrivalAirport'])." ". $sessionArray['DepartureDate']."</div>
 
 
                             <div class=\"panel\">
@@ -819,9 +819,9 @@ class AdminController extends Controller
                                                         if($passenger[$i]['gender']==0)
                                                             $html.="<b>خانم</b>";
                                                         else
-                                                            $html.="<b>آقا</b>
-                                                    </td>
-                                                    <td>".$passenger[$i]['fname'] . $passenger[$i]['lname']."
+                                                            $html.="<b>آقا</b>";
+                                                    $html.="</td>
+                                                    <td>".$passenger[$i]['fname'] ." ". $passenger[$i]['lname']."
                                                     </td>
                                                     <td class=\"nowrap\">
                                                         <strong>
@@ -851,7 +851,7 @@ class AdminController extends Controller
                                 <div class=\"col-sm-3\"></div>
                                 <div class=\"col-sm-6\">
                                     <div class=\"row\">
-                                        <div class=\"col-sm-3\">
+                                        <div class=\"col-sm-6\">
                                             <div class=\"passengerBtn\">
                                                     <button class=\"btn btn-primary btn-block\"  type=\"button\" id=\"editBtn\">اصلاح اطلاعات</button>
                                             </div>
@@ -859,7 +859,7 @@ class AdminController extends Controller
                                         </div>
                                         <div class=\"col-sm-6\">
                                             <div class=\"passengerBtn\">
-                                                    <button class=\"btn btn-primary btn-block\" type=\"button\" id=\"btn\">رزرو بلیت</button>
+                                                    <button class=\"btn btn-primary btn-block\" type=\"button\" id=\"reserveBtn\">رزرو بلیت</button>
                                             </div>
                                         </div>
 
@@ -879,6 +879,16 @@ class AdminController extends Controller
         return $html;
 
 
+    }
+
+    public function unReserve(){
+        $passengers=Auth::user()->passengers()->whereReserve(1)->get();
+        foreach ($passengers as $passenger){
+            $passenger->update([
+                'reserve'=>0
+            ]);
+
+        }
     }
 
     public function reserved(){
@@ -918,6 +928,12 @@ class AdminController extends Controller
                     ] ;
         }
 
+
+        $now=Carbon::now();
+        $now=str_replace(':','',$now);
+        $now=str_replace(' ','',$now);
+        $now=str_replace('-','',$now);
+        $reference=Auth::user()->id .$now;
 
 
         $json =[
@@ -977,7 +993,7 @@ class AdminController extends Controller
                         ]
                     ],
                     "BookingReferenceID" => [
-                        "ID" => "A00001554"
+                        "ID" => $reference
                     ]
                 ];
 
@@ -1019,7 +1035,7 @@ class AdminController extends Controller
             $status='Success';
             session(['ticketResponse' => $response]);
         }
-        return ['response' => $response,'status' => $status];
+        $this->unReserve();
 
     }
 

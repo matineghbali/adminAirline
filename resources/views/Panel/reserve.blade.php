@@ -226,7 +226,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="passengerBtn">
-                                                    <button class="btn btn-primary btn-block" type="button" id="btn">رزرو بلیت</button>
+                                                    <button class="btn btn-primary btn-block" type="button" id="reserveBtn">رزرو بلیت</button>
                                             </div>
                                         </div>
 
@@ -244,7 +244,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
             <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
             <script>
-                $('#btn').click(function () {
+                $('#reserveBtn').click(function () {
                     $.ajax({
                         method: 'get',
                         url: '/admin/reserved',
