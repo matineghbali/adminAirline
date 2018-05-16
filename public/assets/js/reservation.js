@@ -115,10 +115,7 @@ $(document).ready(function() {
             data.bv.disableSubmitButtons(false);
         });
 
-    // Validate the form manually
-    $('#validateBtn').click(function () {
-        $('#defaultForm').bootstrapValidator('validate');
-    });
+
     $('.btnSubmit').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
@@ -388,6 +385,8 @@ $(document).ready(function() {
 
         $('#registerPage').show();
         $('.btnSubmit').attr('disabled', false);
+        // $('#h3passengerNumber').html("<?php echo  session('data')['passengerNumber'] ?>");
+        // $('#spanPrice').text('<?php echo "ytt"; ?>');
 
         $('#reservePage').hide();
 
@@ -424,7 +423,7 @@ $(document).ready(function() {
             }
             else {
 
-                SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت'}).
+                SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت ها'}).
                 then(function() {
                     window.location.replace("/admin/ticket");
 

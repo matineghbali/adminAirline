@@ -11,9 +11,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <link rel="stylesheet" href="/assets/css/fontiran.css">
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
 
-
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 
 
     <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
@@ -25,8 +26,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     {{--persianDatepicker--}}
     <script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 
     {{--js for toggleButton--}}
@@ -63,7 +63,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
                 </li>
             </ul>
 

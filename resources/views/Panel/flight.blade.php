@@ -5,15 +5,17 @@
                         <form id="form">
                             {{csrf_field()}}
 
+                            {{old('ADT')}}
                             <div class="row">
                                 <div class="col-sm-2 form-group">
                                     <input type="text"  id="datepicker" class="form-control"  placeholder="تاریخ پرواز" readonly style="background-color: white;cursor: context-menu">
                                 </div>
                                 <div class="col-sm-2 form-group">
-                                    <select data-live-search="true" id="OriginLocation" tabindex="0" data-live-search-style="startsWith" class="selectpicker form-control" >
-                                        <option id="firstOpt" value="" data-iata=""  disabled selected=""  style="visibility: hidden">مبدأ</option>
+                                    <select data-live-search="true" id="OriginLocation" name="OriginLocation" tabindex="0" data-live-search-style="startsWith" class="selectpicker form-control" >
+
+                                        <option id="firstOpt" value="" data-iata=""  disabled selected=""  style="visibility: hidden;background-color: white;">مبدأ</option>
                                         <option value="THR" >تهران</option>
-                                        <option value="MHD">مشهد</option>
+                                        <option value="MHD" >مشهد</option>
                                         <option value="KIH">کیش</option>
                                         <option value="AWZ">اهواز</option>
                                         <option value="SYZ">شیراز</option>
@@ -141,7 +143,7 @@
 
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="DestinationLocation" tabindex="1" data-live-search-style="startsWith" class="selectpicker form-control" >
-                                        <option id="firstOpt" value="" data-iata="" disabled="" selected="" style="visibility: hidden">مقصد</option>
+                                        <option id="firstOpt" value="" data-iata="" disabled="" selected="" style="visibility: hidden;background-color: white;">مقصد</option>
                                         <option value="THR" >تهران</option>
                                         <option value="MHD">مشهد</option>
                                         <option value="KIH">کیش</option>
@@ -271,7 +273,7 @@
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="ADT" name="ADT" tabindex="3" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="1" data-iata="" disabled="" selected="" >12 سال به بالا</option>--}}
-                                        <option value="1" selected>1 بزرگسال</option>
+                                        <option value="1" >1 بزرگسال</option>
                                         <option value="2">2 بزرگسال</option>
                                         <option value="3">3 بزرگسال</option>
                                         <option value="4">4 بزرگسال</option>
@@ -286,7 +288,7 @@
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="CHD" name="CHD" tabindex="4" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="0" data-iata="" disabled="" selected="" >2 تا 12 سال</option>--}}
-                                        <option value="0" selected>0 کودک</option>
+                                        <option value="0" >0 کودک</option>
                                         <option value="1">1 کودک</option>
                                         <option value="2">2 کودک</option>
                                         <option value="3">3 کودک</option>
@@ -302,7 +304,7 @@
                                 <div class="col-sm-2 form-group">
                                     <select data-live-search="true" id="INF" name="INF" tabindex="5" id="originSelect" data-live-search-style="startsWith" class="selectpicker form-control" >
                                         {{--<option id="firstOpt" value="0" data-iata=""  selected="" >0 تا 2 سال</option>--}}
-                                        <option value="0" selected>0 نوزاد</option>
+                                        <option value="0" >0 نوزاد</option>
                                         <option value="1">1 نوزاد</option>
                                         <option value="2">2 نوزاد</option>
                                         <option value="3">3 نوزاد</option>

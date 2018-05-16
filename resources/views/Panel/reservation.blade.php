@@ -75,7 +75,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
+                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
                 </li>
             </ul>
 
@@ -120,8 +120,8 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
                                         </div>
                                         <div class="col-md-3">
-                                            <h3>{{toPersianNum($data['passengerNumber'])}} نفر </h3>
-                                            <span>{{toPersianNum($data['price'])}} تومان</span>
+                                            <h3 id="h3passengerNumber">{{toPersianNum($data['passengerNumber'])}} نفر </h3>
+                                            <span id="spanPrice">{{toPersianNum($data['price'])}} تومان</span>
                                         </div>
 
                                     </div>
@@ -344,9 +344,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                         <div class="col-sm-6">
                                             <div class="row">
                                                 <div class="col-sm-6">
-                                                    <div class="passengerBtn">
-                                                        <button type="button" class=" btn btn-block btn-info" id="validateBtn">رفع ارور</button>
-                                                    </div>
+                                                    <a href="{{route('getFlight')}}" style="text-decoration: none;">
+                                                        <div class="passengerBtn">
+                                                            <button type="button" class=" btn btn-block btn-success" id="EditSearch">اصلاح جستجو</button>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="passengerBtn" >

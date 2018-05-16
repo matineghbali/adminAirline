@@ -553,6 +553,16 @@ class AdminController extends Controller
         return view('Panel/reservation',['data'=>session('data')]);
     }
 
+    public function getPriceOfPassenger($type,$INFPrice,$CHDPrice,$ADTPrice){
+        if ($type=='INF')
+            $price=$INFPrice;
+        elseif ($type=='CHD')
+            $price=$CHDPrice;
+        else
+            $price=$ADTPrice;
+        return $price;
+    }
+
     public function reserve(Request $request){
 //        $request=[
 //            'birthday'
@@ -596,6 +606,7 @@ class AdminController extends Controller
         $birthday=explode(',' , $request['birthday']);
 
         $Number=explode('.',$request['numberOfPassengers']);
+
         $j=0;
         for ($i=0;$i<$Number[1];$i++){
             $type[$j++]='ADT';
@@ -610,57 +621,7 @@ class AdminController extends Controller
 
         }
 
-//      add passengers in passenger table
 
-        $count=count($gender);
-
-        for ($i=0;$i<$count;$i++){
-            $passenger= Passenger::where('user_id',auth()->user()->id)->
-            where(function ($q) use ($doc_id,$fname,$lname,$i) {
-                $q->where('doc_id',$doc_id[$i])
-                    ->orWhere(function ($query) use ($fname,$lname,$i){
-                        $query->where('fname',$fname[$i])
-                            ->orWhere('lname',$lname[$i]);
-                    });
-                })->get();
-
-
-            if (count($passenger)!= 0){
-                Passenger::where('id',$passenger[0]['id'])->update([
-                    'type'=> $type[$i],
-                    'gender'=>$gender[$i],
-                    'fname'=>$fname[$i],
-                    'lname'=>$lname[$i],
-                    'doc_id'=>$doc_id[$i],
-                    'birthday'=>$birthday[$i],
-                    'email'=>$request['customer_email'],
-                    'tel'=>$request['customer_tel'],
-                    'reserve'=>1
-
-                ]);
-//                echo "update <br>";
-
-            }
-            else{
-                Passenger::create([
-                    'user_id'=>auth()->user()->id,
-                    'type'=>$type[$i],
-                    'gender'=>$gender[$i],
-                    'fname'=>$fname[$i],
-                    'lname'=>$lname[$i],
-                    'doc_id'=>$doc_id[$i],
-                    'birthday'=>$birthday[$i],
-                    'email'=>$request['customer_email'],
-                    'tel'=>$request['customer_tel'],
-                    'reserve'=>1
-                ]);
-//                echo 'create <br>';
-
-
-            }
-        };
-
-        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
 
 
 //        search flight again because may change the number of passengers
@@ -701,6 +662,61 @@ class AdminController extends Controller
             $sessionArray['INFPrice']=0;
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
+
+
+
+
+//      add passengers in passenger table
+
+        $count=count($gender);
+
+        for ($i=0;$i<$count;$i++){
+            $passenger= Passenger::where('user_id',auth()->user()->id)->
+            where(function ($q) use ($doc_id,$fname,$lname,$i) {
+                $q->where('doc_id',$doc_id[$i])
+                    ->orWhere(function ($query) use ($fname,$lname,$i){
+                        $query->where('fname',$fname[$i])
+                            ->orWhere('lname',$lname[$i]);
+                    });
+                })->get();
+
+
+
+            if (count($passenger)!= 0){
+                Passenger::where('id',$passenger[0]['id'])->update([
+                    'type'=> $type[$i],
+                    'gender'=>$gender[$i],
+                    'fname'=>$fname[$i],
+                    'lname'=>$lname[$i],
+                    'doc_id'=>$doc_id[$i],
+                    'birthday'=>$birthday[$i],
+                    'email'=>$request['customer_email'],
+                    'tel'=>$request['customer_tel'],
+                    'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
+                    'reserve'=>1
+
+                ]);
+            }
+            else{
+                Passenger::create([
+                    'user_id'=>auth()->user()->id,
+                    'type'=>$type[$i],
+                    'gender'=>$gender[$i],
+                    'fname'=>$fname[$i],
+                    'lname'=>$lname[$i],
+                    'doc_id'=>$doc_id[$i],
+                    'birthday'=>$birthday[$i],
+                    'email'=>$request['customer_email'],
+                    'tel'=>$request['customer_tel'],
+                    'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
+                    'reserve'=>1
+                ]);
+            }
+        };
+
+        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
+
+
 
 
 
@@ -914,7 +930,7 @@ class AdminController extends Controller
                             "Value"=> session('dataForPayment')['customer']['email']
                           ],
                           "Document"=> [
-                            "DocID"=> session('dataForPayment')['passenger'][$i]['id'],
+                            "DocID"=> session('dataForPayment')['passenger'][$i]['doc_id'],
                             "DocType"=> 5,
                             "ExpireDate"=> "2020-03-27T13:51:40",
                             "DocIssueCountry"=> "IR",
@@ -1031,22 +1047,28 @@ class AdminController extends Controller
             $status='Error';
         }
         else{
+            session(['ticketResponse' => $response]);
             $response=$response['AirReservation']['BookingReferenceID']['ID'];
             $status='Success';
-            session(['ticketResponse' => $response]);
         }
         $this->unReserve();
-
+        return ['response' => $response,'status' => $status];
     }
 
     public function ticket(){
-                return session('ticketResponse');
 
-        return view('Panel.ticket',[
+        $ticket=[
             'data'=>session('dataForPayment')['data'],
             'passenger'=>session('dataForPayment')['passenger'],
             'customer'=>session('dataForPayment')['customer'],
-            'ticketInfo' => session('ticketResponse')]);
+            'ticketInfo' => session('ticketResponse')
+        ];
+
+        foreach ($ticket['ticketInfo']['AirReservation']['Ticketing'] as $ticket){
+
+        }
+
+
 
     }
 
