@@ -78,64 +78,66 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                         <div class="col-sm-12" >
 
                             {{--Flight Info--}}
-                            <div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
-                                {{$data['DepartureDate']}}</div>
-                            <div class="panel">
-                                <div class="row panelContent" >
-                                    <div class="col-md-3">
-                                        <h3>{{$data['DepartureTime']}}</h3>
-                                        <span>{{CodeToCity($data['DepartureAirport'])}}  {{CodeToCity($data['ArrivalAirport'])}}</span>
-                                    </div>
-                                    <div class="col-md-2" style="padding-top: 20px">
-                                        <span class="text-muted" >هواپیمایی {{$data['MarketingAirlineFA']}}</span>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <ul>
-                                            <li>هواپیما: <b>{{$data['AirEquipType']}} </b></li>
-                                            <li>شماره پرواز: <b>{{toPersianNum($data['FlightNumber'])}}</b></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <ul>
-                                            <li>پرواز  <b>چارتر </b></li>
-                                            <li>کلاس پروازی: <b>{{$data['cabinTypeFA']}}</b></li>
-                                        </ul>
+                            {{--<div class="panelTitle">اطلاعات بلیط {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}--}}
+                                {{--{{$data['DepartureDate']}}</div>--}}
+                            {{--<div class="panel">--}}
+                                {{--<div class="row panelContent" >--}}
+                                    {{--<div class="col-md-3">--}}
+                                        {{--<h3>{{$data['DepartureTime']}}</h3>--}}
+                                        {{--<span>{{CodeToCity($data['DepartureAirport'])}}  {{CodeToCity($data['ArrivalAirport'])}}</span>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-md-2" style="padding-top: 20px">--}}
+                                        {{--<span class="text-muted" >هواپیمایی {{$data['MarketingAirlineFA']}}</span>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-md-2">--}}
+                                        {{--<ul>--}}
+                                            {{--<li>هواپیما: <b>{{$data['AirEquipType']}} </b></li>--}}
+                                            {{--<li>شماره پرواز: <b>{{toPersianNum($data['FlightNumber'])}}</b></li>--}}
+                                        {{--</ul>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="col-md-2">--}}
+                                        {{--<ul>--}}
+                                            {{--<li>پرواز  <b>چارتر </b></li>--}}
+                                            {{--<li>کلاس پروازی: <b>{{$data['cabinTypeFA']}}</b></li>--}}
+                                        {{--</ul>--}}
 
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h3>{{toPersianNum($data['passengerNumber'])}} نفر </h3>
-                                        <span>{{toPersianNum($data['price'])}} تومان</span>
-                                    </div>
+                                    {{--</div>--}}
+                                    {{--<div class="col-md-3">--}}
+                                        {{--<h3>{{toPersianNum($data['passengerNumber'])}} نفر </h3>--}}
+                                        {{--<span>{{toPersianNum($data['price'])}} تومان</span>--}}
+                                    {{--</div>--}}
 
-                                </div>
-                            </div>
+                                {{--</div>--}}
+                            {{--</div>--}}
 
                             {{--customer info--}}
-                            <div class="passengerContent" id="ADT">
-                                <div class="passengerHeader">
-                                    <h4 class="h4Passenger">
-                                        اطلاعات خریدار
-                                    </h4>
-                                </div>
+                            {{--<div class="passengerContent" id="ADT">--}}
+                                {{--<div class="passengerHeader">--}}
+                                    {{--<h4 class="h4Passenger">--}}
+                                        {{--اطلاعات خریدار--}}
+                                    {{--</h4>--}}
+                                {{--</div>--}}
 
-                                <div class="passengerBody">
-                                    <div class="row passengerInfo " style="padding: 10px">
-                                        <div class="col-sm-4">
-                                            <span>نام:</span>
-                                            {{$customer['name']}}
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <span>ایمیل:</span>
-                                            {{$customer['email']}}
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <span>شماره موبایل:</span>
-                                            {{toPersianNum($customer['tel'])}}
-                                        </div>
-                                    </div>
+                                {{--<div class="passengerBody">--}}
+                                    {{--<div class="row passengerInfo " style="padding: 10px">--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<span>نام:</span>--}}
+                                            {{--{{$customer['name']}}--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<span>ایمیل:</span>--}}
+                                            {{--{{$customer['email']}}--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-4">--}}
+                                            {{--<span>شماره موبایل:</span>--}}
+                                            {{--{{toPersianNum($customer['tel'])}}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                </div>
-                            </div>
+                                {{--</div>--}}
+                            {{--</div>--}}
+
+
 
                             {{--Passenger info--}}
                             <div class="passengerContent" style="margin-top: 30px">
@@ -217,12 +219,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                 <div class="col-sm-6">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            <div class="passengerBtn">
-                                                <a href="{{route('reservation')}}">
-                                                    <button class="btn btn-primary btn-block" onclick="$('#registerpage').css('visibility','hidden');" type="button" id="editBtn">اصلاح اطلاعات</button>
-                                                </a>
-                                            </div>
-
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="passengerBtn">
@@ -242,37 +238,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
             <!-- /. ROW  -->
             {{--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>--}}
             <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
-
-            <script>
-                $('#reserveBtn').click(function () {
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/reserved',
-                        contentType : false,
-                        processData: false
-
-                    }).done(function (data) {
-                        console.log(data);
-
-                        if (data['status']=='Error'){
-                            swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).
-                            then(function() {
-                                window.location.replace("{{route('reservation')}}");
-                            });
-                        }
-                        else {
-
-                            SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت'}).
-                                then(function() {
-                                    window.location.replace("{{route('ticket')}}");
-
-                            });
-
-                        }
-
-                    });
-                })
-            </script>
 
         </div>
         <!-- /. PAGE INNER  -->

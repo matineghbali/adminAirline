@@ -19,6 +19,8 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
     $this->get('ticket','AdminController@ticket' )->name('ticket');
 
+    $this->get('tickets','AdminController@tickets' )->name('tickets');
+
 
 
 });

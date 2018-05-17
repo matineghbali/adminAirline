@@ -17,11 +17,11 @@ class CreatePassengersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('doc_id');
             $table->string('type',3);
             $table->string('gender');
             $table->string('fname');
             $table->string('lname');
-            $table->string('doc_id');
             $table->string('birthday');
             $table->string('email');
             $table->string('tel');

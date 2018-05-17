@@ -16,7 +16,11 @@ class CreateTicketsTable extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('passenger_id')->unsigned();
+            $table->integer('flight_id')->unsigned();
+
             $table->foreign('passenger_id')->references('id')->on('passengers')->onDelete('cascade');
+            $table->foreign('flight_id')->references('id')->on('flights')->onDelete('cascade');
+
             $table->string('ticketNumber');
             $table->string('dateBook');
             $table->string('BookingReference');

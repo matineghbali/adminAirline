@@ -3,7 +3,9 @@ namespace App\Http\Controllers;
 
 require_once __DIR__ . '/../Function/funnction.php';
 
+use App\Flight;
 use App\Passenger;
+use App\Ticket;
 use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Carbon\Carbon;
@@ -169,17 +171,16 @@ class AdminController extends Controller
 
 //    end functions
 
-
-//    start of search flight
-
     public function index(){
         return view('Panel/panel');
 
     }
 
+//    start of search flight
+
+
     public function getFlight(){
         return view('Panel/flight');
-
     }
 
     public function getFlight2(Request $request){
@@ -594,7 +595,6 @@ class AdminController extends Controller
 //            "3.1.1.1"
 //        ];
 
-
         $customer['name']=$request['customer_name'];
         $customer['email']=$request['customer_email'];
         $customer['tel']=$request['customer_tel'];
@@ -725,8 +725,7 @@ class AdminController extends Controller
 
 
 
-        $html="
-            <div class=\"row\">
+        $html="<div class=\"row\">
                 <div class=\"col-md-12\">
                     <div class=\"row\">
                         <div class=\"col-sm-12\" >
@@ -908,6 +907,7 @@ class AdminController extends Controller
     }
 
     public function reserved(){
+
         $count=count(session('dataForPayment')['passenger']);
 
         $TravelerInfo[]='';
@@ -1055,28 +1055,83 @@ class AdminController extends Controller
         return ['response' => $response,'status' => $status];
     }
 
+//    end of reserve flight
+
     public function ticket(){
 
         $ticket=[
-            'data'=>session('dataForPayment')['data'],
+            'flightInfo'=>session('dataForPayment')['data'],
             'passenger'=>session('dataForPayment')['passenger'],
             'customer'=>session('dataForPayment')['customer'],
             'ticketInfo' => session('ticketResponse')
         ];
 
-        foreach ($ticket['ticketInfo']['AirReservation']['Ticketing'] as $ticket){
+        $flight=Flight::create([
+            'DepartureAirport'=>$ticket['flightInfo']['DepartureAirport'],
+            'ArrivalAirport'=>$ticket['flightInfo']['ArrivalAirport'],
+            'DepartureDateTime'=>$ticket['flightInfo']['DepartureDateTimeEN'],
+            'ArrivalDateTime'=>$ticket['flightInfo']['ArrivalDateTimeEN'],
+            'AvailableSeatQuantity'=>$ticket['flightInfo']['AvailableSeatQuantity'],
+            'FlightNumber'=>$ticket['flightInfo']['FlightNumber'],
+            'FareBasisCode'=>$ticket['flightInfo']['FareBasisCode'],
+            'MarketingAirline'=>$ticket['flightInfo']['MarketingAirlineEN'],
+            'cabinType'=>$ticket['flightInfo']['cabinTypeEN'],
+            'AirEquipType'=>$ticket['flightInfo']['AirEquipType'],
+            'price'=>$ticket['flightInfo']['price'],
+            'ADTPrice'=>$ticket['flightInfo']['ADTPrice'],
+            'CHDPrice'=>$ticket['flightInfo']['CHDPrice'],
+            'INFPrice'=>$ticket['flightInfo']['INFPrice'],
 
+
+        ]);
+
+
+        session(['ticket'=>$ticket]);
+
+        $count=count($ticket['passenger']);
+
+        for ($i=0;$i<$count;$i++){
+            Ticket::create([
+                'passenger_id' => $ticket['passenger'][$i]['id'],
+                'flight_id' => $flight['id'],
+                'ticketNumber' => $ticket['ticketInfo']['AirReservation']['Ticketing'][$i]['TicketDocumentNbr'],
+                'dateBook' => $ticket['ticketInfo']['AirReservation']['DateBooked'],
+                'BookingReference' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID']
+            ]);
         }
+
+        return redirect(route('tickets'));
+
+
+
+//        $tickets=Ticket::where('BookingReference',$ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID'])->get();
+//        foreach ($tickets as $ticket){
+//            echo $ticket->passenger['doc_id'];
+//
+//        }
+//        return Passenger::find($tickets[0]['passenger_id']);
+//        for ($i=0;$i<$count;$i++) {
+//            $passenger=Passenger::find($ticket['passenger'][0]['id']);
+//            return $passenger->tickets;
+//        }
+//        $t=Ticket::find(15)
+
+//            return Ticket::latest()->get();
+
 
 
 
     }
+    public function tickets(){
+        return session('ticket');
+        return $tickets=Ticket::where('BookingReference',session('ticket')['ticketInfo']['AirReservation']['BookingReferenceID']['ID'])->get();
+         view('Panel/tickets');
+    }
 
 
-//    end of reserve flight
+
 
 }
-
 
 
 
