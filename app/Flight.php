@@ -21,6 +21,7 @@ class Flight extends Model
         'ADTPrice',
         'CHDPrice',
         'INFPrice',
+        'passengerNumber'
     ];
 
     public function tickets(){

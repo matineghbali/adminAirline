@@ -77,6 +77,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 <li>
                     <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
                 </li>
+                <li>
+                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
+                </li>
+
             </ul>
 
         </div>

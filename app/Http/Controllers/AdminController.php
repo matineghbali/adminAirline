@@ -169,6 +169,30 @@ class AdminController extends Controller
         return ['start'=> $start,'end'=>$end];
     }
 
+    public function getDateTimeFA(){
+
+    }
+
+    public static function getMarketingAirlineFA($MarketingAirlineEN){
+        if ($MarketingAirlineEN=="QESHM AIR")
+            return 'قشم ایر';
+        else if ($MarketingAirlineEN=="MERAJ")
+            return 'معراج';
+        else if ($MarketingAirlineEN=="TABAN")
+            return 'تابان ایر';
+        else if ($MarketingAirlineEN=="ZAGROS")
+            return 'زاگرس';
+        else
+            return $MarketingAirlineEN;
+    }
+
+    public static function getCabinTypeFA($cabinTypeEN){
+        if ($cabinTypeEN=="Economy")
+            return 'اکونومی';
+        else
+            return $cabinTypeEN;
+
+    }
 //    end functions
 
     public function index(){
@@ -226,14 +250,11 @@ class AdminController extends Controller
         {
             $error=session('Errors');
             if ($error->first('DepartureDateTime'))
-                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $error->first('DepartureDateTime'). '</div></div><br>';
-            if ($error->first('OriginLocation'))
-                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $error->first('OriginLocation'). '</div></div><br>';
-            if ($error->first('DestinationLocation'))
-                $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                    $error->first('DestinationLocation'). '</div></div><br>';
+                $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('DepartureDateTime').'",type: "error", confirmButtonText: "باشه"})</script>';
+            elseif ($error->first('OriginLocation'))
+                $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('OriginLocation').'",type: "error", confirmButtonText: "باشه"})</script>';
+            elseif ($error->first('DestinationLocation'))
+                $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('DestinationLocation').'",type: "error", confirmButtonText: "باشه"})</script>';
 
         }
 
@@ -241,8 +262,7 @@ class AdminController extends Controller
         elseif (session()->has('PassengerNumERR')){
             $error=session('PassengerNumERR');
 
-            $html.="<div class='row'><div class=\"btn btn-danger disabled col-sm-6\" >".
-                $error. '</div></div><br>';
+            $html='<script>SweetAlert({   title: "ارور",   text: "'.$error.'",type: "error", confirmButtonText: "باشه"})</script>';
 
 
         }
@@ -255,13 +275,12 @@ class AdminController extends Controller
                     $response= 'IP معتبر نیست!';
                 else
                     $response=$myRes['response']['Errors'][0]['ShortText'];
-                $html="<div class=\"btn btn-danger disabled\" >$response</div>";
+                $html='<script>SweetAlert({   title: "ارور",   text: "'.$response.'",type: "error", confirmButtonText: "باشه"})</script>';
+
             }
 
             else if($myRes['response']['PricedItineraries'] == null){
-                $response="چنین پروازی وجود ندارد";
-
-                $html="<div class=\"btn btn-danger disabled\" >$response</div>";
+                $html='<script>SweetAlert({   title: "ارور",   text: "چنین پروازی وجود ندارد",type: "error", confirmButtonText: "باشه"})</script>';
             }
             else {
                 $html='';
@@ -272,17 +291,7 @@ class AdminController extends Controller
                     // شرکت هواپیمایی
                     $MarketingAirlineEN=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['MarketingAirline']['Value'];
-                    if ($MarketingAirlineEN=="QESHM AIR")
-                        $MarketingAirlineFA='قشم ایر';
-                    else if ($MarketingAirlineEN=="MERAJ")
-                        $MarketingAirlineFA='معراج';
-                    else if ($MarketingAirlineEN=="TABAN")
-                        $MarketingAirlineFA='تابان ایر';
-                    else if ($MarketingAirlineEN=="ZAGROS")
-                        $MarketingAirlineFA='زاگرس';
-                    else
-                        $MarketingAirlineFA=$MarketingAirlineEN;
-
+                    $MarketingAirlineFA=$this->getMarketingAirlineFA($MarketingAirlineEN);
                     // تجهیزات هواپیمایی
                     $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
@@ -318,11 +327,7 @@ class AdminController extends Controller
                     // نوع بلیط
                     $cabinTypeEN=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['CabinType'];
-
-                    if ($cabinTypeEN=="Economy")
-                        $cabinTypeFA='اکونومی';
-                    else
-                        $cabinTypeFA=$cabinTypeEN;
+                    $cabinTypeFA=$this->getCabinTypeFA($cabinTypeEN);
 
                     $AirEquipType=$response['AirItinerary']['OriginDestinationOptions']
                     [0]['FlightSegment'][0]['Equipment']['AirEquipType'];
@@ -1057,6 +1062,8 @@ class AdminController extends Controller
 
 //    end of reserve flight
 
+
+
     public function ticket(){
 
         $ticket=[
@@ -1077,16 +1084,14 @@ class AdminController extends Controller
             'MarketingAirline'=>$ticket['flightInfo']['MarketingAirlineEN'],
             'cabinType'=>$ticket['flightInfo']['cabinTypeEN'],
             'AirEquipType'=>$ticket['flightInfo']['AirEquipType'],
+            'passengerNumber'=>$ticket['flightInfo']['passengerNumber'],
             'price'=>$ticket['flightInfo']['price'],
             'ADTPrice'=>$ticket['flightInfo']['ADTPrice'],
             'CHDPrice'=>$ticket['flightInfo']['CHDPrice'],
             'INFPrice'=>$ticket['flightInfo']['INFPrice'],
-
-
         ]);
 
 
-        session(['ticket'=>$ticket]);
 
         $count=count($ticket['passenger']);
 
@@ -1100,35 +1105,15 @@ class AdminController extends Controller
             ]);
         }
 
+        session(['ticket_id' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID']]);
         return redirect(route('tickets'));
 
-
-
-//        $tickets=Ticket::where('BookingReference',$ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID'])->get();
-//        foreach ($tickets as $ticket){
-//            echo $ticket->passenger['doc_id'];
-//
-//        }
-//        return Passenger::find($tickets[0]['passenger_id']);
-//        for ($i=0;$i<$count;$i++) {
-//            $passenger=Passenger::find($ticket['passenger'][0]['id']);
-//            return $passenger->tickets;
-//        }
-//        $t=Ticket::find(15)
-
-//            return Ticket::latest()->get();
-
-
-
-
     }
+
     public function tickets(){
-        return session('ticket');
-        return $tickets=Ticket::where('BookingReference',session('ticket')['ticketInfo']['AirReservation']['BookingReferenceID']['ID'])->get();
-         view('Panel/tickets');
+        $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
+        return view('Panel/tickets',['tickets' => $tickets ]);
     }
-
-
 
 
 }

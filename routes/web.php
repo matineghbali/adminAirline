@@ -18,9 +18,16 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('getBirthday/{passenger}','AdminController@getBirthday' )->name('getBirthday');
 
     $this->get('ticket','AdminController@ticket' )->name('ticket');
-
     $this->get('tickets','AdminController@tickets' )->name('tickets');
 
+    $this->get('getPassenger','PassengerController@getPassenger' )->name('getPassenger');
+    $this->get('passengers/{id}/edit','PassengerController@Edit' )->name('EditPassenger');
+    $this->patch('passenger/{id}','PassengerController@Update' )->name('UpdatePassenger');
+    $this->DELETE('passenger/{id}','PassengerController@Delete' )->name('DeletePassenger');
+    $this->get('getTicket/{id}','PassengerController@getTicket' )->name('getTicket');
+
+
+    $this->resource('Matins;|','matin');
 
 
 });

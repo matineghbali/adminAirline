@@ -33,6 +33,8 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <script src="/assets/js/bootstrap.min.js"></script>
     {{--<script src="/assets/js/jquery.metisMenu.js"></script>--}}
     {{--<script src="/assets/js/custom.js"></script>--}}
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
 
 </head>
 <body>
@@ -65,6 +67,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 <li>
                     <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
                 </li>
+                <li>
+                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
+                </li>
+
             </ul>
 
         </div>
