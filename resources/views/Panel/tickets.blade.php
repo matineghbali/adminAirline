@@ -301,11 +301,25 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 </div>
 
                 <div class="row" style="margin-top: 30px">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-5">
+
+                    <div class="col-sm-6">
                         <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
+
                             </div>
+                            <div class="col-sm-6 passengerBtn">
+                                <a href="{{route('adminPanel')}}" style="text-decoration:none;">
+                                    <button class="btn btn-block btn-success  btnSubmit" >
+                                        بازگشت
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="passengerBtn" >
                                     <button class="btn btn-block btn-primary" id="print" type="button">چاپ</button>

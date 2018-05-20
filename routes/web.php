@@ -6,19 +6,19 @@ use Carbon\Carbon;
 Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('panel','AdminController@index')->name('adminPanel');
 
-    $this->get('getFlight','AdminController@getFlight')->name('getFlight');
-    $this->post('getFlight2','AdminController@getFlight2' )->name('getFlight2');
-    $this->get('getFlight3','AdminController@getFlight3' )->name('getFlight3');
+    $this->get('getFlight','FlightController@getFlight')->name('getFlight');
+    $this->post('getFlight2','FlightController@getFlight2' )->name('getFlight2');
+    $this->get('getFlight3','FlightController@getFlight3' )->name('getFlight3');
 
-    $this->get('reservation','AdminController@reservation' )->name('reservation');
-    $this->post('reserve','AdminController@reserve' )->name('reserve');
-    $this->get('unReserve','AdminController@unReserve' )->name('unReserve');
-    $this->get('reserved','AdminController@reserved' )->name('reserved');
+    $this->get('reservation','ReserveController@reservation' )->name('reservation');
+    $this->post('reserve','ReserveController@reserve' )->name('reserve');
+    $this->get('unReserve','ReserveController@unReserve' )->name('unReserve');
+    $this->get('reserved','ReserveController@reserved' )->name('reserved');
 
     $this->get('getBirthday/{passenger}','AdminController@getBirthday' )->name('getBirthday');
 
-    $this->get('ticket','AdminController@ticket' )->name('ticket');
-    $this->get('tickets','AdminController@tickets' )->name('tickets');
+    $this->get('ticket','TicketController@ticket' )->name('ticket');
+    $this->get('tickets','TicketController@tickets' )->name('tickets');
 
     $this->get('getPassenger','PassengerController@getPassenger' )->name('getPassenger');
     $this->get('passengers/{id}/edit','PassengerController@Edit' )->name('EditPassenger');
@@ -26,8 +26,6 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->DELETE('passenger/{id}','PassengerController@Delete' )->name('DeletePassenger');
     $this->get('getTicket/{id}','PassengerController@getTicket' )->name('getTicket');
 
-
-    $this->resource('Matins;|','matin');
 
 
 });

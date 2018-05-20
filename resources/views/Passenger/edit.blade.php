@@ -156,9 +156,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="passengerBtn" >
-                                                        <button class="btn btn-block btn-success  btnSubmit" >
-                                                            بازگشت
-                                                        </button>
+                                                        <a href="{{route('getPassenger')}}" style="text-decoration:none;">
+                                                            <button class="btn btn-block btn-success  btnSubmit" >
+                                                                بازگشت
+                                                            </button>
+                                                        </a>
                                                     </div>
 
                                                 </div>

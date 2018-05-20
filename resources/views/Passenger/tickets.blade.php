@@ -127,7 +127,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                             <div class="passengerContent">
                                 <div class="passengerHeader">
                                     <h4 class="h4Passenger">
-                                        اطلاعات بلیت ها
+                                        اطلاعات بلیت
                                     </h4>
                                 </div>
 
@@ -141,14 +141,14 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <span>شماره مرجع:</span>
                                             {{$tickets[0]->BookingReference}}
                                         </div>
-                                        <div class="col-sm-2">
-                                            <span>تعداد بلیت ها:</span>
-                                            <b>{{toPersianNum($tickets[0]->flight->passengerNumber)}}</b>  عدد
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <span>قیمت کل بلیت ها:</span>
-                                            <b>{{toPersianNum($tickets[0]->flight->price)}}</b> تومان
-                                        </div>
+                                        {{--<div class="col-sm-2">--}}
+                                            {{--<span>تعداد بلیت ها:</span>--}}
+                                            {{--<b>{{toPersianNum($tickets[0]->flight->passengerNumber)}}</b>  عدد--}}
+                                        {{--</div>--}}
+                                        {{--<div class="col-sm-3">--}}
+                                            {{--<span>قیمت کل بلیت ها:</span>--}}
+                                            {{--<b>{{toPersianNum($tickets[0]->flight->price)}}</b> تومان--}}
+                                        {{--</div>--}}
                                     </div>
 
                                 </div>
@@ -291,20 +291,34 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 </div>
 
                 <div class="row" style="margin-top: 50px">
-                    <div class="col-sm-6">
+                    <div class="col-sm-5">
                         <div class="row">
                             <div class="col-sm-6">
 
                             </div>
-                            <div class="col-sm-6">
+
+                            <div class="col-sm-6 passengerBtn">
+                                    <a href="{{route('getPassenger')}}" style="text-decoration:none;">
+                                        <button class="btn btn-block btn-success  btnSubmit" >
+                                        بازگشت
+                                        </button>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="row" style="text-align: center">
+                            <div >
                                 {!! $tickets->render() !!}
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
+
+                    <div class="col-sm-5">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="passengerBtn" style="text-align: center">
+                                <div class="passengerBtn" >
                                     <button class="btn btn-block btn-primary" id="print" type="button">چاپ</button>
                                 </div>
                             </div>
