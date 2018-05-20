@@ -200,26 +200,27 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                     <div class="row passengerInfo " style="padding: 10px">
                                         <div class="col-sm-4">
                                             <span>نام:</span>
-                                            {{session('dataForPayment')['customer']['name']}}
+                                            {{$tickets[0]->customer_name}}
                                         </div>
                                         <div class="col-sm-4">
                                             <span>ایمیل:</span>
-                                            {{session('dataForPayment')['customer']['email']}}
+                                            {{$tickets[0]->customer_email}}
                                         </div>
                                         <div class="col-sm-4">
                                             <span>شماره موبایل:</span>
-                                            {{session('dataForPayment')['customer']['tel']}}
+                                            {{$tickets[0]->customer_tel}}
                                         </div>
                                     </div>
 
                                 </div>
                             </div>
 
+
                             {{--Passenger info--}}
                             <div class="passengerContent" style="margin-top: 30px">
                                 <div class="passengerHeader">
                                     <h4 class="h4Passenger">
-                                        اطلاعات مسافران
+                                        اطلاعات مسافر
                                     </h4>
                                 </div>
                                 <div class="passengerBody" >
@@ -227,7 +228,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                         <table class="table table-striped table-hover">
                                             <thead>
                                             <tr class="small">
-                                                <th>#</th>
                                                 <th>نوع</th>
                                                 <th>جنسیت</th>
                                                 <th>نام و نام خانوادگی</th>
@@ -235,17 +235,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <th>تاریخ تولد</th>
                                                 <th>قیمت بلیت</th>
                                                 <th>شماره بلیت</th>
-                                                {{--<th>مشاهده بلیت</th>--}}
                                             </tr>
                                             </thead>
                                             <tbody>
 
-{{--<!--                                            --><?php //$i=0 ?>--}}
-                                            {{--@foreach($tickets as $ticket)--}}
                                                 <tr>
-                                                    <td>
-{{--                                                        {{toPersianNum(++$i)}}--}}
-                                                    </td>
                                                     <td>
                                                         @if($tickets[0]->passenger->type=='ADT')
                                                             بزرگسال
@@ -279,10 +273,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                     <td>
                                                         {{toPersianNum($tickets[0]->ticketNumber)}}
                                                     </td>
-                                                    {{--<td>--}}
-                                                        {{--<a href="" class="btn-sm btn-success" style="text-decoration:none;">بلیت</a>--}}
-                                                    {{--</td>--}}
-
                                                 </tr>
 
                                             {{--@endforeach--}}

@@ -200,15 +200,15 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                     <div class="row passengerInfo " style="padding: 10px">
                                         <div class="col-sm-4">
                                             <span>نام:</span>
-                                            {{session('dataForPayment')['customer']['name']}}
+                                            {{$tickets[0]->customer_name}}
                                         </div>
                                         <div class="col-sm-4">
                                             <span>ایمیل:</span>
-                                            {{session('dataForPayment')['customer']['email']}}
+                                            {{$tickets[0]->customer_email}}
                                         </div>
                                         <div class="col-sm-4">
                                             <span>شماره موبایل:</span>
-                                            {{session('dataForPayment')['customer']['tel']}}
+                                            {{$tickets[0]->customer_tel}}
                                         </div>
                                     </div>
 

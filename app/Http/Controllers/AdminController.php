@@ -677,13 +677,7 @@ class AdminController extends Controller
 
         for ($i=0;$i<$count;$i++){
             $passenger= Passenger::where('user_id',auth()->user()->id)->
-            where(function ($q) use ($doc_id,$fname,$lname,$i) {
-                $q->where('doc_id',$doc_id[$i])
-                    ->orWhere(function ($query) use ($fname,$lname,$i){
-                        $query->where('fname',$fname[$i])
-                            ->orWhere('lname',$lname[$i]);
-                    });
-                })->get();
+            where('doc_id',$doc_id[$i])->get();
 
 
 
@@ -695,8 +689,6 @@ class AdminController extends Controller
                     'lname'=>$lname[$i],
                     'doc_id'=>$doc_id[$i],
                     'birthday'=>$birthday[$i],
-                    'email'=>$request['customer_email'],
-                    'tel'=>$request['customer_tel'],
                     'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
                     'reserve'=>1
 
@@ -711,8 +703,6 @@ class AdminController extends Controller
                     'lname'=>$lname[$i],
                     'doc_id'=>$doc_id[$i],
                     'birthday'=>$birthday[$i],
-                    'email'=>$request['customer_email'],
-                    'tel'=>$request['customer_tel'],
                     'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
                     'reserve'=>1
                 ]);
@@ -1101,7 +1091,11 @@ class AdminController extends Controller
                 'flight_id' => $flight['id'],
                 'ticketNumber' => $ticket['ticketInfo']['AirReservation']['Ticketing'][$i]['TicketDocumentNbr'],
                 'dateBook' => $ticket['ticketInfo']['AirReservation']['DateBooked'],
-                'BookingReference' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID']
+                'BookingReference' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID'],
+                'customer_name'=>$ticket['customer']['name'],
+                'customer_email'=>$ticket['customer']['email'],
+                'customer_tel'=>$ticket['customer']['tel'],
+
             ]);
         }
 
