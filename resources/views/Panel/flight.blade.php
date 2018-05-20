@@ -1,7 +1,160 @@
-﻿            @include('Section.Header')
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پنل مدیریت</title>
+
+    <link rel="stylesheet" href="/assets/css/fontiran.css">
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+
+    <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/assets/css/custom.css" rel="stylesheet" />
+    <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
+
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+    {{--persianDatepicker--}}
+    {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
+    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
+    {{--js for toggleButton--}}
+    <script src="/assets/js/bootstrap.min.js"></script>
+    {{--<script src="/assets/js/jquery.metisMenu.js"></script>--}}
+    {{--<script src="/assets/js/custom.js"></script>--}}
+
+    <script>
+        $(document).ready(function () {
+
+
+            $('#datepicker').persianDatepicker({
+                startDate: 'today',
+                endDate: '1400/2/2'
+            });
+
+
+            $('#form').on('submit',function (e) {
+                e.preventDefault();
+
+                var _token=$('input[name="_token"]').val();
+
+                var formData=new  FormData();
+                formData.append('OriginLocation',$('#OriginLocation').val());
+                formData.append('DestinationLocation',$('#DestinationLocation').val());
+                formData.append('DepartureDateTime',$('#datepicker').val());
+                formData.append('ADT',$('#ADT').val());
+                formData.append('CHD',$('#CHD').val());
+                formData.append('INF',$('#INF').val());
+                $.ajax({
+                    method: 'POST',
+                    url: '/admin/getFlight2',
+                    data: formData,
+                    contentType : false,
+                    processData: false,
+                    headers: {
+                        'X_CSRF-TOKEN': _token
+                    },
+
+                }).done(function (data) {
+                    console.log(data);
+                    $.ajax({
+                        method: 'get',
+                        url: '/admin/getFlight3',
+                        data: formData,
+                        contentType : false,
+                        processData: false
+
+                    }).done(function (response) {
+                        console.log(response);
+
+                        $('#searchResult').show();
+                        $('#searchResult').html(response['html']);
+
+                        $('#searchBoxContent').hide();
+
+                        $('#editSearch').attr('style','visibility:visible');
+
+                        // $('html, body').animate({
+                        //     scrollTop: $("#contentResult").offset().top
+                        // }, 500);
+
+
+                    });//end function of ajax2
+
+                });//end function of ajax1
+
+            })//end form submit
+
+            $('#editSearch').click(function () {
+                $('#searchResult').hide();
+                $('#searchBoxContent').show();
+                $(this).attr('style','visibility:hidden')
+
+            })
+        })//end jquery
+    </script>
+
+</head>
+<body>
+<div id="wrapper">
+    <nav class="navbar navbar-default navbar-cls-top " role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{route('adminPanel')}}">پنل مدیریت</a>
+        </div>
+        <div class="navbar-header-logout">
+            {{toPersianNum(jdate()->format('%d %B، %Y'))}}
+            <a href="/logout" class="btn btn-danger">خروج</a>
+        </div>
+    </nav>
+    <!-- /. NAV TOP  -->
+    <nav class="navbar-default navbar-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav" id="main-menu">
+                <li class="text-center">
+                    <img src="/assets/img/find_user.png" class="user-image img-responsive"/>
+                </li>
+                <li>
+                    <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
+                </li>
+                <li>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
+                </li>
+                <li>
+                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <!-- /. NAV SIDE  -->
+    <div id="page-wrapper" >
+        <div id="page-inner">
+
+
+
+
+
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="searchBoxContent">
+                    <div id="searchBoxContent">
                         <form id="form">
                             {{csrf_field()}}
 
@@ -329,69 +482,15 @@
 
                         </form>
                     </div>
-                    {{--result from search--}}
-
-                    <div class="searchResult">
-                        <div id="contentResult">
-                        </div>
-                    </div>
-
-
-
-
                 </div>
             </div>
 
-            <script>
-                $(document).ready(function () {
+            <button type="button" class="btn btn-success" style="visibility: hidden;" id="editSearch">تغییر جستجو</button>
+
+            <div id="searchResult">
+                <div id="contentResult">
+                </div>
+            </div>
 
 
-                    $('#datepicker').persianDatepicker({
-                        startDate: 'today',
-                        endDate: '1400/2/2'
-                    });
-
-
-                    $('#form').on('submit',function (e) {
-                        e.preventDefault();
-
-                        var _token=$('input[name="_token"]').val();
-
-                        var formData=new  FormData();
-                        formData.append('OriginLocation',$('#OriginLocation').val());
-                        formData.append('DestinationLocation',$('#DestinationLocation').val());
-                        formData.append('DepartureDateTime',$('#datepicker').val());
-                        formData.append('ADT',$('#ADT').val());
-                        formData.append('CHD',$('#CHD').val());
-                        formData.append('INF',$('#INF').val());
-                        $.ajax({
-                            method: 'POST',
-                            url: '/admin/getFlight2',
-                            data: formData,
-                            contentType : false,
-                            processData: false,
-                            headers: {
-                                'X_CSRF-TOKEN': _token
-                            },
-
-                        }).done(function (data) {
-                            console.log(data);
-                            $.ajax({
-                                method: 'get',
-                                url: '/admin/getFlight3',
-                                data: formData,
-                                contentType : false,
-                                processData: false,
-
-                            }).done(function (response) {
-                                console.log(response);
-                                $('#contentResult').attr('style','visibility:visible');
-                                $('#contentResult').html(response['html']);
-                            });//end function of ajax2
-
-                        });//end function of ajax1
-
-                    })//end form submit
-                })//end jquery
-            </script>
-            @include('Section.Footer')
+@include('Section.Footer')

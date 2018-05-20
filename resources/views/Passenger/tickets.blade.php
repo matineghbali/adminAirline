@@ -22,6 +22,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -121,6 +122,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 <div class="col-md-12" id="printable">
                     <div class="row">
                         <div class="col-sm-12" >
+
                             <h4 style="color: red">مسیر پروازی {{CodeToCity($tickets[0]->flight->DepartureAirport)}} به
                                 {{CodeToCity($tickets[0]->flight->ArrivalAirport)}}:</h4>
                             {{--ticket info--}}

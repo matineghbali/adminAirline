@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 ?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -22,18 +23,19 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
 
+    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
 
     {{--persianDatepicker--}}
-    <script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>
+    {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
     <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
     {{--js for toggleButton--}}
     <script src="/assets/js/bootstrap.min.js"></script>
     {{--<script src="/assets/js/jquery.metisMenu.js"></script>--}}
     {{--<script src="/assets/js/custom.js"></script>--}}
-    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
 
 </head>

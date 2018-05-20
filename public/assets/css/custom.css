@@ -298,7 +298,7 @@ background-color: #FFF;
 /*end css of reservation*/
 
 /*start css for flight*/
-.searchBoxContent{
+#searchBoxContent{
     background: #5F5D5D;padding: 15px;text-align: center;margin-bottom: 30px;border-radius: 3px
 }
 .searchResult{

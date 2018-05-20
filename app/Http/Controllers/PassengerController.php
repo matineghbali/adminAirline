@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Passenger;
 use App\Ticket;
+use foo\bar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PassengerController extends Controller
 {
@@ -20,6 +22,8 @@ class PassengerController extends Controller
     }
 
     public function update(Request $request,$id){
+//        session()->forget('err');
+
         $passenger=Passenger::find($id);
         $passenger->update([
            'gender'=>$request['gender'],
@@ -35,12 +39,16 @@ class PassengerController extends Controller
 
     public function Delete($id){
         Passenger::destroy($id);
+        Alert::error('حذف شد!','');
         return back();
     }
 
     public function getTicket($id){
         $tickets=Ticket::wherePassenger_id($id)->latest()->paginate(1);
-//        return $tickets[0]->passenger;
+        if (count($tickets)==0){
+            alert()->warning('هیچ بلیتی برای این مسافر وجود ندارد!' ,'');
+            return redirect(route('getPassenger'));
+        }
         return view('Passenger.tickets',['tickets'=>$tickets]);
     }
 

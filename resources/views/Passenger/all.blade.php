@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 ?>
-        <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8" />
@@ -16,9 +17,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
-
-
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
+    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
@@ -27,13 +28,13 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
     <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
 
-
     {{--js for toggleButton--}}
     <script src="/assets/js/jquery.metisMenu.js"></script>
     {{--<script src="/assets/js/custom.js"></script>--}}
 
 </head>
 <body>
+
 <div id="wrapper">
     <nav class="navbar navbar-default navbar-cls-top " role="navigation">
         <div class="navbar-header">
@@ -73,10 +74,15 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     </nav>
     <!-- /. NAV SIDE  -->
+
+
     <div id="page-wrapper" >
         <div id="page-inner">
+            @include('sweetalert::alert')
+
+
             <div class="row">
-                <div class="col-md-12" id="printable">
+                <div class="col-md-12">
                     <div class="row">
                         <div class="col-sm-12" >
                             {{--Passenger info--}}
@@ -164,12 +170,14 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                     </div>
 
 
+
                 </div>
             </div>
 
             <div style="text-align: center">
                 {!! $passengers->render() !!}
             </div>
+
         </div>
         <!-- /. PAGE INNER  -->
     </div>

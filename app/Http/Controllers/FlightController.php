@@ -51,6 +51,7 @@ class FlightController extends AdminController
 
     public function getFlight3(){
 
+        $err='false';
         // ارورهای ولیدیشن
         $html='';
         if (session()->has('Errors'))       //error haye validation
@@ -62,16 +63,14 @@ class FlightController extends AdminController
                 $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('OriginLocation').'",type: "error", confirmButtonText: "باشه"})</script>';
             elseif ($error->first('DestinationLocation'))
                 $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('DestinationLocation').'",type: "error", confirmButtonText: "باشه"})</script>';
-
+            $err='true';
         }
 
         //اارور های تعداد مسافران
         elseif (session()->has('PassengerNumERR')){
             $error=session('PassengerNumERR');
-
             $html='<script>SweetAlert({   title: "ارور",   text: "'.$error.'",type: "error", confirmButtonText: "باشه"})</script>';
-
-
+            $err='true';
         }
         //ارورهای سرور
         else{
@@ -83,11 +82,13 @@ class FlightController extends AdminController
                 else
                     $response=$myRes['response']['Errors'][0]['ShortText'];
                 $html='<script>SweetAlert({   title: "ارور",   text: "'.$response.'",type: "error", confirmButtonText: "باشه"})</script>';
-
+                $err='true';
             }
 
             else if($myRes['response']['PricedItineraries'] == null){
                 $html='<script>SweetAlert({   title: "ارور",   text: "چنین پروازی وجود ندارد",type: "error", confirmButtonText: "باشه"})</script>';
+                $err='true';
+
             }
             else {
                 $html='';
@@ -353,7 +354,7 @@ class FlightController extends AdminController
         }
         session()->forget('dataForPayment');
 
-        return ['html'=>$html];
+        return ['html'=>$html,'error'=>$err];
     }
 
 //    end of search flight

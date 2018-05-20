@@ -183,6 +183,10 @@ $(document).ready(function() {
                     $('#registerPage').hide();
                     $('#reservePage').show();
                     $('#reservePage').html(data);
+                    $('html, body').animate({
+                        scrollTop: $("#reservePage").offset().top
+                    }, 500);
+
 
                 });
 
