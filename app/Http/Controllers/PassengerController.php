@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class PassengerController extends Controller
 {
     public function getPassenger(){
-        $passengers=Auth::user()->passengers()->get();
+        $passengers=Auth::user()->passengers()->latest()->paginate(5);
         return view('Passenger/all',['passengers' => $passengers]);
     }
 
@@ -39,8 +39,9 @@ class PassengerController extends Controller
     }
 
     public function getTicket($id){
-        return $tickets=Ticket::find($id);
-        return view('Passenger.ticket',['ticket'=>$tickets]);
+        $tickets=Ticket::wherePassenger_id($id)->latest()->paginate(1);
+//        return $tickets[0]->passenger;
+        return view('Passenger.tickets',['tickets'=>$tickets]);
     }
 
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Passenger extends Model
 {
     protected $fillable=[
-        'user_id','type','gender','fname','lname','doc_id','birthday','email','tel','price','reserve'
+        'user_id','type','gender','fname','lname','doc_id','birthday','price','reserve'
     ];
 
     public function user(){

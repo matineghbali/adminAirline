@@ -24,6 +24,11 @@ class CreateTicketsTable extends Migration
             $table->string('ticketNumber');
             $table->string('dateBook');
             $table->string('BookingReference');
+
+            $table->string('customer_name');
+            $table->string('customer_email');
+            $table->string('customer_tel');
+
             $table->timestamps();
         });
     }

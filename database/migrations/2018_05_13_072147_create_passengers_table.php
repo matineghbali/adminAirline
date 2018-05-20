@@ -23,8 +23,6 @@ class CreatePassengersTable extends Migration
             $table->string('fname');
             $table->string('lname');
             $table->string('birthday');
-            $table->string('email');
-            $table->string('tel');
             $table->string('price');
             $table->boolean('reserve')->default(0);
             $table->timestamps();
