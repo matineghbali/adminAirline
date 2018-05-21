@@ -200,26 +200,45 @@ $(document).ready(function() {
     getBirthday('ADT');  //set birthday for first ADT passenger
 
 
-    for(i=1;i<ADTNumber;i++)
+    for(i=1;i<ADTNumber;i++){
         AddPassengerBody('ADT');
+        var pastADT=0;
+        $('#ADT .pastPassenger').each(function(e) {
+            $(this).attr('id', 'pastPassengerADT' + pastADT++);
+        });
+
+    }
 
     if (CHDNumber>0){
         $('#CHD').css("visibility", "visible");
         $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
 
         $('#CHD .removeBTN').attr('id','removeCHD');
+
+        var pastCHD=0;
+
         $('#CHD .PassengerType').val('CHD');
         for(i=0;i<CHDNumber;i++)
             AddPassengerBody('CHD');
+        $('#CHD .pastPassenger').each(function(e) {
+            $(this).attr('id', 'pastPassengerCHD' + pastCHD++);
+        });
+
     }
 
     if (INFNumber>0){
         $('#INF').css("visibility", "visible");
         $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
         $('#INF .removeBTN').attr('id','removeINF');
+        $('#INF .pastPassenger').attr('id','pastPassengerINF' + pastINF++ );
         $('#INF .PassengerType').val('INF');
         for(i=0;i<INFNumber;i++)
             AddPassengerBody('INF');
+        var pastINF=0;
+        $('#INF .pastPassenger').each(function(e) {
+            $(this).attr('id', 'pastPassengerINF' + pastINF++);
+        });
+
     }
 
     var PassengerNumERR='تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید';
@@ -234,6 +253,11 @@ $(document).ready(function() {
             ADTNumber++;
             numberOfPassengers++;
             AddPassengerBody('ADT');
+            var pastADT=0;
+            $('#ADT .pastPassenger').each(function(e) {
+                $(this).attr('id', 'pastPassengerADT' + pastADT++);
+            });
+
         }
 
 
@@ -256,8 +280,14 @@ $(document).ready(function() {
             CHDNumber++;
             numberOfPassengers++;
             $('#CHD .removeBTN').attr('id','removeCHD');
+            $('#CHD .pastPassenger').attr('id','pastPassengerCHD' + pastCHD++ );
             $('#CHD .PassengerType').val('CHD');
             AddPassengerBody('CHD');
+            var pastCHD=0;
+            $('#CHD .pastPassenger').each(function(e) {
+                $(this).attr('id', 'pastPassengerCHD' + pastCHD++);
+            });
+
 
         }
 
@@ -284,15 +314,76 @@ $(document).ready(function() {
             INFNumber++;
             numberOfPassengers++;
             $('#INF .removeBTN').attr('id','removeINF');
+            $('#INF .pastPassenger').attr('id','pastPassengerCHD' + pastINF++ );
             $('#INF .PassengerType').val('INF');
             AddPassengerBody('INF');
+            var pastINF=0;
+            $('#INF .pastPassenger').each(function(e) {
+                $(this).attr('id', 'pastPassengerINF' + pastINF++);
+            });
+
 
         }
     });
 
+    $(document).on("click", '.pastPassenger', function(){
+           $.ajax({
+               method: 'get',
+               url: '/admin/pastPassenger',
+               contentType: false,
+               processType: false
+           }).done(function (data) {
+               console.log(data['modal']);
+               $('#ADT0').append(data['modal']);
+               $('#ADT0 .modal-body').html(data['html']);
+           });
+    });
+    // $('#' + passenger + ' .datepicker').each(function(e) {
+
+    $(document).on("click", "tr.rows", function () {
+        // console.log($(this).children('td').eq(1).text());
+        $myRow=[];
+        for( i=1;i<=5;i++ ){
+            if ( i==1 ){
+                if ($(this).children('td').eq(i).text() == 'نوزاد')
+                    $myRow[0] = 'INF';
+                else if ($(this).children('td').eq(i).text() == 'کودک')
+                    $myRow[0] = 'CHD';
+                else
+                    $myRow[0] = 'ADT';
+            }
+
+            else if ( i==2 ){
+                if ($(this).children('td').eq(i).text() == 'خانم')
+                    $myRow[1] = 0;
+                else
+                    $myRow[1] = 1;
+            }
+            else if ( i==3 ){
+                var $name=$(this).children('td').eq(i).text().split(' ');
+                $myRow[2]=$name[0];
+                $myRow[3]=$name[1];
+            }
+            else if (i==4 || i==5){
+                $myRow[i]=toEnglishNum($(this).children('td').eq(i).text());
+            }
+        }
+
+        // $('.modal').modal('toggle');
+        // $(this).parents('.passengerBody').css("background-color", "red");
+        console.log($(this).parents());
+
+
+
+        console.log($myRow);
+
+    });
+
+
     $(document).on("click", "#removeADT", function(){
         ADTNumber--;
         numberOfPassengers--;
+        pastADT--;
         $(this).parents('.passengerBody').remove();
     });
 
@@ -301,6 +392,7 @@ $(document).ready(function() {
             $('#CHD').css("visibility","hidden");
         }
         CHDNumber--;
+        pastCHD--;
         numberOfPassengers--;
         $(this).parents('.passengerBody').remove();
     });
@@ -309,10 +401,68 @@ $(document).ready(function() {
         if (($('#INF').find('.passengerBody').length)-1==1)
             $('#INF').css("visibility","hidden");
         INFNumber--;
+        pastINF--;
         numberOfPassengers--;
         $(this).parents('.passengerBody').remove();
     });
 
+    $(document).on("click", "#editBtn", function() {
+        $.ajax({
+            method: 'get',
+            url: '/admin/unReserve',
+            contentType : false,
+            processData: false
+
+        });
+
+        $('#registerPage').show();
+        $('.btnSubmit').attr('disabled', false);
+        // $('#h3passengerNumber').html("<?php echo  session('data')['passengerNumber'] ?>");
+        // $('#spanPrice').text('<?php echo "ytt"; ?>');
+
+        $('#reservePage').hide();
+
+    });
+
+    $(document).on("click", "#reserveBtn", function() {
+        $.ajax({
+            method: 'get',
+            url: '/admin/reserved',
+            contentType : false,
+            processData: false
+
+        }).done(function (data) {
+            console.log(data);
+
+            if (data['status']=='Error'){
+                swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).
+                then(function() {
+                    $.ajax({
+                        method: 'get',
+                        url: '/admin/unReserve',
+                        contentType : false,
+                        processData: false
+
+                    });
+
+                    $('#registerPage').show();
+                    $('.btnSubmit').attr('disabled', false);
+
+                    $('#reservePage').hide();
+                });
+            }
+            else {
+
+                SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت ها'}).
+                then(function() {
+                    window.location.replace("/admin/ticket");
+
+                });
+
+            }
+
+        });
+    });
 
 
     // functions
@@ -325,6 +475,8 @@ $(document).ready(function() {
             $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
 
         $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
+        // $('#' + passenger + '.pastPassenger').attr('id','pastPassenger' + passenger +  pastPassengerIndex++ );
+
 
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
@@ -376,67 +528,22 @@ $(document).ready(function() {
         return output;
     }
 
+    function  toEnglishNum($number) {
+        $number = $number.replace(/۱/g,"1");
+        $number = $number.replace(/۲/g,"2");
+        $number = $number.replace(/۳/g,"3");
+        $number = $number.replace(/۴/g,"4");
+        $number = $number.replace(/۵/g,"5");
+        $number = $number.replace(/۶/g,"6");
+        $number = $number.replace(/۷/g,"7");
+        $number = $number.replace(/۸/g,"8");
+        $number = $number.replace(/۹/g,"9");
+        $number = $number.replace(/۰/g,"0");
+        return $number;
+    }
 
+    //end function
 
-    $(document).on("click", "#editBtn", function() {
-        $.ajax({
-            method: 'get',
-            url: '/admin/unReserve',
-            contentType : false,
-            processData: false
-
-        });
-
-        $('#registerPage').show();
-        $('.btnSubmit').attr('disabled', false);
-        // $('#h3passengerNumber').html("<?php echo  session('data')['passengerNumber'] ?>");
-        // $('#spanPrice').text('<?php echo "ytt"; ?>');
-
-        $('#reservePage').hide();
-
-    });
-
-
-
-    $(document).on("click", "#reserveBtn", function() {
-        $.ajax({
-            method: 'get',
-            url: '/admin/reserved',
-            contentType : false,
-            processData: false
-
-        }).done(function (data) {
-            console.log(data);
-
-            if (data['status']=='Error'){
-                swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).
-                then(function() {
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/unReserve',
-                        contentType : false,
-                        processData: false
-
-                    });
-
-                    $('#registerPage').show();
-                    $('.btnSubmit').attr('disabled', false);
-
-                    $('#reservePage').hide();
-                });
-            }
-            else {
-
-                SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت ها'}).
-                then(function() {
-                    window.location.replace("/admin/ticket");
-
-                });
-
-            }
-
-        });
-    });
 
 
 });

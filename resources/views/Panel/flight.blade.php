@@ -80,9 +80,11 @@
                         $('#searchResult').show();
                         $('#searchResult').html(response['html']);
 
-                        $('#searchBoxContent').hide();
+                        if (response['error']=='false'){
+                            $('#searchBoxContent').hide();
 
-                        $('#editSearch').attr('style','visibility:visible');
+                            $('#editSearch').attr('style','visibility:visible');
+                        }
 
                         // $('html, body').animate({
                         //     scrollTop: $("#contentResult").offset().top
@@ -488,6 +490,7 @@
             <button type="button" class="btn btn-success" style="visibility: hidden;" id="editSearch">تغییر جستجو</button>
 
             <div id="searchResult">
+
                 <div id="contentResult">
                 </div>
             </div>

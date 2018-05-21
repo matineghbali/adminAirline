@@ -177,7 +177,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
             <div style="text-align: center">
                 {!! $passengers->render() !!}
             </div>
-
         </div>
         <!-- /. PAGE INNER  -->
     </div>

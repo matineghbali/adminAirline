@@ -25,6 +25,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->patch('passenger/{id}','PassengerController@Update' )->name('UpdatePassenger');
     $this->DELETE('passenger/{id}','PassengerController@Delete' )->name('DeletePassenger');
     $this->get('getTicket/{id}','PassengerController@getTicket' )->name('getTicket');
+    $this->get('pastPassenger','PassengerController@pastPassenger' )->name('pastPassenger');
 
 
 

@@ -205,6 +205,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                     </div>
 
                                     {{--adult info--}}
+
+
+
+
+
                                     <div class="passengerContent" id="ADT">
                                         <div class="passengerHeader">
                                             <h4 class="h4Passenger">
@@ -213,13 +218,14 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                         </div>
 
                                         <div class="passengerBody" id="ADT0">
-                                            <div class="row">
-                                                <div class="passengerPastPassenger">
-                                                    <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                    <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
-                                                </div>
-                                            </div>
                                             <div class="row passengerInfo">
+                                                <div class="row">
+                                                    <div class="passengerPastPassenger" style="margin-left: 10px">
+                                                        <button type="button" class="btn btn-primary btn-xs pastPassenger" data-toggle="modal" data-target="#ADTModal">
+                                                            <i class="fa fa-th-list"></i>مسافران سابق</button>
+                                                        <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
+                                                    </div>
+                                                </div>
                                                 <input type="hidden" value="ADT" name="typeADT" class="PassengerType">
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
@@ -266,13 +272,15 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                         </div>
 
                                         <div class="passengerBody hide" id="passengerBodyADT">
-                                            <div class="row">
-                                                <div class="passengerPastPassenger">
-                                                    <button type="button" class="btn btn-primary btn-xs"><i class="fa fa-th-list"></i> مسافران سابق</button>
-                                                    <button type="button" class="btn btn-danger btn-xs removeBTN" id="removeADT"><i class="fa fa-remove removeButton"></i></button>
+                                            <div class="row passengerInfo" >
+                                                <div class="row" >
+                                                    <div class="passengerPastPassenger" style="margin-left: 10px">
+                                                        <button type="button" class="btn btn-primary btn-xs pastPassenger" id="pastPassengerADT" data-toggle="modal" data-target="#ADTModal">
+                                                            <i class="fa fa-th-list"></i> مسافران سابق</button>
+                                                        <button type="button" class="btn btn-danger btn-xs removeBTN" id="removeADT"><i class="fa fa-remove removeButton"></i></button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row passengerInfo">
+
                                                 <div class="form-group">
                                                     <input type="hidden" value="ADT" name="type" class="PassengerType">
                                                 </div>
