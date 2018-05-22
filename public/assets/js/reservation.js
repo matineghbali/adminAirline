@@ -125,21 +125,19 @@ $(document).ready(function() {
         });
 
 
-    $('#ADT .datepicker').each(function(e) {
-        $(this).persianDatepicker({
+        $('#passengerBodyADT0 .datepicker').persianDatepicker({
             cellWidth: 50,
             cellHeight: 30,
             fontSize: 18,
             onSelect: function (e) {
-                console.log($('#ADT .datepicker').val());
-                getBirthday('ADT',$('#ADT .datepicker').val());
+                getBirthday('ADT',$('#passengerBodyADT0 .datepicker').val(),$('#passengerBodyADT0 .datepicker').attr('id'));
 
             }
 
-        })
-    });
+        });
 
-    function getBirthday(passenger,date) {
+
+    function getBirthday(passenger,date,id) {
         var _token=$('input[name="_token"]').val();
         var formData=new  FormData();
         formData.append('passenger',passenger);
@@ -157,60 +155,76 @@ $(document).ready(function() {
         }).done(function (data) {
             console.log(data);
             if (data['status']=='invalid'){
-                sessionStorage.setItem('status'+passenger+'Error','true');
-                alert(sessionStorage.getItem('status'+passenger+'Error'));
+                if (passenger=='ADT'){
+                    sessionStorage.setItem('statusADTError','true');
+                    sessionStorage.setItem('statusCHDError','false');
+                    sessionStorage.setItem('statusINFError','false');
+                }
+                else if (passenger=='CHD'){
+                    sessionStorage.setItem('statusADTError','false');
+                    sessionStorage.setItem('statusCHDError','true');
+                    sessionStorage.setItem('statusINFError','false');
+                }
+                else if (passenger=='INF'){
+                    sessionStorage.setItem('statusADTError','false');
+                    sessionStorage.setItem('statusCHDError','false');
+                    sessionStorage.setItem('statusINFError','true');
+                }
+
             }
             else {
-                sessionStorage.setItem('statusADTError', 'false');
-                alert(sessionStorage.getItem('statusADTError'));
+                sessionStorage.setItem('statusADTError','false');
+                sessionStorage.setItem('statusCHDError','false');
+                sessionStorage.setItem('statusINFError','false');
             }
-            $('#defaultForm').bootstrapValidator('revalidateField', $('#birth'));
+            $('#defaultForm').bootstrapValidator('revalidateField', $('#' + id));
 
-
-
-
-            // if (passenger='ADT')
-                //     var ADTError='true';
-                // else if (passenger='CHD')
-                //     var CHDError='true';
-                // else
-                //     var INFError='true';
-                // $('#defaultForm').bootstrapValidator('validate').on('success.field.bv', function (e, data) {});
-                // $('#defaultForm').bootstrapValidator('addField', 'passenger-birthday[]');
-
-            // }
-            // else{
-            //     $('#defaultForm').bootstrapValidator('validate').on('success.field.bv', function (e, data) {});
-
-            //     $('#defaultForm').bootstrapValidator().on('success.field.bv', function (e, data) {
-            //         error_formValid='false';
-            //     });
-            // }
         });
     }
 
+    var passengerBodyADT=1;
+    var passengerBodyCHD=0;
+    var passengerBodyINF=0;
+
+    function AddPassengerBody(passenger) {
+
+        var template     = "passengerBody",
+            $templateEle = $('#' + template + passenger),
+
+            $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
+        if (passenger=="ADT")
+            var passengerBody=$row.attr('id',"passengerBodyADT"+passengerBodyADT++);
+        else if(passenger=='CHD')
+            var passengerBody=$row.attr('id',"passengerBodyCHD"+passengerBodyCHD++);
+        else if (passenger=='INF')
+            var passengerBody=$row.attr('id',"passengerBodyINF"+passengerBodyINF++);
 
 
+        $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
 
-    function calcAge(i) {
-        var d = i.split('_'), p = (d[0] == 'baby') ? 'babies' : d[0] + 's',
-            s = $('#' + p + '_foreign_nationality_' + d[2]).is(':checked');
-        $.post(Skeleton.baseUrl('context/calcAge/' + $('#' + i).data('type')), {
-            age: $('#' + i).val(),
-            sys: $('[name=is_system]').val(),
-            fr: $('[name=is_foreign]').val(),
-            date: (s) ? 'gregorian' : 'jalali',
-            ticket_id: $('input[name=ticket_id]').val(),
-        }, function (r) {
-            $('#' + i + '_agestatus').val(r.state);
-            $('#reservationForm').formValidation('revalidateField', 'adl[birth_date][]');
-            $('#reservationForm').formValidation('revalidateField', 'chd[birth_date][]');
-            $('#reservationForm').formValidation('revalidateField', 'inf[birth_date][]');
-        }, 'json');
+
+        var $el = $row.find('select').eq(0).attr('name', template + '[]');
+        $('#defaultForm').bootstrapValidator('addField', $el);
+
+
+        for (j = 0; j <= 4; j++) {
+            var $el = $row.find('input').eq(j).attr('name', template + '[]');
+            $('#defaultForm').bootstrapValidator('addField', $el);
+
+        }
+
+        $('#' + passengerBody.attr('id') + ' .datepicker').persianDatepicker({
+                cellWidth: 50,
+                cellHeight: 30,
+                fontSize: 18,
+                onSelect: function (e) {
+                    getBirthday(passenger,$('#' + passengerBody.attr('id') + ' .datepicker').val(),$('#' + passengerBody.attr('id') + ' .datepicker').attr('id'));
+                }
+
+            })
+        // });
+
     }
-
-
-
 
 
     $('.btnSubmit').click(function () {
@@ -307,6 +321,11 @@ $(document).ready(function() {
         $('#ADT .pastPassenger').each(function(e) {
             $(this).attr('id', 'pastPassengerADT' + pastADT++);
         });
+        var datepickerADT=0;
+        $('#ADT .datepicker').each(function(e) {
+            $(this).attr('id', 'datepickerADT' + datepickerADT++);
+        });
+
 
     }
 
@@ -316,14 +335,22 @@ $(document).ready(function() {
 
         $('#CHD .removeBTN').attr('id','removeCHD');
 
-        var pastCHD=0;
 
         $('#CHD .PassengerType').val('CHD');
+
         for(i=0;i<CHDNumber;i++)
             AddPassengerBody('CHD');
+
+        var pastCHD=0;
         $('#CHD .pastPassenger').each(function(e) {
             $(this).attr('id', 'pastPassengerCHD' + pastCHD++);
         });
+
+        var datepickerCHD=0;
+        $('#CHD .datepicker').each(function(e) {
+            $(this).attr('id', 'datepickerCHD' + datepickerCHD++);
+        });
+
 
     }
 
@@ -331,14 +358,21 @@ $(document).ready(function() {
         $('#INF').css("visibility", "visible");
         $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
         $('#INF .removeBTN').attr('id','removeINF');
-        $('#INF .pastPassenger').attr('id','pastPassengerINF' + pastINF++ );
+        // $('#INF .pastPassenger').attr('id','pastPassengerINF' + pastINF++ );
         $('#INF .PassengerType').val('INF');
         for(i=0;i<INFNumber;i++)
             AddPassengerBody('INF');
+
         var pastINF=0;
         $('#INF .pastPassenger').each(function(e) {
             $(this).attr('id', 'pastPassengerINF' + pastINF++);
         });
+
+        var datepickerINF=0;
+        $('#INF .datepicker').each(function(e) {
+            $(this).attr('id', 'datepickerINF' + datepickerINF++);
+        });
+
 
     }
 
@@ -358,6 +392,11 @@ $(document).ready(function() {
             $('#ADT .pastPassenger').each(function(e) {
                 $(this).attr('id', 'pastPassengerADT' + pastADT++);
             });
+            var datepickerADT=0;
+            $('#ADT .datepicker').each(function(e) {
+                $(this).attr('id', 'datepickerADT' + datepickerADT++);
+            });
+
 
         }
 
@@ -384,10 +423,17 @@ $(document).ready(function() {
             $('#CHD .pastPassenger').attr('id','pastPassengerCHD' + pastCHD++ );
             $('#CHD .PassengerType').val('CHD');
             AddPassengerBody('CHD');
+
             var pastCHD=0;
             $('#CHD .pastPassenger').each(function(e) {
                 $(this).attr('id', 'pastPassengerCHD' + pastCHD++);
             });
+
+            var datepickerCHD=0;
+            $('#CHD .datepicker').each(function(e) {
+                $(this).attr('id', 'datepickerCHD' + datepickerCHD++);
+            });
+
 
 
         }
@@ -418,9 +464,15 @@ $(document).ready(function() {
             $('#INF .pastPassenger').attr('id','pastPassengerCHD' + pastINF++ );
             $('#INF .PassengerType').val('INF');
             AddPassengerBody('INF');
+
             var pastINF=0;
             $('#INF .pastPassenger').each(function(e) {
                 $(this).attr('id', 'pastPassengerINF' + pastINF++);
+            });
+
+            var datepickerINF=0;
+            $('#INF .datepicker').each(function(e) {
+                $(this).attr('id', 'datepickerINF' + datepickerINF++);
             });
 
 
@@ -435,8 +487,8 @@ $(document).ready(function() {
                processType: false
            }).done(function (data) {
                console.log(data['modal']);
-               $('#ADT0').append(data['modal']);
-               $('#ADT0 .modal-body').html(data['html']);
+               $('#passengerBodyADT0').append(data['modal']);
+               $('#passengerBodyADT0 .modal-body').html(data['html']);
            });
     });
     // $('#' + passenger + ' .datepicker').each(function(e) {
@@ -485,6 +537,7 @@ $(document).ready(function() {
         ADTNumber--;
         numberOfPassengers--;
         pastADT--;
+        passengerBodyADT--;
         $(this).parents('.passengerBody').remove();
     });
 
@@ -495,6 +548,7 @@ $(document).ready(function() {
         CHDNumber--;
         pastCHD--;
         numberOfPassengers--;
+        passengerBodyCHD--;
         $(this).parents('.passengerBody').remove();
     });
 
@@ -504,6 +558,7 @@ $(document).ready(function() {
         INFNumber--;
         pastINF--;
         numberOfPassengers--;
+        passengerBodyINF--;
         $(this).parents('.passengerBody').remove();
     });
 
@@ -568,42 +623,6 @@ $(document).ready(function() {
 
     // functions
 
-    function AddPassengerBody(passenger) {
-
-        var template     = "passengerBody",
-            $templateEle = $('#' + template + passenger),
-
-            $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
-
-        $('#' + passenger + '.removeBTN').attr('id','remove' + passenger);
-        // $('#' + passenger + '.pastPassenger').attr('id','pastPassenger' + passenger +  pastPassengerIndex++ );
-
-
-        var $el = $row.find('select').eq(0).attr('name', template + '[]');
-        $('#defaultForm').bootstrapValidator('addField', $el);
-
-        // getBirthday(passenger);
-
-        for (j = 0; j <= 4; j++) {
-            var $el = $row.find('input').eq(j).attr('name', template + '[]');
-            $('#defaultForm').bootstrapValidator('addField', $el);
-
-        }
-
-        $('#' + passenger + ' .datepicker').each(function(e) {
-            $(this).persianDatepicker({
-                cellWidth: 50,
-                cellHeight: 30,
-                fontSize: 18,
-
-
-                startDate: 'today',
-                endDate: '1400/01/01'
-
-            });
-        });
-
-    }
 
 
     function getFieldValue(field) {

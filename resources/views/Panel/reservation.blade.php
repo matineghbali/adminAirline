@@ -205,11 +205,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                     </div>
 
                                     {{--adult info--}}
-
-
-
-
-
                                     <div class="passengerContent" id="ADT">
                                         <div class="passengerHeader">
                                             <h4 class="h4Passenger">
@@ -217,7 +212,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             </h4>
                                         </div>
 
-                                        <div class="passengerBody" id="ADT0">
+                                        <div class="passengerBody" id="passengerBodyADT0">
                                             <div class="row passengerInfo">
                                                 <div class="row">
                                                     <div class="passengerPastPassenger" style="margin-left: 10px">
@@ -262,7 +257,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker"  type="text" id="birth" name="passenger-birthday[]"  style="background-color: white;cursor: context-menu" >
+                                                        <input class="form-control datepicker"  type="text" id="datepickerADT0" name="passenger-birthday[]"  style="background-color: white;cursor: context-menu" >
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>
@@ -319,7 +314,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]" id="birthday" style="background-color: white;cursor: context-menu" oninput="getBirthday($('#type').val(),$('#birthday').val())">
+                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]" style="background-color: white;cursor: context-menu">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>
