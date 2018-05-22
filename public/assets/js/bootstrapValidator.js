@@ -8229,3 +8229,120 @@ if (typeof jQuery === 'undefined') {
         }
     };
 }(window.jQuery));
+
+
+
+
+// custom
+
+
+(function($) {
+    $.fn.bootstrapValidator.i18n.ADTError = $.extend($.fn.bootstrapValidator.i18n.ADTError || {}, {
+        'default': 'سن بزرگسال باید بزرگتر از 12 باشد'
+    });
+
+    $.fn.bootstrapValidator.validators.ADTError = {
+        // enableByHtml5: function($field) {
+        //     var required = $field.attr('required') + '';
+        //     return ('required' === required || 'true' === required);
+        // },
+
+        /**
+         * Check if input value is empty or not
+         *
+         * @param {BootstrapValidator} validator The validator plugin instance
+         * @param {jQuery} $field Field element
+         * @param {Object} options
+         * @returns {Boolean}
+         */
+        validate: function(validator, $field, options) {
+            var type = $field.attr('type');
+            if (sessionStorage.getItem('statusADTError')=='true') {
+                return validator
+                    .getFieldElements($field.attr('data-bv-field'))
+                    .filter(':checked')
+                    .length > 0;
+            }
+
+            else if (sessionStorage.getItem('statusADTError')=='false'){
+                return true;
+            }
+
+            // return $.trim($field.val()) !== '';
+        }
+    };
+}(window.jQuery));
+
+(function($) {
+    $.fn.bootstrapValidator.i18n.CHDError = $.extend($.fn.bootstrapValidator.i18n.CHDError || {}, {
+        'default': 'سن کودک باید بین 2 تا 12 سال باشد'
+    });
+
+    $.fn.bootstrapValidator.validators.CHDError = {
+        // enableByHtml5: function($field) {
+        //     var required = $field.attr('required') + '';
+        //     return ('required' === required || 'true' === required);
+        // },
+
+        /**
+         * Check if input value is empty or not
+         *
+         * @param {BootstrapValidator} validator The validator plugin instance
+         * @param {jQuery} $field Field element
+         * @param {Object} options
+         * @returns {Boolean}
+         */
+        validate: function(validator, $field, options) {
+            var type = $field.attr('type');
+            if (sessionStorage.getItem('statusCHDError')=='true') {
+                return validator
+                    .getFieldElements($field.attr('data-bv-field'))
+                    .filter(':checked')
+                    .length > 0;
+            }
+
+            else if (sessionStorage.getItem('statusCHDError')=='false'){
+                return true;
+            }
+
+            // return $.trim($field.val()) !== '';
+        }
+    };
+}(window.jQuery));
+
+(function($) {
+    $.fn.bootstrapValidator.i18n.INFError = $.extend($.fn.bootstrapValidator.i18n.INFError || {}, {
+        'default': 'سن نوزاد باید بین 7 روز تا 2 سال باشد'
+    });
+
+    $.fn.bootstrapValidator.validators.INFError = {
+        // enableByHtml5: function($field) {
+        //     var required = $field.attr('required') + '';
+        //     return ('required' === required || 'true' === required);
+        // },
+
+        /**
+         * Check if input value is empty or not
+         *
+         * @param {BootstrapValidator} validator The validator plugin instance
+         * @param {jQuery} $field Field element
+         * @param {Object} options
+         * @returns {Boolean}
+         */
+        validate: function(validator, $field, options) {
+            var type = $field.attr('type');
+            if (sessionStorage.getItem('statusINFError')=='true') {
+                return validator
+                    .getFieldElements($field.attr('data-bv-field'))
+                    .filter(':checked')
+                    .length > 0;
+            }
+
+            else if (sessionStorage.getItem('statusINFError')=='false'){
+                return true;
+            }
+
+            // return $.trim($field.val()) !== '';
+        }
+    };
+}(window.jQuery));

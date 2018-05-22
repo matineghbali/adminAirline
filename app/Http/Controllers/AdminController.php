@@ -108,7 +108,9 @@ class AdminController extends Controller
         return $response;
     }
 
-    public  function getBirthday($passenger){
+    public function getBirthday(Request $request){
+        $passenger=$request['passenger'];
+        $dateInput=$request['date'];
         $date=jdate()->format('%y/%m/%d');
         $array=explode('/',$date);
         $y='13'.$array[0];$m=$array[1];$d=$array[2];
@@ -166,7 +168,13 @@ class AdminController extends Controller
             $end=$adtEY.'/'.$infM.'/'.($infD-2);
         }
 
-        return ['start'=> $start,'end'=>$end];
+//        return ['start'=> $start,'end'=>$end];
+
+        if ($dateInput<$start || $dateInput>$end)
+            $status='invalid';
+        else
+            $status='valid';
+        return ['status' => $status , 'start' => $start , 'end'=>$end , 'dateInput' => $dateInput , 'passenger' =>$passenger];
     }
 
 

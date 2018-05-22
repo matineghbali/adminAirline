@@ -262,7 +262,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker"  type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu" >
+                                                        <input class="form-control datepicker"  type="text" id="birth" name="passenger-birthday[]"  style="background-color: white;cursor: context-menu" >
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>
@@ -282,7 +282,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <input type="hidden" value="ADT" name="type" class="PassengerType">
+                                                    <input type="hidden" value="ADT" name="type" id="type" class="PassengerType">
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
@@ -319,7 +319,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]"  readonly style="background-color: white;cursor: context-menu">
+                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]" id="birthday" style="background-color: white;cursor: context-menu" oninput="getBirthday($('#type').val(),$('#birthday').val())">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>

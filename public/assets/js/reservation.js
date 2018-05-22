@@ -86,6 +86,15 @@ $(document).ready(function() {
                 validators: {
                     notEmpty: {
                         message: 'تاریخ تولد خود را انتخاب کنید'
+                    },
+                    ADTError: {
+                        message: 'سن بزرگسال باید بزرگتر از 12 باشد'
+                    },
+                    CHDError: {
+                        message: 'سن کودک باید بین 2 تا 12 سال باشد'
+                    },
+                    INFError: {
+                        message: 'سن نوزاد باید بین 7 روز تا 2 سال باشد'
                     }
                 }
             },
@@ -114,6 +123,94 @@ $(document).ready(function() {
         .on('status.field.bv', function (e, data) {
             data.bv.disableSubmitButtons(false);
         });
+
+
+    $('#ADT .datepicker').each(function(e) {
+        $(this).persianDatepicker({
+            cellWidth: 50,
+            cellHeight: 30,
+            fontSize: 18,
+            onSelect: function (e) {
+                console.log($('#ADT .datepicker').val());
+                getBirthday('ADT',$('#ADT .datepicker').val());
+
+            }
+
+        })
+    });
+
+    function getBirthday(passenger,date) {
+        var _token=$('input[name="_token"]').val();
+        var formData=new  FormData();
+        formData.append('passenger',passenger);
+        formData.append('date',date);
+        $.ajax({
+            method: 'POST',
+            url: '/admin/getBirthday',
+            data: formData,
+            contentType : false,
+            processData: false,
+            headers: {
+                'X_CSRF-TOKEN': _token
+            }
+
+        }).done(function (data) {
+            console.log(data);
+            if (data['status']=='invalid'){
+                sessionStorage.setItem('status'+passenger+'Error','true');
+                alert(sessionStorage.getItem('status'+passenger+'Error'));
+            }
+            else {
+                sessionStorage.setItem('statusADTError', 'false');
+                alert(sessionStorage.getItem('statusADTError'));
+            }
+            $('#defaultForm').bootstrapValidator('revalidateField', $('#birth'));
+
+
+
+
+            // if (passenger='ADT')
+                //     var ADTError='true';
+                // else if (passenger='CHD')
+                //     var CHDError='true';
+                // else
+                //     var INFError='true';
+                // $('#defaultForm').bootstrapValidator('validate').on('success.field.bv', function (e, data) {});
+                // $('#defaultForm').bootstrapValidator('addField', 'passenger-birthday[]');
+
+            // }
+            // else{
+            //     $('#defaultForm').bootstrapValidator('validate').on('success.field.bv', function (e, data) {});
+
+            //     $('#defaultForm').bootstrapValidator().on('success.field.bv', function (e, data) {
+            //         error_formValid='false';
+            //     });
+            // }
+        });
+    }
+
+
+
+
+    function calcAge(i) {
+        var d = i.split('_'), p = (d[0] == 'baby') ? 'babies' : d[0] + 's',
+            s = $('#' + p + '_foreign_nationality_' + d[2]).is(':checked');
+        $.post(Skeleton.baseUrl('context/calcAge/' + $('#' + i).data('type')), {
+            age: $('#' + i).val(),
+            sys: $('[name=is_system]').val(),
+            fr: $('[name=is_foreign]').val(),
+            date: (s) ? 'gregorian' : 'jalali',
+            ticket_id: $('input[name=ticket_id]').val(),
+        }, function (r) {
+            $('#' + i + '_agestatus').val(r.state);
+            $('#reservationForm').formValidation('revalidateField', 'adl[birth_date][]');
+            $('#reservationForm').formValidation('revalidateField', 'chd[birth_date][]');
+            $('#reservationForm').formValidation('revalidateField', 'inf[birth_date][]');
+        }, 'json');
+    }
+
+
+
 
 
     $('.btnSubmit').click(function () {
@@ -197,7 +294,11 @@ $(document).ready(function() {
     });
 
 
-    getBirthday('ADT');  //set birthday for first ADT passenger
+
+    // getBirthday('ADT');  //set birthday for first ADT passenger
+
+
+
 
 
     for(i=1;i<ADTNumber;i++){
@@ -481,40 +582,29 @@ $(document).ready(function() {
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
 
-        getBirthday(passenger);
+        // getBirthday(passenger);
 
         for (j = 0; j <= 4; j++) {
             var $el = $row.find('input').eq(j).attr('name', template + '[]');
             $('#defaultForm').bootstrapValidator('addField', $el);
 
         }
-    }
 
-    function getBirthday(passenger) {
-        $.ajax({
-            method: 'get',
-            url: '/admin/getBirthday/'+passenger,
-            contentType : false,
-            processData: false
-        }).done(function (data) {
-            console.log(data);
-            start=data['start'];
-            end=data['end'];
-            $('#' + passenger + ' .datepicker').each(function(e) {
-                $(this).persianDatepicker({
-
-                    cellWidth: 50,
-                    cellHeight: 30,
-                    fontSize: 18,
+        $('#' + passenger + ' .datepicker').each(function(e) {
+            $(this).persianDatepicker({
+                cellWidth: 50,
+                cellHeight: 30,
+                fontSize: 18,
 
 
-                    startDate: start,
-                    endDate: 'today'
+                startDate: 'today',
+                endDate: '1400/01/01'
 
-                });
             });
         });
+
     }
+
 
     function getFieldValue(field) {
         var i=0;
@@ -543,6 +633,10 @@ $(document).ready(function() {
     }
 
     //end function
+
+
+
+
 
 
 
