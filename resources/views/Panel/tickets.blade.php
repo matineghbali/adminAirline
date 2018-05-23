@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="col-md-12" id="printable">
                     <div class="row">
-                        <div class="col-sm-12" >
+                        <div class="col-md-12" >
                             <h4 style="color: red">مسیر پروازی {{CodeToCity($tickets[0]->flight->DepartureAirport)}} به
                                 {{CodeToCity($tickets[0]->flight->ArrivalAirport)}}:</h4>
                             {{--ticket info--}}

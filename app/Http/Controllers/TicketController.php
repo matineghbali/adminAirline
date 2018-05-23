@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\View\View;
 use TCPDF;
+use TCPDF_FONTS;
 
 class TicketController extends AdminController
 {
@@ -66,7 +67,7 @@ class TicketController extends AdminController
     }
 
     public function tickets(){
-        $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
+        $tickets=Ticket::where('BookingReference','abh123')->get();
 //        return view('Panel/tickets',['tickets' => $tickets ]);
 
         return $this->ticket_generator($tickets);
@@ -99,46 +100,49 @@ class TicketController extends AdminController
 
 
 
+
         // create new PDF document
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         //$fontname = TCPDF_FONTS::addTTFfont(BASEPATH.'fonts/IRANSans-web.ttf', 'TrueTypeUnicode', '', 32);
 
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Ghasedak-ict.com');
-        $pdf->SetTitle('Ghasedak24 Ticket');
-        $pdf->SetSubject('Ghasedak-ict.com');
-        $pdf->SetKeywords('Ghasedak, PDF');
-        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 018', PDF_HEADER_STRING);
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+//        $pdf->SetCreator(PDF_CREATOR);
+//        $pdf->SetAuthor('Ghasedak-ict.com');
+//        $pdf->SetTitle('Ghasedak24 Ticket');
+//        $pdf->SetSubject('Ghasedak-ict.com');
+//        $pdf->SetKeywords('Ghasedak, PDF');
+//        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 018', PDF_HEADER_STRING);
+//        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+//        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         /*
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         */
-        $pdf->SetMargins(5, 5, 5);
-        $pdf->SetAutoPageBreak(TRUE, 1);
+//        $pdf->SetMargins(5, 5, 5);
+//        $pdf->SetAutoPageBreak(TRUE, 1);
+//
+//        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
+//        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+//
+//        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+//        $pdf->setPrintHeader(false);
+//        $pdf->setPrintFooter(false);
 
         $lg = Array();
         $lg['a_meta_charset'] = 'UTF-8';
         $lg['a_meta_dir'] = 'rtl';
         $lg['a_meta_language'] = 'fa';
         $lg['w_page'] = 'page';
-
         $pdf->setLanguageArray($lg);
-//        $pdf->SetFont('IRANSans', '', 10, '', false);
+
+        $fontname = TCPDF_FONTS::addTTFfont(public_path().'/assets/fonts/IRANSansWeb.ttf', 'TrueTypeUnicode', '', 32);
+
+        $pdf->SetFont($fontname, '', 10, '', false);
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
         $pdf->SetLineStyle(array('width' => 1, 'color' => array(0, 0, 0)));
 
