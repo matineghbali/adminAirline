@@ -148,6 +148,9 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Morilog\Jalali\JalaliServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+
 
 
 
@@ -214,6 +217,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'jDate' => Morilog\Jalali\Facades\jDate::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'DomPDF' => Barryvdh\DomPDF\Facade::class,
+        'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class,
 
 
     ],

@@ -257,7 +257,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker"  type="text" id="datepickerADT0" name="passenger-birthday[]"  style="background-color: white;cursor: context-menu" >
+                                                        <input class="form-control datepicker"  type="text" id="datepickerADT0" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu" >
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>
@@ -314,7 +314,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]" style="background-color: white;cursor: context-menu">
+                                                        <input class="form-control datepicker" type="text" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu">
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
 
                                                     </div>

@@ -588,7 +588,7 @@ $(document).ready(function() {
             processData: false
 
         }).done(function (data) {
-            console.log(data);
+            // console.log(data);
 
             if (data['status']=='Error'){
                 swal({   title: "ارور!",   text: data['response'] ,type: "error" , confirmButtonText: 'اصلاح اطلاعات'}).

@@ -1,10 +1,7 @@
-<?php
-require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
-?>
+
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html" dir="rtl">
 <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>پنل مدیریت</title>
 
@@ -15,7 +12,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
-    <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
+    {{--<link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />--}}
 
 
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
@@ -25,96 +22,19 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
-    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
+    {{--<script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>--}}
 
 
     {{--js for toggleButton--}}
     <script src="/assets/js/jquery.metisMenu.js"></script>
     {{--<script src="/assets/js/custom.js"></script>--}}
 
-    <script type="text/javascript" src="/assets/js/printThis.js"></script>
+    {{--<script type="text/javascript" src="/assets/js/printThis.js"></script>--}}
 
-    <script type='text/javascript'>
-
-        $(document).ready(function () {
-            $('#print').on('click', function() {
-                $('#printable').printThis({
-                    header: "<h1>Amazing header</h1>"
-                });
-            });
-
-            // $('#print').on('click', function() {
-            //     $("#printable").print({
-            //         globalStyles: false,
-            //         mediaPrint: false,
-            //         stylesheet: "http://fonts.googleapis.com/css?family=Inconsolata",
-            //         iframe: false,
-            //         noPrintSelector: ".avoid-this",
-            //         append: "Matin<br/>",
-            //         prepend: "<br/>eqbali",
-            //         manuallyCopyFormValues: true,
-            //         deferred: $.Deferred(),
-            //         timeout: 250,
-            //         title: null,
-            //         doctype: '<!doctype html>',
-            //
-            //
-            //         debug: true,
-            //         importCSS: false,
-            //         importStyle: false,
-            //         printDelay: 5000,
-            //         removeScripts: true
-            //
-            //
-            //
-            //     });
-            // });
-
-
-        });
-    </script>
 
 </head>
 <body>
 <div id="wrapper">
-    <nav class="navbar navbar-default navbar-cls-top " role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{route('adminPanel')}}">پنل مدیریت</a>
-        </div>
-        <div class="navbar-header-logout">
-            {{toPersianNum(jdate()->format('%d %B، %Y'))}}
-            <a href="/logout" class="btn btn-danger">خروج</a>
-        </div>
-    </nav>
-    <!-- /. NAV TOP  -->
-    <nav class="navbar-default navbar-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav" id="main-menu">
-                <li class="text-center">
-                    <img src="/assets/img/find_user.png" class="user-image img-responsive"/>
-                </li>
-                <li>
-                    <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
-                </li>
-                <li>
-                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیط هواپیما</a>
-                </li>
-                <li>
-                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
-                </li>
-
-            </ul>
-
-        </div>
-
-    </nav>
-    <!-- /. NAV SIDE  -->
     <div id="page-wrapper" >
         <div id="page-inner">
             <div class="row">
@@ -235,7 +155,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <th>تاریخ تولد</th>
                                                 <th>قیمت بلیت</th>
                                                 <th>شماره بلیت</th>
-                                                {{--<th>مشاهده بلیت</th>--}}
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -279,10 +198,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                     <td>
                                                         {{toPersianNum($ticket->ticketNumber)}}
                                                     </td>
-                                                    {{--<td>--}}
-                                                        {{--<a href="" class="btn-sm btn-success" style="text-decoration:none;">بلیت</a>--}}
-                                                    {{--</td>--}}
-
                                                 </tr>
 
                                             @endforeach
@@ -300,58 +215,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
                 </div>
 
-                <div class="row" style="margin-top: 30px">
-
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-6">
-
-                            </div>
-                            <div class="col-sm-6 passengerBtn">
-                                <a href="{{route('adminPanel')}}" style="text-decoration:none;">
-                                    <button class="btn btn-block btn-success  btnSubmit" >
-                                        بازگشت
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="passengerBtn" >
-                                    <button class="btn btn-block btn-primary" id="print" type="button">چاپ</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
 
 
             </div>
         </div>
-        <!-- /. PAGE INNER  -->
     </div>
-    <!-- /. PAGE WRAPPER  -->
 </div>
-<!-- /. WRAPPER  -->
-
-
-
-{{--<script>--}}
-    {{--var prtContent = document.getElementById("#page-inner");--}}
-    {{--var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');--}}
-    {{--WinPrint.document.write(prtContent.innerHTML);--}}
-    {{--WinPrint.document.close();--}}
-    {{--WinPrint.focus();--}}
-    {{--WinPrint.print();--}}
-    {{--WinPrint.close();--}}
-{{--</script>--}}
-
-
-
 </body>
 </html>

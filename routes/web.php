@@ -20,14 +20,14 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('ticket','TicketController@ticket' )->name('ticket');
     $this->get('tickets','TicketController@tickets' )->name('tickets');
 
+
+
     $this->get('getPassenger','PassengerController@getPassenger' )->name('getPassenger');
     $this->get('passengers/{id}/edit','PassengerController@Edit' )->name('EditPassenger');
     $this->patch('passenger/{id}','PassengerController@Update' )->name('UpdatePassenger');
     $this->DELETE('passenger/{id}','PassengerController@Delete' )->name('DeletePassenger');
     $this->get('getTicket/{id}','PassengerController@getTicket' )->name('getTicket');
     $this->get('pastPassenger','PassengerController@pastPassenger' )->name('pastPassenger');
-
-
 
 });
 
