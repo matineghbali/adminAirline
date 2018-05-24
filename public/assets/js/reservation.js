@@ -610,8 +610,12 @@ $(document).ready(function() {
             else {
 
                 SweetAlert({   title: "با موفقیت انجام شد:)",   text: 'شماره مرجع: ' + data['response'],type: "success" , confirmButtonText: 'مشاهده بلیت ها'}).
-                then(function() {
+                then(function(e) {
+
                     window.location.replace("/admin/ticket");
+                    e.preventDefault();
+                    $('#editBtn').attr('disabled', 'enable');
+                    $('#reserveBtn').attr('disabled', 'enable');
 
                 });
 
@@ -620,6 +624,15 @@ $(document).ready(function() {
         });
     });
 
+    // $(document).on("click", "#returnBtn", function() {
+    //     $.ajax({
+    //         method: 'get',
+    //         url: '/admin/panel',
+    //         contentType : false,
+    //         processData: false
+    //
+    //     });
+    // });
 
     // functions
 

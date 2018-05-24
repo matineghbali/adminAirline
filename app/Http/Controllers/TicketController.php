@@ -67,71 +67,47 @@ class TicketController extends AdminController
     }
 
     public function tickets(){
-        $tickets=Ticket::where('BookingReference','abh123')->get();
+        $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
 //        return view('Panel/tickets',['tickets' => $tickets ]);
-
         return $this->ticket_generator($tickets);
+        return 'dfgvdfgv';
 
-//        $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
-//        return view('Panel/tickets',['tickets' => $tickets ]);
+        $this->ticket_generator(session('ticket_id'));
 
-//        $file_url = '';
-//        header('Content-Type: application/octet-stream');
-//        header("Content-Transfer-Encoding: Binary");
-//        header("Content-disposition: attachment; filename=\"" . basename($file_url) . "\"");
-//        readfile($file_url); // do the double-download-dance (dirty but worky)
-
-//        require_once __DIR__ . '/vendor/autoload.php';
-
-
-//        $pdf = Mpdf::loadView('Panel.tickets',compact('tickets'));
-//        return $pdf->download('tickets.pdf');
-
-//        $data['file_ext'] = 'pdf';
-//        $path = FCPATH . 'uploads/reservations/' . $data['file_name'] . '.' . $data['file_ext'];
-//        $this->ticket_generator($param2, $path);
     }
-
-
 
     public function ticket_generator($tickets)
     {
-
-
-
-
-
         // create new PDF document
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        //$fontname = TCPDF_FONTS::addTTFfont(BASEPATH.'fonts/IRANSans-web.ttf', 'TrueTypeUnicode', '', 32);
 
-//        $pdf->SetCreator(PDF_CREATOR);
-//        $pdf->SetAuthor('Ghasedak-ict.com');
-//        $pdf->SetTitle('Ghasedak24 Ticket');
-//        $pdf->SetSubject('Ghasedak-ict.com');
-//        $pdf->SetKeywords('Ghasedak, PDF');
-//        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 018', PDF_HEADER_STRING);
-//        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-//        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-//        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Ghasedak-ict.com');
+        $pdf->SetTitle('Ghasedak24 Ticket');
+        $pdf->SetSubject('Ghasedak-ict.com');
+        $pdf->SetKeywords('Ghasedak, PDF');
+        //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 018', PDF_HEADER_STRING);
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         /*
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         */
-//        $pdf->SetMargins(5, 5, 5);
-//        $pdf->SetAutoPageBreak(TRUE, 1);
-//
-//        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-//        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->SetMargins(5, 5, 5);
+        $pdf->SetAutoPageBreak(TRUE, 1);
+
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 
-//        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-//        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-//
-//        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-//        $pdf->setPrintHeader(false);
-//        $pdf->setPrintFooter(false);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
 
         $lg = Array();
         $lg['a_meta_charset'] = 'UTF-8';
@@ -160,9 +136,56 @@ class TicketController extends AdminController
         $pdf->WriteHTML($html, true, 0, true, 0);
 
 
-            $pdf->Output('ticket.pdf', 'D');
+
+        $pdf->Output('ticket.pdf', 'D');
+
+        return redirect(route('adminPanel'));
+
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public function getTicketPdf($id){
+//        $pdf ='a';
+//        $url ='http://ghasedak24.com:8089/getpdf?url=http://localhost:8000/admin/createTicketPdf/'.$id.'&token=123456YTREWQ!@';
+//
+//        $contextOptions = array(
+//            "ssl" => array(
+//                "verify_peer"      => false,
+//                "verify_peer_name" => false,
+//            ),
+//        );
+//        copy($url,$pdf,stream_context_create( $contextOptions ));
+////        $name=Tour::where('id',$id)->pluck('tourName')->first();
+//        return response()->download($pdf, 'tickets.pdf');
+//    }
+//
+//
+//    public function createTicketPdf($id){
+//        $tickets=Ticket::where('BookingReference',$id)->get();
+//
+////        return view('Panel/tickets',['tickets' => $tickets ]);
+//
+//        return view('Panel/tickets', compact('tickets'));
+//    }
+//
+
+
+
 
 
 }
