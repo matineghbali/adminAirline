@@ -316,22 +316,17 @@ class ReserveController extends AdminController
                                 <div class=\"col-sm-3\"></div>
                                 <div class=\"col-sm-6\">
                                     <div class=\"row\">
-                                        <div class=\"col-sm-4\">
-                                            <div class=\"passengerBtn\">
-                                                    <button  class=\"btn btn-info btn-block\"  type=\"button\" id=\"returnBtn\">بازگشت</button>
-                                            </div>
-
-                                        </div>
-
-                                        <div class=\"col-sm-4\">
+                                        <div class=\"col-sm-6\">
                                             <div class=\"passengerBtn\">
                                                     <button class=\"btn btn-success btn-block\"  type=\"button\" id=\"editBtn\">اصلاح اطلاعات</button>
                                             </div>
 
                                         </div>
-                                        <div class=\"col-sm-4\">
+                                        <div class=\"col-sm-6\">
                                             <div class=\"passengerBtn\">
-                                                    <button class=\"btn btn-primary btn-block\" type=\"button\" id=\"reserveBtn\">رزرو بلیت</button>
+                                                <a  style=\"text-decoration: none;\" id=\"returnBtn\">
+                                                    <button class=\"btn btn-primary btn-block\" type=\"button\" id=\"reserveBtn\" >رزرو بلیت</button>
+                                                </a>
                                             </div>
                                         </div>
 

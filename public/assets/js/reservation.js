@@ -580,6 +580,7 @@ $(document).ready(function() {
 
     });
 
+
     $(document).on("click", "#reserveBtn", function() {
         $.ajax({
             method: 'get',
@@ -613,26 +614,25 @@ $(document).ready(function() {
                 then(function(e) {
 
                     window.location.replace("/admin/ticket");
-                    e.preventDefault();
                     $('#editBtn').attr('disabled', 'enable');
-                    $('#reserveBtn').attr('disabled', 'enable');
+                    $('#reserveBtn').text('بازگشت');
+                    $('#reserveBtn').attr('id','mo');
+                    $('#returnBtn').attr('href','http://localhost:8000/admin/panel');
+                    e.preventDefault();
+
+
+                    // $('#reserveBtn').attr('id','#returnBtn');
+
 
                 });
 
             }
 
-        });
+        }); //ajax response
+
+
     });
 
-    // $(document).on("click", "#returnBtn", function() {
-    //     $.ajax({
-    //         method: 'get',
-    //         url: '/admin/panel',
-    //         contentType : false,
-    //         processData: false
-    //
-    //     });
-    // });
 
     // functions
 
