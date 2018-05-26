@@ -216,16 +216,16 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                             <div class="row passengerInfo">
                                                 <div class="row">
                                                     <div class="passengerPastPassenger" style="margin-left: 10px">
-                                                        <button type="button" class="btn btn-primary btn-xs pastPassenger" data-toggle="modal" data-target="#ADTModal">
+                                                        <button type="button" class="btn btn-primary btn-xs pastPassenger" data-toggle="modal" data-target="#ADTModal" id="pastPassengerADT0">
                                                             <i class="fa fa-th-list"></i>مسافران سابق</button>
                                                         <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-remove removeButton"></i></button>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" value="ADT" name="typeADT" class="PassengerType">
+                                                <input type="hidden" value="ADT" name="typeADT" class="PassengerType" id="type">
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="sex" class="formLabel">جنسیت</label>
-                                                        <select class="form-control passenger-gender" name="passenger-gender[]" required>
+                                                        <select class="form-control gender" name="passenger-gender[]" id="gender" required>
                                                             <option value="">انتخاب</option>
                                                             <option value="0" >زن</option>
                                                             <option value="1">مرد</option>
@@ -236,21 +236,21 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">نام</label>
-                                                        <input class="form-control" type="text" name="passenger-fname[]">
+                                                        <input class="form-control" type="text" name="passenger-fname[]" id="fname">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                        <input class="form-control" type="text" name="passenger-lname[]" >
+                                                        <input class="form-control" type="text" name="passenger-lname[]" id="lname">
 
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">کد ملی</label>
-                                                        <input class="form-control" type="text" name="passenger-id[]" >
+                                                        <input class="form-control" type="text" name="passenger-id[]" id="doc-id">
 
                                                     </div>
                                                 </div>
@@ -282,7 +282,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="sex" class="formLabel">جنسیت</label>
-                                                        <select class="form-control passenger-gender" name="passenger-gender[]" required>
+                                                        <select class="form-control gender" name="passenger-gender[]"  required>
                                                             <option value="" >انتخاب</option>
                                                             <option value="0" >زن</option>
                                                             <option value="1">مرد</option>
@@ -293,20 +293,20 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">نام</label>
-                                                        <input class="form-control" type="text" name="passenger-fname[]" >
+                                                        <input class="form-control fname" type="text" name="passenger-fname[]" >
 
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                        <input class="form-control" type="text" name="passenger-lname[]" >
+                                                        <input class="form-control lname" type="text" name="passenger-lname[]" >
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="customer-name" class="formLabel">کد ملی</label>
-                                                        <input class="form-control" type="text" name="passenger-id[]" >
+                                                        <input class="form-control doc-id" type="text" name="passenger-id[]" >
 
                                                     </div>
                                                 </div>

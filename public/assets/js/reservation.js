@@ -190,7 +190,6 @@ $(document).ready(function() {
 
         var template     = "passengerBody",
             $templateEle = $('#' + template + passenger),
-
             $row = $templateEle.clone().removeAttr('id').insertBefore($templateEle).removeClass('hide');
         if (passenger=="ADT")
             var passengerBody=$row.attr('id',"passengerBodyADT"+passengerBodyADT++);
@@ -205,13 +204,20 @@ $(document).ready(function() {
 
         var $el = $row.find('select').eq(0).attr('name', template + '[]');
         $('#defaultForm').bootstrapValidator('addField', $el);
+        $el.attr('id','gender');
 
 
-        for (j = 0; j <= 4; j++) {
-            var $el = $row.find('input').eq(j).attr('name', template + '[]');
-            $('#defaultForm').bootstrapValidator('addField', $el);
-
+        $el=[];
+        for (var j = 0; j <= 4; j++) {
+            $el[j] = $row.find('input').eq(j).attr('name', template + '[]');
+            $('#defaultForm').bootstrapValidator('addField', $el[j]);
         }
+        $el[0].attr('id','type');
+        $el[1].attr('id','fname');
+        $el[2].attr('id','lname');
+        $el[3].attr('id','doc-id');
+
+        // console.log($el[0]);
 
         $('#' + passengerBody.attr('id') + ' .datepicker').persianDatepicker({
                 cellWidth: 50,
@@ -260,7 +266,7 @@ $(document).ready(function() {
             else {
                 var passenger_gender=[];var i=0;
 
-                $('.passenger-gender').each(function(e) {
+                $('.gender').each(function(e) {
                     if($(this).find(":selected").val()){
                         passenger_gender[i]=$(this).find(":selected").val();
                         i++;
@@ -306,13 +312,6 @@ $(document).ready(function() {
         }
 
     });
-
-
-
-    // getBirthday('ADT');  //set birthday for first ADT passenger
-
-
-
 
 
     for(i=1;i<ADTNumber;i++){
@@ -479,24 +478,25 @@ $(document).ready(function() {
         }
     });
 
+    var pastPassengerID='';
     $(document).on("click", '.pastPassenger', function(){
+           pastPassengerID = $(this).attr('id');
            $.ajax({
                method: 'get',
                url: '/admin/pastPassenger',
                contentType: false,
                processType: false
            }).done(function (data) {
-               console.log(data['modal']);
+               // console.log(data['modal']);
+               // alert(id);
                $('#passengerBodyADT0').append(data['modal']);
                $('#passengerBodyADT0 .modal-body').html(data['html']);
            });
     });
-    // $('#' + passenger + ' .datepicker').each(function(e) {
 
     $(document).on("click", "tr.rows", function () {
-        // console.log($(this).children('td').eq(1).text());
         $myRow=[];
-        for( i=1;i<=5;i++ ){
+        for(var i=1;i<=5;i++ ){
             if ( i==1 ){
                 if ($(this).children('td').eq(i).text() == 'نوزاد')
                     $myRow[0] = 'INF';
@@ -522,15 +522,31 @@ $(document).ready(function() {
             }
         }
 
-        // $('.modal').modal('toggle');
-        // $(this).parents('.passengerBody').css("background-color", "red");
-        console.log($(this).parents());
+
+        var passengerBody= $('#' + pastPassengerID).parents('.passengerBody').attr('id');
 
 
+        // $('#'+ passengerBody + ' #type').val($myRow[0]);
+        $('#'+ passengerBody + ' #gender').val($myRow[1]);
+        $('#'+ passengerBody + ' #fname').val($myRow[2]);
+        $('#'+ passengerBody + ' #lname').val($myRow[3]);
+        $('#'+ passengerBody + ' #doc-id').val($myRow[4]);
+        $('#'+ passengerBody + ' .datepicker').val($myRow[5]);
+
+        $('#ADTModal').modal('toggle');
+
+        getBirthday($('#'+ passengerBody + ' #type').val(),$myRow[5],$('#' + passengerBody + ' .datepicker').attr('id'));
+
+        // $('#defaultForm').bootstrapValidator('validate');
 
         console.log($myRow);
 
     });
+
+
+
+
+
 
 
     $(document).on("click", "#removeADT", function(){
@@ -580,7 +596,6 @@ $(document).ready(function() {
 
     });
 
-
     $(document).on("click", "#reserveBtn", function() {
         $.ajax({
             method: 'get',
@@ -618,11 +633,6 @@ $(document).ready(function() {
                     $('#reserveBtn').text('بازگشت');
                     $('#reserveBtn').attr('id','mo');
                     $('#returnBtn').attr('href','http://localhost:8000/admin/panel');
-                    e.preventDefault();
-
-
-                    // $('#reserveBtn').attr('id','#returnBtn');
-
 
                 });
 

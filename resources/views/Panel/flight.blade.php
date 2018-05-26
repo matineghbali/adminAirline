@@ -486,8 +486,13 @@
                     </div>
                 </div>
             </div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-block btn-primary" style="visibility: hidden;" id="editSearch">تغییر جستجو</button>
+                </div>
 
-            <button type="button" class="btn btn-success" style="visibility: hidden;" id="editSearch">تغییر جستجو</button>
+            </div>
 
             <div id="searchResult">
 
