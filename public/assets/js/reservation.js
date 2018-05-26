@@ -123,6 +123,8 @@ $(document).ready(function() {
         .on('status.field.bv', function (e, data) {
             data.bv.disableSubmitButtons(false);
         });
+    /////////////////////////////////////////////////////end of validation
+
 
 
         $('#passengerBodyADT0 .datepicker').persianDatepicker({
@@ -153,7 +155,6 @@ $(document).ready(function() {
             }
 
         }).done(function (data) {
-            console.log(data);
             if (data['status']=='invalid'){
                 if (passenger=='ADT'){
                     sessionStorage.setItem('statusADTError','true');
@@ -217,7 +218,6 @@ $(document).ready(function() {
         $el[2].attr('id','lname');
         $el[3].attr('id','doc-id');
 
-        // console.log($el[0]);
 
         $('#' + passengerBody.attr('id') + ' .datepicker').persianDatepicker({
                 cellWidth: 50,
@@ -226,9 +226,7 @@ $(document).ready(function() {
                 onSelect: function (e) {
                     getBirthday(passenger,$('#' + passengerBody.attr('id') + ' .datepicker').val(),$('#' + passengerBody.attr('id') + ' .datepicker').attr('id'));
                 }
-
-            })
-        // });
+        })
 
     }
 
@@ -487,8 +485,6 @@ $(document).ready(function() {
                contentType: false,
                processType: false
            }).done(function (data) {
-               // console.log(data['modal']);
-               // alert(id);
                $('#passengerBodyADT0').append(data['modal']);
                $('#passengerBodyADT0 .modal-body').html(data['html']);
            });
@@ -536,17 +532,14 @@ $(document).ready(function() {
         $('#ADTModal').modal('toggle');
 
         getBirthday($('#'+ passengerBody + ' #type').val(),$myRow[5],$('#' + passengerBody + ' .datepicker').attr('id'));
+        $('#defaultForm').bootstrapValidator('revalidateField',  $('#'+ passengerBody + ' #fname'));
+        $('#defaultForm').bootstrapValidator('revalidateField',  $('#'+ passengerBody + ' #lname'));
+        $('#defaultForm').bootstrapValidator('revalidateField',  $('#'+ passengerBody + ' #doc-id'));
+        $('#defaultForm').bootstrapValidator('revalidateField',  $('#'+ passengerBody + ' #gender'));
 
-        // $('#defaultForm').bootstrapValidator('validate');
 
-        console.log($myRow);
 
     });
-
-
-
-
-
 
 
     $(document).on("click", "#removeADT", function(){

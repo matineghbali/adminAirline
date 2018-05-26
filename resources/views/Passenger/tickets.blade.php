@@ -40,7 +40,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
         $(document).ready(function () {
             $('#print').on('click', function() {
                 $('#printable').printThis({
-                    header: "<h1>Amazing header</h1>"
+                    header: "<h1>مشخصات بلیت</h1>"
                 });
             });
 

@@ -28,7 +28,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
-    <script src="/assets/js/reservation.js"></script>
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -90,6 +89,15 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="col-sm-12" >
                                 <form method="post" action="{{route('UpdatePassenger',['id'=>$passenger->id])}}">
                                     {{csrf_field()}}
@@ -103,7 +111,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
                                         <div class="passengerBody">
                                             <div class="row passengerInfo">
-                                                <input type="hidden" value="ADT" name="typeADT" class="PassengerType">
+                                                <input type="hidden" value="ADT" name="type" class="PassengerType">
+
+
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="sex" class="formLabel">جنسیت</label>
@@ -149,29 +159,30 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
                                         </div>
 
-                                    {{--submit --}}
-                                    <div class="row" style="margin-top: 10px">
-                                        <div class="col-sm-3"></div>
-                                        <div class="col-sm-6">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="passengerBtn" >
-                                                        <a href="{{route('getPassenger')}}" style="text-decoration:none;">
-                                                            <button class="btn btn-block btn-success  btnSubmit" >
-                                                                بازگشت
+                                        {{--submit --}}
+                                        <div class="row" style="margin-top: 10px">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-6">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="passengerBtn" >
+                                                            <a href="{{route('getPassenger')}}" style="text-decoration:none;">
+                                                                <button class="btn btn-block btn-success  btnSubmit" >
+                                                                    بازگشت
+                                                                </button>
+                                                            </a>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="passengerBtn" >
+                                                            <button class="btn btn-block btn-primary  btnSubmit" type="submit">
+                                                                تغییر
                                                             </button>
-                                                        </a>
+                                                        </div>
                                                     </div>
 
                                                 </div>
-                                                <div class="col-sm-6">
-                                                    <div class="passengerBtn" >
-                                                        <button class="btn btn-block btn-primary  btnSubmit" type="submit">
-                                                            تغییر
-                                                        </button>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -197,12 +208,16 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
 
         </div>
-        <!-- /. PAGE INNER  -->
     </div>
-    <!-- /. PAGE WRAPPER  -->
 </div>
-<!-- /. WRAPPER  -->
 
+<script>
+    $(' .datepicker').persianDatepicker({
+        cellWidth: 50,
+        cellHeight: 30,
+        fontSize: 18
+    });
+</script>
 
 
 

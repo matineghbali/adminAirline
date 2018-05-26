@@ -7,6 +7,7 @@ use App\Ticket;
 use foo\bar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationData;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PassengerController extends Controller
@@ -25,7 +26,14 @@ class PassengerController extends Controller
 
     public function update(Request $request, $id)
     {
-//        session()->forget('err');
+        $validation=$request->validate([
+            'gender'=>'required',
+            'fname'=>'required',
+            'lname'=>'required',
+            'doc_id'=>'required',
+            'birthday'=>'required'
+        ]);
+
 
         $passenger = Passenger::find($id);
         $passenger->update([
@@ -116,7 +124,7 @@ class PassengerController extends Controller
 
         $i = 0;
         foreach ($passengers as $passenger) {
-            $html .='<tr class=\'rows\'> 
+            $html .='<tr class=\'rows\' id=\'validationModal\'> 
                                                     <td>' .
                 $this->toPersianNum(++$i) . '
                                                     </td>
