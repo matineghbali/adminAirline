@@ -150,7 +150,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                     <div class="form-group">
                                                         <label for="email1" class="formLabel">ایمیل</label>
                                                         <input type="text" class="form-control" id="email" aria-describedby="emailHelp" name="email" value="{{auth()->user()->email}}">
-                                                        <small id="emailHelp" class="form-text text-muted">پس از خرید، بلیط به ایمیل شما ارسال می گردد.</small>
 
                                                     </div>
 
@@ -259,7 +258,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                         <label for="customer-name" class="formLabel" >تاریخ تولد</label>
                                                         <input class="form-control datepicker"  type="text" id="datepickerADT0" name="passenger-birthday[]" readonly style="background-color: white;cursor: context-menu" >
                                                         <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
-
                                                     </div>
                                                 </div>
                                             </div>

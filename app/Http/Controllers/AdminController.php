@@ -109,72 +109,43 @@ class AdminController extends Controller
     }
 
     public function getBirthday(Request $request){
+        $DepartureDate=session('data')['DepartureDateTimeEN'];
         $passenger=$request['passenger'];
         $dateInput=$request['date'];
-        $date=jdate()->format('%y/%m/%d');
-        $array=explode('/',$date);
-        $y='13'.$array[0];$m=$array[1];$d=$array[2];
+        $dateInput=str_replace('/','-',$dateInput);
+        $explodeDateInput=explode('-',$dateInput);
+        for($i=0;$i<count($explodeDateInput);$i++){
+            if ($explodeDateInput[$i]<10)
+                $explodeDateInput[$i]='0'.$explodeDateInput[$i];
+        }
 
-        $infM=0;$infD=0;
+        $dateInput=implode('-',$explodeDateInput);
+
+        $ArrayDepartureDate=explode('T',$DepartureDate);
+
+
         if ($passenger=='INF'){
-            $infY=$y-2;
-            $infM=$m;
-            if ($d>7){
-                $infD=$d-7;
-                if ($infD<10)
-                    $infD='0'.$infD;
-            }
-            else{
-                $infM=$m-1;
-                $infD=(daysOfMonth($m)+$d)-7;
-            }
-            $start=$infY.'/'.$infM.'/'.$infD;
-
-            $end=$y.'/'.$infM.'/'.$infD;
+            $start= jDate::forge($ArrayDepartureDate[0])->reforge('- 2 Years')->format('date');
+            $end  = jDate::forge($ArrayDepartureDate[0])->reforge('- 7 Days')->format('date');
+        }
+        elseif ($passenger=='CHD'){
+            $start= jDate::forge($ArrayDepartureDate[0])->reforge('- 1 Days - 12 Years')->format('date');
+            $end  = jDate::forge($ArrayDepartureDate[0])->reforge('+ 2 Days - 2 Years')->format('date');
+        }
+        elseif ($passenger=='ADT'){
+            $start= jDate::forge('1921-03-21')->format('date');
+            $end  = jDate::forge($ArrayDepartureDate[0])->reforge('- 2 Days - 12 Years')->format('date');
         }
 
 
-        else if ($passenger=='CHD'){
-            $infM=$m;
-            if ($d>7){
-                $infD=$d-7;
-                if ($infD<10)
-                    $infD='0'.$infD;
-            }
-            else{
-                $infM=$m-1;
-                $infD=(daysOfMonth($m)+$d)-7;
-            }
-
-            $chdSY=$y-12;
-            $start=$chdSY.'/'.$infM.'/'.($infD-1);
-            $chdEY=$y-2;
-            $end=$chdEY.'/'.$infM.'/'.($infD-1);
-        }
-        else {
-            $infM=$m;
-            if ($d>7){
-                $infD=$d-7;
-                if ($infD<10)
-                    $infD='0'.$infD;
-            }
-            else{
-                $infM=$m-1;
-                $infD=(daysOfMonth($m)+$d)-7;
-            }
-            $adtSY='1300';
-            $start=$adtSY.'/'.$infM.'/'.($infD-2);
-            $adtEY=$y-12;
-            $end=$adtEY.'/'.$infM.'/'.($infD-2);
-        }
-
-//        return ['start'=> $start,'end'=>$end];
 
         if ($dateInput<$start || $dateInput>$end)
             $status='invalid';
         else
             $status='valid';
-        return ['status' => $status , 'start' => $start , 'end'=>$end , 'dateInput' => $dateInput , 'passenger' =>$passenger];
+
+        return ['status' => $status , 'start' => $start , 'end'=>$end , 'dateInput' => $dateInput ,
+            'DepartureDate' => jdate($ArrayDepartureDate[0])->format('date') , 'passenger' =>$passenger];
     }
 
 

@@ -31,15 +31,10 @@ $(document).ready(function() {
                     notEmpty: {
                         message: 'شماره تلفن را وارد کنید'
                     },
-                    stringLength: {
-                        min: 11,
-                        max: 12,
-                        message: 'شماره تلفن باید 11 رقم باشد'
-                    },
                     regexp: {
-                        regexp: /^[0-9]+$/,
-                        message: 'شماره تلفن را با ارقام انگلیسی وارد کنید'
-                    },
+                        regexp: /(09)[0-9]{9}/,
+                        message: 'شماره تلفن خود را درست وارد کنید'
+                    }
 
 
                 }
@@ -71,15 +66,15 @@ $(document).ready(function() {
                         message: 'کد ملی را وارد کنید'
                     },
 
-                    // stringLength: {
-                    //     min: 10,
-                    //     max: 10,
-                    //     message: 'کد ملی باید 10 رقم باشد'
-                    // },
-                    // regexp: {
-                    //     regexp: /^[0-9]+$/,
-                    //     message: 'کد ملی را ارقام انگلیسی وارد کنید'
-                    // },
+                    stringLength: {
+                        min: 10,
+                        max: 10,
+                        message: 'کد ملی باید 10 رقم باشد'
+                    },
+                    regexp: {
+                        regexp: /^[0-9]+$/,
+                        message: 'کد ملی را با ارقام انگلیسی وارد کنید'
+                    },
                 }
             },
             'passenger-birthday[]': {
@@ -123,20 +118,23 @@ $(document).ready(function() {
         .on('status.field.bv', function (e, data) {
             data.bv.disableSubmitButtons(false);
         });
-    /////////////////////////////////////////////////////end of validation
+
+    //////////////////////////////////////////////////////end of validation
+
+    isPastPassenger(); //check that user have pastPassenger
 
 
 
-        $('#passengerBodyADT0 .datepicker').persianDatepicker({
-            cellWidth: 50,
-            cellHeight: 30,
-            fontSize: 18,
-            onSelect: function (e) {
-                getBirthday('ADT',$('#passengerBodyADT0 .datepicker').val(),$('#passengerBodyADT0 .datepicker').attr('id'));
+     $('#passengerBodyADT0 .datepicker').persianDatepicker({
+         cellWidth: 50,
+         cellHeight: 30,
+         fontSize: 18,
+         onSelect: function (e) {
+             getBirthday('ADT',$('#passengerBodyADT0 .datepicker').val(),$('#passengerBodyADT0 .datepicker').attr('id'));
 
-            }
+         }
 
-        });
+     });
 
 
     function getBirthday(passenger,date,id) {
@@ -155,6 +153,7 @@ $(document).ready(function() {
             }
 
         }).done(function (data) {
+            console.log(data);
             if (data['status']=='invalid'){
                 if (passenger=='ADT'){
                     sessionStorage.setItem('statusADTError','true');
@@ -230,7 +229,6 @@ $(document).ready(function() {
 
     }
 
-
     $('.btnSubmit').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
@@ -294,7 +292,7 @@ $(document).ready(function() {
                     }
 
                 }).done(function (data) {
-                    console.log(data);
+                    // console.log(data);
                     $('#registerPage').hide();
                     $('#reservePage').show();
                     $('#reservePage').html(data);
@@ -310,7 +308,6 @@ $(document).ready(function() {
         }
 
     });
-
 
     for(i=1;i<ADTNumber;i++){
         AddPassengerBody('ADT');
@@ -476,9 +473,25 @@ $(document).ready(function() {
         }
     });
 
+    function isPastPassenger() {
+        $.ajax({
+            method: 'get',
+            url: '/admin/isPastPassenger',
+            contentType: false,
+            processType: false
+        }).done(function (data) {
+            if (data == 'false'){
+                $('.pastPassenger').hide();
+            }
+        });
+    }
+
+    //pastPassenger
+
     var pastPassengerID='';
     $(document).on("click", '.pastPassenger', function(){
-           pastPassengerID = $(this).attr('id');
+
+        pastPassengerID = $(this).attr('id');
            $.ajax({
                method: 'get',
                url: '/admin/pastPassenger',
@@ -522,7 +535,6 @@ $(document).ready(function() {
         var passengerBody= $('#' + pastPassengerID).parents('.passengerBody').attr('id');
 
 
-        // $('#'+ passengerBody + ' #type').val($myRow[0]);
         $('#'+ passengerBody + ' #gender').val($myRow[1]);
         $('#'+ passengerBody + ' #fname').val($myRow[2]);
         $('#'+ passengerBody + ' #lname').val($myRow[3]);
@@ -540,6 +552,8 @@ $(document).ready(function() {
 
 
     });
+
+    //end of pastPassenger
 
 
     $(document).on("click", "#removeADT", function(){

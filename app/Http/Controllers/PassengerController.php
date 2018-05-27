@@ -85,8 +85,7 @@ class PassengerController extends Controller
     {
         $passengers = Auth::user()->passengers()->limit(3)->get();
 
-        $modal = '
-                                        <div class="modal fade" id="ADTModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        $modal = '<div class="modal fade" id="ADTModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -104,9 +103,6 @@ class PassengerController extends Controller
                                                 </div>
                                             </div>
                                         </div>';
-
-
-
 
         $html='<table class="table table-striped table-hover" id="table">
                                             <thead>
@@ -153,6 +149,14 @@ class PassengerController extends Controller
                                         </table>';
         return ['modal' => $modal , 'html' => $html ];
 
+    }
+
+    public function isPastPassenger(){
+        $passengers = Auth::user()->passengers()->get();
+        if (count($passengers)==0)
+            return 'false';
+        else
+            return 'true';
     }
 
 

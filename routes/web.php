@@ -28,9 +28,13 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->DELETE('passenger/{id}','PassengerController@Delete' )->name('DeletePassenger');
     $this->get('getTicket/{id}','PassengerController@getTicket' )->name('getTicket');
     $this->get('pastPassenger','PassengerController@pastPassenger' )->name('pastPassenger');
+    $this->get('isPastPassenger','PassengerController@isPastPassenger' )->name('isPastPassenger');
 
 });
 
+Route::get('/',function (){
+    return 'HOME PAGE';
+});
 
 Route::group(['namespace' => 'Auth'] , function (){
     // Authentication Routes...
