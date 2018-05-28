@@ -150,7 +150,8 @@
                                                 <th>#</th>
                                                 <th>نوع</th>
                                                 <th>جنسیت</th>
-                                                <th>نام و نام خانوادگی</th>
+                                                <th>نام</th>
+                                                <th> نام خانوادگی</th>
                                                 <th>کد ملی</th>
                                                 <th>تاریخ تولد</th>
                                                 <th>قیمت بلیت</th>
@@ -182,7 +183,10 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        {{$ticket->passenger->fname.' '. $ticket->passenger->lname }}
+                                                        {{$ticket->passenger->fname}}
+                                                    </td>
+                                                    <td>
+                                                        {{$ticket->passenger->lname}}
                                                     </td>
                                                     <td class="nowrap">
                                                         <strong>

@@ -515,31 +515,4 @@ class ReserveController extends AdminController
 
 
 
-
-
-    public function calcAge($param1 = '') {
-        $ticket_id = $this->input->post('ticket_id', true);
-        $ticket = $this->db->get_where('ticket' , array('ticket_id'=>$ticket_id))->row();
-        if ($param1 == 'adult' && $this->input->post('sys') != 1 && $this->input->post('fr') == 1) {
-            $response['state'] = true;
-            goto res;
-        }
-        $ticket_date = $ticket->date;
-        $dc = ($_POST['date'] == 'jalali') ? jdate('Y/m/d', $ticket_date) :date('Y/m/d', $ticket_date);
-        $diff = date_diff(date_create($this->input->post('age', true)), date_create($dc));
-        switch($param1) {
-            case 'adult':
-                $response['state'] = ($diff->y >= 12) ? true : false;
-                break;
-            case 'infant':
-                $response['state'] = ($diff->y >= 2 && $diff->y < 12) ? true : false;
-                break;
-            case 'baby':
-                $response['state'] = ($diff->y >= 0 && $diff->y < 2) ? true : false;
-                break;
-        }
-        res:
-        echo json_encode($response);
-    }
-
 }

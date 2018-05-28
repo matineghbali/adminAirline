@@ -70,9 +70,6 @@ class TicketController extends AdminController
         $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
 //        return view('Panel/tickets',['tickets' => $tickets ]);
         return $this->ticket_generator($tickets);
-        return 'dfgvdfgv';
-
-        $this->ticket_generator(session('ticket_id'));
 
     }
 
@@ -95,15 +92,15 @@ class TicketController extends AdminController
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
         */
-        $pdf->SetMargins(5, 5, 5);
-        $pdf->SetAutoPageBreak(TRUE, 1);
+//        $pdf->SetMargins(5, 5, 5);
+//        $pdf->SetAutoPageBreak(TRUE, 1);
 
-        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+//        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+//        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
         $pdf->setPrintHeader(false);
@@ -120,12 +117,12 @@ class TicketController extends AdminController
 
         $pdf->SetFont($fontname, '', 10, '', false);
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-        $pdf->SetLineStyle(array('width' => 1, 'color' => array(0, 0, 0)));
+//        $pdf->SetLineStyle(array('width' => 1, 'color' => array(0, 0, 0)));
 
-        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
-        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
-        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
-        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
+//        $pdf->Line(0, 0, $pdf->getPageWidth(), 0);
+//        $pdf->Line($pdf->getPageWidth(), 0, $pdf->getPageWidth(), $pdf->getPageHeight());
+//        $pdf->Line(0, $pdf->getPageHeight(), $pdf->getPageWidth(), $pdf->getPageHeight());
+//        $pdf->Line(0, 0, 0, $pdf->getPageHeight());
 
 
         $html=view('Panel/tickets',['tickets' => $tickets ]);
