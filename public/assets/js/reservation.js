@@ -262,6 +262,11 @@ $(document).ready(function() {
             else {
                 var passenger_gender=[];var i=0;
 
+                $('#progressbar li').eq(2).removeClass('active');
+                $('#progressbar li').eq(2).addClass('done');
+                $('#progressbar li').eq(3).addClass('active');
+
+
                 $('.gender').each(function(e) {
                     if($(this).find(":selected").val()){
                         passenger_gender[i]=$(this).find(":selected").val();
@@ -297,7 +302,7 @@ $(document).ready(function() {
                     $('#reservePage').show();
                     $('#reservePage').html(data);
                     $('html, body').animate({
-                        scrollTop: $("#reservePage").offset().top
+                        scrollTop: $("#progressbar").offset().top
                     }, 500);
 
 
@@ -596,6 +601,10 @@ $(document).ready(function() {
 
         $('#registerPage').show();
         $('.btnSubmit').attr('disabled', false);
+        $('#progressbar li').eq(3).removeClass('active');
+        $('#progressbar li').eq(2).removeClass('done');
+        $('#progressbar li').eq(2).addClass('active');
+
         // $('#h3passengerNumber').html("<?php echo  session('data')['passengerNumber'] ?>");
         // $('#spanPrice').text('<?php echo "ytt"; ?>');
 
@@ -626,6 +635,9 @@ $(document).ready(function() {
 
                     $('#registerPage').show();
                     $('.btnSubmit').attr('disabled', false);
+                    $('#progressbar li').eq(3).removeClass('active');
+                    $('#progressbar li').eq(2).removeClass('done');
+                    $('#progressbar li').eq(2).addClass('active');
 
                     $('#reservePage').hide();
                 });
@@ -640,6 +652,11 @@ $(document).ready(function() {
                     $('#reserveBtn').text('بازگشت');
                     $('#reserveBtn').attr('id','mo');
                     $('#returnBtn').attr('href','http://localhost:8000/admin/panel');
+
+                    $('#progressbar li').eq(3).removeClass('active');
+                    $('#progressbar li').eq(3).addClass('done');
+                    $('#progressbar li').eq(4).addClass('active');
+
 
                 });
 

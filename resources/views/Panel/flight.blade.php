@@ -13,13 +13,20 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 
+    {{--<link href="/assets/css/smart_wizard.css" rel="stylesheet" type="text/css" />--}}
+    <link href="/assets/css/smart_wizard_theme_circles.css" rel="stylesheet" type="text/css" />
 
-    <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
     <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
 
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/assets/js/jquery.smartWizard.js"></script>
+    <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
+
+
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
@@ -35,6 +42,9 @@
 
     <script>
         $(document).ready(function () {
+            // $('#smartwizard').smartWizard({
+            //     theme: 'circles'
+            // });
 
 
             $('#datepicker').persianDatepicker({
@@ -63,8 +73,7 @@
                     processData: false,
                     headers: {
                         'X_CSRF-TOKEN': _token
-                    },
-
+                    }
                 }).done(function (data) {
                     console.log(data);
                     $.ajax({
@@ -76,15 +85,24 @@
 
                     }).done(function (response) {
                         console.log(response);
-
-                        $('#searchResult').show();
-                        $('#searchResult').html(response['html']);
-
                         if (response['error']=='false'){
                             $('#searchBoxContent').hide();
-
+                            $('#searchResult').show();
                             $('#editSearch').attr('style','visibility:visible');
+                            $('#progressbar li').eq(0).removeClass('active');
+                            $('#progressbar li').eq(0).addClass('done');
+                            $('#progressbar li').eq(1).addClass('active');
+
                         }
+                        else {
+                            $('#searchBoxContent').show();
+                            $('#searchResult').hide();
+                            $('#editSearch').attr('style','visibility:hidden');
+                        }
+
+                        $('#searchResult').html(response['html']);
+
+
 
                         // $('html, body').animate({
                         //     scrollTop: $("#contentResult").offset().top
@@ -95,12 +113,16 @@
 
                 });//end function of ajax1
 
-            })//end form submit
+            });//end form submit
 
             $('#editSearch').click(function () {
                 $('#searchResult').hide();
                 $('#searchBoxContent').show();
-                $(this).attr('style','visibility:hidden')
+                $(this).attr('style','visibility:hidden');
+                $('#progressbar li').eq(1).removeClass('active');
+                $('#progressbar li').eq(0).removeClass('done');
+                $('#progressbar li').eq(0).addClass('done');
+
 
             })
         })//end jquery
@@ -124,7 +146,6 @@
             <a href="/logout" class="btn btn-danger">خروج</a>
         </div>
     </nav>
-    <!-- /. NAV TOP  -->
     <nav class="navbar-default navbar-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="main-menu">
@@ -135,10 +156,10 @@
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a   href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-plane fa-3x"></i> بلیت هواپیما</a>
                 </li>
                 <li>
-                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
+                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-user fa-3x"></i> لیست مسافران</a>
                 </li>
 
             </ul>
@@ -146,15 +167,38 @@
         </div>
 
     </nav>
-    <!-- /. NAV SIDE  -->
     <div id="page-wrapper" >
         <div id="page-inner">
 
+            <div class="row" >
+                <ul class="progressbar hidden-xs" id="progressbarSearch" style="margin-bottom: 80px;padding:10px">
+                    <li class="active">
+                        <span class="progress-bar-text ">
+                        1. جستجـو
+                        </span>
+                    </li>
+                    <li>
+                        <span class="progress-bar-text ">
+                        2. انتخاب پرواز
+                        </span>
+                    </li>
+                    <li>
+                        <span class="progress-bar-text ">
+                        3. اطلاعات مسافران
+                        </span>
+                    </li>
+                    <li>
+                        <span class="progress-bar-text ">
+                        4. تایید اطلاعات
+                        </span>
+                    </li>
+                    <li>
+                        <span class="progress-bar-text ">
+                        5. صدور بلیط
+                        </span>
+                    </li>
+                </ul>
 
-
-
-
-            <div class="row">
                 <div class="col-sm-12">
                     <div id="searchBoxContent">
                         <form id="form">
@@ -486,6 +530,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row" style="margin-bottom: 20px">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">

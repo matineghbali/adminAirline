@@ -83,8 +83,7 @@ class PassengerController extends Controller
 
     public function pastPassenger()
     {
-        $passengers = Auth::user()->passengers()->limit(3)->get();
-
+        $passengers = Auth::user()->passengers()->limit(3)->latest()->get();
         $modal = '<div class="modal fade" id="ADTModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">

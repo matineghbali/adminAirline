@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "49396f4c4d8b4b6b241f93c2249c7b18",
+    "content-hash": "ebe4724c5f7125a583b4aa29c4c6d4e6",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -119,6 +119,48 @@
                 "toastr"
             ],
             "time": "2017-09-27T02:19:46+00:00"
+        },
+        {
+            "name": "components/jquery",
+            "version": "3.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/459648cda77875519c5da3ae1dd0ed5d170aa649",
+                "reference": "459648cda77875519c5da3ae1dd0ed5d170aa649",
+                "shasum": ""
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery.min.map",
+                        "jquery.slim.js",
+                        "jquery.slim.min.js",
+                        "jquery.slim.min.map"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JS Foundation and other contributors"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2018-03-04T13:23:48+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -2819,6 +2861,49 @@
             "time": "2018-04-26T16:12:06+00:00"
         },
         {
+            "name": "techlab/smartwizard",
+            "version": "v4.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/techlab/SmartWizard.git",
+                "reference": "51672b70e1620ec77fbd456f71700352016ab985"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/techlab/SmartWizard/zipball/51672b70e1620ec77fbd456f71700352016ab985",
+                "reference": "51672b70e1620ec77fbd456f71700352016ab985",
+                "shasum": ""
+            },
+            "require": {
+                "components/jquery": ">=1.9",
+                "twbs/bootstrap": "4.0.0-alpha.6"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dipu Raj",
+                    "email": "hello@techlaboratory.net",
+                    "homepage": "http://dipuraj.me"
+                }
+            ],
+            "description": "The awesome jQuery step wizard plugin with Bootstrap support",
+            "homepage": "http://techlaboratory.net/smartwizard",
+            "keywords": [
+                "bootstrap",
+                "jquery",
+                "jquery-plugin",
+                "step",
+                "ui",
+                "wizard",
+                "wizard plugin"
+            ],
+            "time": "2017-07-03T11:58:07+00:00"
+        },
+        {
             "name": "tecnickcom/tcpdf",
             "version": "6.2.17",
             "source": {
@@ -2926,6 +3011,57 @@
             "description": "CssToInlineStyles is a class that enables you to convert HTML-pages/files into HTML-pages/files with inline styles. This is very useful when you're sending emails.",
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "time": "2017-11-27T11:13:29+00:00"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "4.0.0-alpha.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "65ffb1c3b6e94440812a2e228cb8e8be512652ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/65ffb1c3b6e94440812a2e228cb8e8be512652ec",
+                "reference": "65ffb1c3b6e94440812a2e228cb8e8be512652ec",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "time": "2017-01-06T16:41:52+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

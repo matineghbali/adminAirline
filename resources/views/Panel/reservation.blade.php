@@ -75,10 +75,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
                 </li>
                 <li>
-                    <a href="{{route('getFlight')}}" ><i class="fa fa-desktop fa-3x"></i>بلیت هواپیما</a>
+                    <a   href="{{route('getFlight')}}" ><i class="fa fa-plane fa-3x"></i> بلیت هواپیما</a>
                 </li>
                 <li>
-                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-desktop fa-3x"></i>لیست مسافران</a>
+                    <a   href="{{route('getPassenger')}}" ><i class="fa fa-user fa-3x"></i> لیست مسافران</a>
                 </li>
 
             </ul>
@@ -92,6 +92,34 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     <div id="page-wrapper" >
         <div id="page-inner">
+            <ul class="progressbar hidden-xs" id="progressbar" style="margin-bottom: 80px;padding:10px">
+                <li class="done">
+                        <span class="progress-bar-text ">
+                        1. جستجـو
+                        </span>
+                </li>
+                <li class="done">
+                        <span class="progress-bar-text ">
+                        2. انتخاب پرواز
+                        </span>
+                </li>
+                <li class="active">
+                        <span class="progress-bar-text ">
+                        3. اطلاعات مسافران
+                        </span>
+                </li>
+                <li>
+                        <span class="progress-bar-text ">
+                        4. تایید اطلاعات
+                        </span>
+                </li>
+                <li>
+                        <span class="progress-bar-text ">
+                        5. صدور بلیط
+                        </span>
+                </li>
+            </ul>
+
             <div id="registerPage" >
                 <div class="row">
                     <div class="col-md-12">

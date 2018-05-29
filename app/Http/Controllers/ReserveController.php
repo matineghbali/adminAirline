@@ -131,12 +131,20 @@ class ReserveController extends AdminController
         $count=count($gender);
 
         for ($i=0;$i<$count;$i++){
+//            $passenger= Passenger::where('user_id',auth()->user()->id)->
+//            where('doc_id',$doc_id[$i])->get();
+
             $passenger= Passenger::where('user_id',auth()->user()->id)->
-            where('doc_id',$doc_id[$i])->get();
-
-
+            where(function ($q) use ($doc_id,$fname,$lname,$i) {
+                $q->where('doc_id',$doc_id[$i])
+                    ->orWhere(function ($query) use ($fname,$lname,$i){
+                        $query->where('fname',$fname[$i])
+                            ->where('lname',$lname[$i]);
+                    });
+            })->get();
 
             if (count($passenger)!= 0){
+
                 Passenger::where('id',$passenger[0]['id'])->update([
                     'type'=> $type[$i],
                     'gender'=>$gender[$i],
