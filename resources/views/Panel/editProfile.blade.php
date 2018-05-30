@@ -11,27 +11,20 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     <link rel="stylesheet" href="/assets/css/fontiran.css">
     <link href="/assets/css/bootstrap.css" rel="stylesheet" />
 
-
     <link href="/assets/css/bootstrap-rtl.min.css" rel="stylesheet" />
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <link href="/assets/css/custom.css" rel="stylesheet" />
-    <link type="text/css" rel="stylesheet" href="/assets/css/persianDatepicker-default.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 
-    <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
     <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script src="/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
 
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
 
     {{--persianDatepicker--}}
     {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
-    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
 
 
     {{--js for toggleButton--}}
@@ -92,111 +85,84 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
 
     <div id="page-wrapper" >
+        @include('sweetalert::alert')
         <div id="page-inner">
             <div id="registerPage" >
                 <div class="row">
                     <div class="col-md-12">
                         <div class="row">
                             @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+
+                                    </div>
                                 </div>
                             @endif
                             <div class="col-sm-12" >
-                                <form method="post" action="{{route('UpdatePassenger',['id'=>$passenger->id])}}">
-                                    {{csrf_field()}}
-                                    {{method_field('PATCH')}}
-                                    <div class="passengerContent">
-                                        <div class="passengerHeader">
-                                            <h4 class="h4Passenger">
-                                                تغییر اطلاعات مسافر
-                                            </h4>
-                                        </div>
 
-                                        <div class="passengerBody">
-                                            <div class="row passengerInfo">
-                                                <input type="hidden" value="ADT" name="type" class="PassengerType">
+                                <form method="POST" action="{{ route('updateProfileInfo',['id'=>auth()->user()->id]) }}" enctype="multipart/form-data" >
+                                    @csrf
+                                    @method('PATCH')
 
-
-                                                <div class="col-sm-4">
-                                                    <div class="form-group">
-                                                        <label for="sex" class="formLabel">جنسیت</label>
-                                                        <select class="form-control passenger-gender" name="gender" required>
-                                                            <option value="">انتخاب</option>
-                                                            <option value="0" {{$passenger->gender==0 ? 'selected' : ''}}>زن</option>
-                                                            <option value="1" {{$passenger->gender==1 ? 'selected' : ''}}>مرد</option>
-                                                        </select>
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group ">
-                                                        <label for="customer-name" class="formLabel">نام</label>
-                                                        <input class="form-control" type="text" name="fname" value="{{$passenger->fname}}">
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group ">
-                                                        <label for="customer-name" class="formLabel">نام خانوادگی</label>
-                                                        <input class="form-control" type="text" name="lname" value="{{$passenger->lname}}">
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group ">
-                                                        <label for="customer-name" class="formLabel">کد ملی</label>
-                                                        <input class="form-control" type="text" name="doc_id" value="{{$passenger->doc_id}}">
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="form-group ">
-                                                        <label for="customer-name" class="formLabel" >تاریخ تولد</label>
-                                                        <input class="form-control datepicker"  type="text" name="birthday" value="{{$passenger->birthday}}"
-                                                               readonly style="background-color: white;cursor: context-menu" >
-                                                        <small id="telHelp" class="form-text text-muted">مثال: ۱۳۹۱/۰۲/۰۶</small>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        {{--submit --}}
-                                        <div class="row" style="margin-top: 10px">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-6">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <div class="passengerBtn" >
-                                                            <a href="{{route('getPassenger')}}" style="text-decoration:none;">
-                                                                <button class="btn btn-block btn-success  btnSubmit" >
-                                                                    بازگشت
-                                                                </button>
-                                                            </a>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <div class="passengerBtn" >
-                                                            <button class="btn btn-block btn-primary  btnSubmit" type="submit">
-                                                                تغییر
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
+                                    <div class="form-group row">
+                                        <label for="name" class="col-sm-offset-2 col-sm-2  col-form-label col-form-label-sm">نام</label>
+                                        <div class="col-sm-6 ">
+                                            <input  id="name" type="text" class="form-control form-control-sm" name="name" value="{{auth()->user()->name}}"  autofocus>
                                         </div>
                                     </div>
 
-                                </form>
+                                    <div class="form-group row">
+                                        <label for="email" class="col-sm-offset-2 col-sm-2 col-form-label col-form-label-sm">{{ __('آدرس ایمیل') }}</label>
+                                        <div class="col-sm-6">
+                                            <input dir="rtl" id="email" type="text" class="form-control form-control-sm" name="email" value="{{auth()->user()->email}}" >
+                                        </div>
+                                    </div>
 
+                                    <div class="form-group row">
+                                        <label for="password" class="col-sm-offset-2 col-sm-2 col-form-label text-sm-right">{{ __('پسورد') }}</label>
+                                        <div class="col-sm-6">
+                                            <input dir="rtl" id="password" type="password" class="form-control" name="password">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="password-confirm" class="col-sm-offset-2 col-sm-2 col-form-label text-sm-right">{{ __('تکرار پسورد') }}</label>
+                                        <div class="col-sm-6">
+                                            <input dir="rtl" id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="tel" class="col-sm-offset-2 col-sm-2 col-form-label text-sm-right">{{ __('تلفن') }}</label>
+                                        <div class="col-sm-6">
+                                            <input dir="rtl" id="tel" type="tel" class="form-control"
+                                                  value="{{auth()->user()->tel}}" name="tel">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="image" class="col-sm-offset-2 col-sm-2 col-form-label text-sm-right">{{ __('انتخاب تصویر') }}</label>
+                                        <div class="col-sm-6">
+                                            <input dir="rtl" id="image" type="file" class="form-control" name="image">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row " style="margin-top: 30px">
+                                        <div class="col-sm-offset-4 col-sm-4 ">
+                                            <button type="submit" class="btn btn-primary btn-block">
+                                                {{ __('ثبت نام') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
 
 
 

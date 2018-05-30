@@ -56,7 +56,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
         <div class="sidebar-collapse">
             <ul class="nav" id="main-menu">
                 <li class="text-center">
-                    <img src="/assets/img/find_user.png" class="user-image img-responsive"/>
+                    @if(auth()->user()->image)
+                        <img src="/assets/img/{{auth()->user()->image}}" class="user-image img-responsive"/>
+                    @else
+                        <img src="/assets/img/find_user.png" class="user-image img-responsive"/>
+                    @endif
                 </li>
                 <li>
                     <a   href="{{route('adminPanel')}}" ><i class="fa fa-dashboard fa-3x"></i> میزکار</a>
@@ -67,6 +71,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                 <li>
                     <a   href="{{route('getPassenger')}}" ><i class="fa fa-user fa-3x"></i> لیست مسافران</a>
                 </li>
+                <li>
+                    <a   href="{{route('editProfileInfo')}}" ><i class="fa fa-edit fa-3x"></i> تغییر اطلاعات پروفایل</a>
+                </li>
+
 
             </ul>
 

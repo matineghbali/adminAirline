@@ -22,6 +22,52 @@ class AdminController extends Controller
 {
     public $date="false";
 
+    public function index(){
+        return view('Panel/panel');
+
+    }
+
+    public function editProfileInfo(){
+       return view('Panel.editProfile');
+    }
+
+    public function updateProfileInfo(Request $request,$id){
+        $validator=Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'tel' => 'required|string',
+            'email' => 'required|string|email|max:255|unique:users,email,'.Auth::user()->id ,
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()){
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $user=User::whereId(Auth::user()->id)->first();
+
+        if ($request->file('image')){
+            $file=$request->file('image');
+            $imagePath = "/assets/img/";
+            $image =$file->getClientOriginalName();
+            $file->move(public_path($imagePath) , $image);
+        }
+        else
+            $image=$user['image'];
+
+        $user->update([
+            'name' => $request['name'],
+            'tel' => $request['tel'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+            'image' => $image
+        ]);
+
+        alert()->success('تغییرات با موفقیت ثبت شد:)' ,'');
+
+        return back();
+//        return redirect(route('adminPanel'));
+    }
+
 //    functions
 
     public function DateFormatOfAPI($date){
@@ -171,12 +217,6 @@ class AdminController extends Controller
     }
 
 //    end functions
-
-    public function index(){
-        return view('Panel/panel');
-
-    }
-
 
 }
 

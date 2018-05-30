@@ -6,6 +6,9 @@ use Carbon\Carbon;
 Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('panel','AdminController@index')->name('adminPanel');
 
+    $this->get('editProfileInfo','AdminController@editProfileInfo' )->name('editProfileInfo');
+    $this->PATCH('updateProfileInfo/{id}','AdminController@updateProfileInfo' )->name('updateProfileInfo');
+
     $this->get('getFlight','FlightController@getFlight')->name('getFlight');
     $this->post('getFlight2','FlightController@getFlight2' )->name('getFlight2');
     $this->get('getFlight3','FlightController@getFlight3' )->name('getFlight3');
@@ -19,8 +22,6 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
 
     $this->get('ticket','TicketController@ticket' )->name('ticket');
     $this->get('tickets','TicketController@tickets' )->name('tickets');
-
-
 
     $this->get('getPassenger','PassengerController@getPassenger' )->name('getPassenger');
     $this->get('passengers/{id}/edit','PassengerController@Edit' )->name('EditPassenger');

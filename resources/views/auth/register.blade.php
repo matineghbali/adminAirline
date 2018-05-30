@@ -8,7 +8,7 @@
                 <div class="card-header" style="text-align: right">{{ __('ثبت نام') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">
@@ -46,7 +46,7 @@
                         <div class="form-group row">
 
                             <div class="col-md-6 offset-md-2">
-                                <input dir="rtl" id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                <input dir="rtl" id="password" type="password" class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
 
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback">
@@ -70,9 +70,8 @@
                         </div>
 
                         <div class="form-group row">
-{{--                            <div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}"></div>--}}
                             <div class="col-md-6 offset-md-2">
-                                <input dir="rtl" id="tel" type="tel" class="form-control{{ $errors->has('tel') ? ' is-invalid' : '' }}" name="tel" required>
+                                <input dir="rtl" id="tel" type="tel" class="form-control{{ $errors->has('tel') ? ' is-invalid' : '' }}" value="{{ old('tel') }}"  name="tel" required>
 
                                 @if ($errors->has('tel'))
                                     <span class="invalid-feedback">
@@ -82,6 +81,17 @@
                             </div>
 
                             <label for="tel" class="col-md-2 col-form-label text-md-right">{{ __('تلفن') }}</label>
+
+                        </div>
+
+                        <div class="form-group row">
+
+                            <div class="col-md-6 offset-md-2">
+                                <input dir="rtl" id="image" type="file" class="form-control" name="image">
+
+                            </div>
+
+                            <label for="image" class="col-md-2 col-form-label text-md-right">{{ __('انتخاب تصویر') }}</label>
 
                         </div>
 
