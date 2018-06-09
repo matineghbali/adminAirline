@@ -8346,3 +8346,41 @@ if (typeof jQuery === 'undefined') {
         }
     };
 }(window.jQuery));
+
+
+(function($) {
+    $.fn.bootstrapValidator.i18n.KodeMeliERR = $.extend($.fn.bootstrapValidator.i18n.KodeMeliERR || {}, {
+        'default': 'فرمت کد ملی صحیح نیست!'
+    });
+
+    $.fn.bootstrapValidator.validators.KodeMeliERR = {
+        // enableByHtml5: function($field) {
+        //     var required = $field.attr('required') + '';
+        //     return ('required' === required || 'true' === required);
+        // },
+
+        /**
+         * Check if input value is empty or not
+         *
+         * @param {BootstrapValidator} validator The validator plugin instance
+         * @param {jQuery} $field Field element
+         * @param {Object} options
+         * @returns {Boolean}
+         */
+        validate: function(validator, $field, options) {
+            var type = $field.attr('type');
+            if (sessionStorage.getItem('statusKodeMeliError')=='true') {
+                return validator
+                    .getFieldElements($field.attr('data-bv-field'))
+                    .filter(':checked')
+                    .length > 0;
+            }
+
+            else if (sessionStorage.getItem('statusKodeMeliError')=='false'){
+                return true;
+            }
+
+            // return $.trim($field.val()) !== '';
+        }
+    };
+}(window.jQuery));

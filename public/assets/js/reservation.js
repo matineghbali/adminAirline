@@ -75,6 +75,9 @@ $(document).ready(function() {
                         regexp: /^[0-9]+$/,
                         message: 'کد ملی را با ارقام انگلیسی وارد کنید'
                     },
+                    KodeMeliERR:{
+                        message: 'فرمت کد ملی صحیح نیست!'
+                    }
                 }
             },
             'passenger-birthday[]': {
@@ -135,6 +138,7 @@ $(document).ready(function() {
          }
 
      });
+
 
 
     function getBirthday(passenger,date,id) {

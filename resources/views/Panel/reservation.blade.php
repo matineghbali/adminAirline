@@ -46,6 +46,29 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     {{--<script src="/assets/js/custom.js"></script>--}}
 
 
+    <script>
+        function isMeliCodeValid(code,passengerBody) {
+            $.ajax({
+                method: 'GET',
+                url: '/admin/isMeliCodeValid/'+code,
+                contentType : false,
+                processData: false,
+            }).done(function (data) {
+                console.log(data);
+                if (data == 'invalid')
+                    sessionStorage.setItem('statusKodeMeliError', 'true');
+                else
+                    sessionStorage.setItem('statusKodeMeliError', 'false');
+
+
+                $('#defaultForm').bootstrapValidator('revalidateField', $('#'+ passengerBody + ' #doc-id'));
+
+
+            })
+        }
+    </script>
+
+
 </head>
 <body>
 <div id="wrapper">
@@ -285,8 +308,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group ">
                                                         <label for="customer-name" class="formLabel">کد ملی</label>
-                                                        <input class="form-control" type="text" name="passenger-id[]" id="doc-id">
-
+                                                        <input class="form-control" type="text" name="passenger-id[]" id="doc-id"
+                                                               oninput="
+                                                               var passengerBody=$(this).parents('.passengerBody').attr('id');
+                                                               isMeliCodeValid($(this).val(),passengerBody)">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
@@ -340,8 +365,10 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <label for="customer-name" class="formLabel">کد ملی</label>
-                                                        <input class="form-control doc-id" type="text" name="passenger-id[]" >
-
+                                                        <input class="form-control" type="text" name="passenger-id[]" id="doc-id"
+                                                               oninput="
+                                                               var passengerBody=$(this).parents('.passengerBody').attr('id');
+                                                               isMeliCodeValid($(this).val(),passengerBody)">
                                                     </div>
                                                 </div>
 

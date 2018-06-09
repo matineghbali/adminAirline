@@ -17,6 +17,7 @@ use Illuminate\Validation\Rule;
 use function MongoDB\BSON\toJSON;
 use Morilog\Jalali\jDate;
 use Morilog\Jalali\jDateTime;
+use Psy\Util\Str;
 use RealRashid\SweetAlert\Facades\Alert;
 class AdminController extends Controller
 {
@@ -69,6 +70,63 @@ class AdminController extends Controller
     }
 
 //    functions
+
+//    public static boolean isMeliCodeValid(String code) {
+//    if (code == null || code.isEmpty() || code.length() != 10) {
+//    return false;
+//    }
+//
+//    int i, temp = 0;
+//            code = code.replaceAll("[^0-9]", "");
+//
+//            for (i = 10; i > 1; i--)
+//                temp += Integer.parseInt(code.substring(10 - i, 11 - i)) * i;
+//
+//            if (Integer.parseInt(code.substring(0, 5)) == Integer.parseInt(code.substring(5, 10)))
+//                temp++;
+//            i = temp % 11;
+//            if (i >= 2)
+//               i = 11 - i;
+//
+//            if (i == Integer.parseInt(code.substring(9, 10))) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//    }
+
+
+
+    public function isMeliCodeValid(string $code){
+
+       if ($code == null || empty($code) || strlen($code) != 10) {
+           return 'invalid';
+       }
+
+       $temp = 0;
+
+       $code = preg_replace("[^0-9]", "", $code);
+
+       for ($i = 10; $i > 1; $i--){
+           $temp += (substr($code,10 - $i, 1))  * $i;
+       }
+
+       if ((float) substr($code,0, 5) == substr($code,5, 10) )
+            $temp++;
+
+        $i = $temp % 11;
+
+        if ($i >= 2)
+        {
+            $i = 11 - $i;
+        }
+
+        if ((float) $i == (float) substr($code,9, 10) ) {
+            return 'valid';
+        } else {
+            return 'invalid';
+        }
+    }
 
     public function DateFormatOfAPI($date){
         //input:1397/1/21

@@ -19,6 +19,7 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('reserved','ReserveController@reserved' )->name('reserved');
 
     $this->post('getBirthday','AdminController@getBirthday' )->name('getBirthday');
+    $this->get('isMeliCodeValid/{code}','AdminController@isMeliCodeValid' )->name('isMeliCodeValid');
 
     $this->get('ticket','TicketController@ticket' )->name('ticket');
     $this->get('tickets','TicketController@tickets' )->name('tickets');
