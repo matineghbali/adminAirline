@@ -71,32 +71,6 @@ class AdminController extends Controller
 
 //    functions
 
-//    public static boolean isMeliCodeValid(String code) {
-//    if (code == null || code.isEmpty() || code.length() != 10) {
-//    return false;
-//    }
-//
-//    int i, temp = 0;
-//            code = code.replaceAll("[^0-9]", "");
-//
-//            for (i = 10; i > 1; i--)
-//                temp += Integer.parseInt(code.substring(10 - i, 11 - i)) * i;
-//
-//            if (Integer.parseInt(code.substring(0, 5)) == Integer.parseInt(code.substring(5, 10)))
-//                temp++;
-//            i = temp % 11;
-//            if (i >= 2)
-//               i = 11 - i;
-//
-//            if (i == Integer.parseInt(code.substring(9, 10))) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//    }
-
-
-
     public function isMeliCodeValid(string $code){
 
        if ($code == null || empty($code) || strlen($code) != 10) {
@@ -276,8 +250,267 @@ class AdminController extends Controller
 
 //    end functions
 
+
+
+
+
+
+
+
+
+//SMS Functions
+
+    public function sendSMS(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/sms/send/simple",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "message=saluuuuum,3vomin sms:)&sender=30005088&Receptor=09367683492&checkmessageids=740210",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+    public function getCheckmessageids(){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => " http://api.smsapp.ir/v2/sms/check ",
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "checkingids=740210",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+
+
+    }
+
+    public function statusSMS(){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => " http://api.smsapp.ir/v2/sms/status ",
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "messageids=1635466090",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+
+    }
+
+    public function requestinfo(){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => " http://api.smsapp.ir/v2/sms/requestinfo ",
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "messageids=1635466090",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;}
+    }
+
+    public function credit(){
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => " http://api.smsapp.ir/v2/credit",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_HTTPHEADER => array(
+            "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+        ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;}
+
+
+    }
+
+    public function addGroup(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/contact/group/add",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "parentid=0&groupname=MATIN",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+    public function addNumber(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/contact/group/number/addbulk",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "groupid=176552&numbers=09367683492#Matin#Eqbali#matin.eghbali74@gmail.com,09388341609#som#sol#som@gmail.com",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+    public function groupList(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/contact/group/list",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "parentid=0",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+//    public function delGroup(){
+//        $curl = curl_init();
+//        curl_setopt_array($curl, array(
+//            CURLOPT_URL => "http://api.smsapp.ir/v2/contact/group/delete",
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_CUSTOMREQUEST => "POST",
+//            CURLOPT_POSTFIELDS => "groupid=176571",
+//            CURLOPT_HTTPHEADER => array(
+//                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+//            ),));
+//        $response = curl_exec($curl);
+//        $err = curl_error($curl);
+//        curl_close($curl);
+//
+//        if ($err) {
+//            echo "cURL Error #:" . $err;
+//        } else {
+//            echo $response;
+//        }
+//    }
+
+    public function numberListOfGroup(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/contact/group/number/list",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "groupid=176552",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
+
+    public function sendingToGroup(){
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.smsapp.ir/v2/sms/send/bulk2",
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "message=hello world&sender=30005088&Receptor=09367683492,09388341609,groupids=176552",
+            CURLOPT_HTTPHEADER => array(
+                "apikey: hSrZbZCmfo0bWX1mHR5D0fgV5p7UYhX6EaMtgKR389g",
+            ),
+        ));
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+        curl_close($curl);
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
+        }
+    }
 }
 
+/////////////
 
 
 

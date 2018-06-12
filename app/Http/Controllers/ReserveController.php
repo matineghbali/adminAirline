@@ -72,28 +72,25 @@ class ReserveController extends AdminController
         $j=0;
         for ($i=0;$i<$Number[1];$i++){
             $type[$j++]='ADT';
-
         }
         for ($i=0;$i<$Number[2];$i++){
             $type[$j++]='CHD';
-
         }
         for ($i=0;$i<$Number[3];$i++){
             $type[$j++]='INF';
-
         }
 
 
 //        search flight again because may change the number of passengers
         $sessionArray=session('data');
-
+//      session()->forget('data');
         $sessionArray['passengerNumber']=$Number[0];
         $sessionArray['ADTNumber']=$Number[1];
         $sessionArray['CHDNumber']=$Number[2];
         $sessionArray['INFNumber']=$Number[3];
 
 
-
+        //again request for search api,for get price of passengerType that may added in reservation page:)
         $response=$this->ApiForSearchFlight($sessionArray['DepartureAirport'],$sessionArray['ArrivalAirport'],$sessionArray['DepartureDateTimeEN'],
             $sessionArray['ADTNumber'],$sessionArray['CHDNumber'],$sessionArray['INFNumber']);
 
@@ -102,7 +99,6 @@ class ReserveController extends AdminController
             $price[$prices["PassengerTypeQuantity"]['Code']]=
                 [$prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]
                     ['Quantity'],$prices["PassengerTypeQuantity"]['Quantity']];
-
         }
 
         if (array_key_exists('ADT',$price)){
@@ -122,7 +118,6 @@ class ReserveController extends AdminController
             $sessionArray['INFPrice']=0;
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
-
 
 
 
@@ -175,11 +170,10 @@ class ReserveController extends AdminController
         $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
 
 
-
-
-
         session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
         session(['data'=>session('dataForPayment')['data']]) ;
+
+
 
 
 
@@ -356,15 +350,6 @@ class ReserveController extends AdminController
 
     }
 
-    public function unReserve(){
-        $passengers=Auth::user()->passengers()->whereReserve(1)->get();
-        foreach ($passengers as $passenger){
-            $passenger->update([
-                'reserve'=>0
-            ]);
-
-        }
-    }
 
     public function reserved(){
 
@@ -513,6 +498,17 @@ class ReserveController extends AdminController
         }
         $this->unReserve();
         return ['response' => $response,'status' => $status];
+    }
+
+
+    public function unReserve(){
+        $passengers=Auth::user()->passengers()->whereReserve(1)->get();
+        foreach ($passengers as $passenger){
+            $passenger->update([
+                'reserve'=>0
+            ]);
+
+        }
     }
 
 //    end of reserve flight

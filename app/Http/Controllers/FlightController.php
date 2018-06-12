@@ -150,10 +150,10 @@ class FlightController extends AdminController
                         $price[$prices["PassengerTypeQuantity"]['Code']]=
                             [$prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]
                                 ['Quantity'],$prices["PassengerTypeQuantity"]['Quantity']];
-
                     }
 
 
+//                    set price for each passenger type
 
                     $ADT='';$CHD='';$INF='';$ADTNumber=0;$CHDNumber=0;$INFNumber=0;
                     if (array_key_exists('ADT',$price)){
@@ -353,6 +353,7 @@ class FlightController extends AdminController
             }
         }
         session()->forget('dataForPayment');
+//        session()->forget('Response');
 
         return ['html'=>$html,'error'=>$err];
     }

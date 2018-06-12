@@ -44,6 +44,8 @@ class PassengerController extends Controller
             'birthday' => $request['birthday']
         ]);
 
+        Alert::success('تغییرات با موفقیت ثبت شد!', '');
+
         return redirect(route('getPassenger'));
 
     }
@@ -157,8 +159,6 @@ class PassengerController extends Controller
         else
             return 'true';
     }
-
-
 }
 
 

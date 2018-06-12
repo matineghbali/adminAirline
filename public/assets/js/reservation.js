@@ -1,5 +1,4 @@
 $(document).ready(function() {
-
     var error_formValid='';
     $('#defaultForm').bootstrapValidator({
         message: 'This value is not valid',
@@ -124,10 +123,12 @@ $(document).ready(function() {
 
     //////////////////////////////////////////////////////end of validation
 
-    isPastPassenger(); //check that user have pastPassenger
 
 
+    //check that user have pastPassenger
+    isPastPassenger();
 
+    //set persianDatepicker for First ADTPassenger
      $('#passengerBodyADT0 .datepicker').persianDatepicker({
          cellWidth: 50,
          cellHeight: 30,
@@ -139,7 +140,10 @@ $(document).ready(function() {
 
      });
 
+     //////////////////////
 
+
+    // functions
 
     function getBirthday(passenger,date,id) {
         var _token=$('input[name="_token"]').val();
@@ -223,16 +227,60 @@ $(document).ready(function() {
 
 
         $('#' + passengerBody.attr('id') + ' .datepicker').persianDatepicker({
-                cellWidth: 50,
-                cellHeight: 30,
-                fontSize: 18,
-                onSelect: function (e) {
-                    getBirthday(passenger,$('#' + passengerBody.attr('id') + ' .datepicker').val(),$('#' + passengerBody.attr('id') + ' .datepicker').attr('id'));
-                }
+            cellWidth: 50,
+            cellHeight: 30,
+            fontSize: 18,
+            onSelect: function (e) {
+                getBirthday(passenger,$('#' + passengerBody.attr('id') + ' .datepicker').val(),$('#' + passengerBody.attr('id') + ' .datepicker').attr('id'));
+            }
         })
 
     }
 
+
+    function getFieldValue(field) {
+        var i=0;
+        var output=[];
+        $('input[data-bv-field^="passenger-'+field+'[]"]').each(function(e) {
+            if ($(this).val()){
+                output[i]=$(this).val();
+                i++;
+            }
+        });
+        return output;
+    }
+
+    function  toEnglishNum($number) {
+        $number = $number.replace(/۱/g,"1");
+        $number = $number.replace(/۲/g,"2");
+        $number = $number.replace(/۳/g,"3");
+        $number = $number.replace(/۴/g,"4");
+        $number = $number.replace(/۵/g,"5");
+        $number = $number.replace(/۶/g,"6");
+        $number = $number.replace(/۷/g,"7");
+        $number = $number.replace(/۸/g,"8");
+        $number = $number.replace(/۹/g,"9");
+        $number = $number.replace(/۰/g,"0");
+        return $number;
+    }
+
+    function isPastPassenger() {
+        $.ajax({
+            method: 'get',
+            url: '/admin/isPastPassenger',
+            contentType: false,
+            processType: false
+        }).done(function (data) {
+            if (data == 'false'){
+                $('.pastPassenger').hide();
+            }
+        });
+    }
+
+    //end function
+
+
+    //validation kardan vaqti k yekbar submit mikoni va dobare barmigardim(eslahe etalat) va dobare submit mikonim
     $('.btnSubmit').click(function () {
         $('#defaultForm').bootstrapValidator('validate');
     });
@@ -318,6 +366,7 @@ $(document).ready(function() {
 
     });
 
+    //create ADTPassenger
     for(i=1;i<ADTNumber;i++){
         AddPassengerBody('ADT');
         var pastADT=0;
@@ -332,6 +381,7 @@ $(document).ready(function() {
 
     }
 
+    //create CHDPassenger
     if (CHDNumber>0){
         $('#CHD').css("visibility", "visible");
         $('#CHD').append($('#passengerBodyADT').clone().attr('id','passengerBodyCHD'));
@@ -353,10 +403,9 @@ $(document).ready(function() {
         $('#CHD .datepicker').each(function(e) {
             $(this).attr('id', 'datepickerCHD' + datepickerCHD++);
         });
-
-
     }
 
+    //create INFPassenger
     if (INFNumber>0){
         $('#INF').css("visibility", "visible");
         $('#INF').append($('#passengerBodyADT').clone().attr('id','passengerBodyINF'));
@@ -375,9 +424,8 @@ $(document).ready(function() {
         $('#INF .datepicker').each(function(e) {
             $(this).attr('id', 'datepickerINF' + datepickerINF++);
         });
-
-
     }
+
 
     var PassengerNumERR='تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید';
     var PassengerINFERR='تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد';
@@ -402,8 +450,6 @@ $(document).ready(function() {
 
 
         }
-
-
     });
 
     $('.addCHD').on('click', function () {
@@ -436,11 +482,7 @@ $(document).ready(function() {
             $('#CHD .datepicker').each(function(e) {
                 $(this).attr('id', 'datepickerCHD' + datepickerCHD++);
             });
-
-
-
         }
-
     });
 
     $('.addINF').on('click', function () {
@@ -477,29 +519,16 @@ $(document).ready(function() {
             $('#INF .datepicker').each(function(e) {
                 $(this).attr('id', 'datepickerINF' + datepickerINF++);
             });
-
-
         }
     });
 
-    function isPastPassenger() {
-        $.ajax({
-            method: 'get',
-            url: '/admin/isPastPassenger',
-            contentType: false,
-            processType: false
-        }).done(function (data) {
-            if (data == 'false'){
-                $('.pastPassenger').hide();
-            }
-        });
-    }
+
 
     //pastPassenger
 
     var pastPassengerID='';
-    $(document).on("click", '.pastPassenger', function(){
 
+    $(document).on("click", '.pastPassenger', function(){
         pastPassengerID = $(this).attr('id');
            $.ajax({
                method: 'get',
@@ -548,6 +577,13 @@ $(document).ready(function() {
         $('#'+ passengerBody + ' #fname').val($myRow[2]);
         $('#'+ passengerBody + ' #lname').val($myRow[3]);
         $('#'+ passengerBody + ' #doc-id').val($myRow[4]);
+        // var passengerBody=$(this).parents('.passengerBody').attr('id');
+        isMeliCodeValid($('#'+ passengerBody + ' #doc-id').val(),passengerBody);
+
+        // $(document).on("input", '#'+ passengerBody + ' #doc-id', function() {
+        //     alert($('#'+ passengerBody + ' #doc-id').val());
+        // });
+
         $('#'+ passengerBody + ' .datepicker').val($myRow[5]);
 
         $('#ADTModal').modal('toggle');
@@ -563,7 +599,6 @@ $(document).ready(function() {
     });
 
     //end of pastPassenger
-
 
     $(document).on("click", "#removeADT", function(){
         ADTNumber--;
@@ -593,6 +628,8 @@ $(document).ready(function() {
         passengerBodyINF--;
         $(this).parents('.passengerBody').remove();
     });
+
+
 
     $(document).on("click", "#editBtn", function() {
         $.ajax({
@@ -670,44 +707,6 @@ $(document).ready(function() {
 
 
     });
-
-
-    // functions
-
-
-
-    function getFieldValue(field) {
-        var i=0;
-        var output=[];
-        $('input[data-bv-field^="passenger-'+field+'[]"]').each(function(e) {
-            if ($(this).val()){
-                output[i]=$(this).val();
-                i++;
-            }
-        });
-        return output;
-    }
-
-    function  toEnglishNum($number) {
-        $number = $number.replace(/۱/g,"1");
-        $number = $number.replace(/۲/g,"2");
-        $number = $number.replace(/۳/g,"3");
-        $number = $number.replace(/۴/g,"4");
-        $number = $number.replace(/۵/g,"5");
-        $number = $number.replace(/۶/g,"6");
-        $number = $number.replace(/۷/g,"7");
-        $number = $number.replace(/۸/g,"8");
-        $number = $number.replace(/۹/g,"9");
-        $number = $number.replace(/۰/g,"0");
-        return $number;
-    }
-
-    //end function
-
-
-
-
-
 
 
 });

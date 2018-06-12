@@ -102,13 +102,6 @@
 
                         $('#searchResult').html(response['html']);
 
-
-
-                        // $('html, body').animate({
-                        //     scrollTop: $("#contentResult").offset().top
-                        // }, 500);
-
-
                     });//end function of ajax2
 
                 });//end function of ajax1

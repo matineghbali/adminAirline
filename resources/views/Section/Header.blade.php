@@ -37,7 +37,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     {{--<script src="/assets/js/jquery.metisMenu.js"></script>--}}
     {{--<script src="/assets/js/custom.js"></script>--}}
 
-
+    <script type="text/javascript">
+        window.$crisp=[];window.CRISP_WEBSITE_ID="338f68d3-9923-4975-bfa3-a75d4a682d5b";
+        (function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;
+        d.getElementsByTagName("head")[0].appendChild(s);})();
+    </script>
 </head>
 <body>
 <div id="wrapper">

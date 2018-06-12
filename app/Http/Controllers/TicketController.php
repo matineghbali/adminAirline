@@ -68,7 +68,7 @@ class TicketController extends AdminController
 
     public function tickets(){
         $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
-//        return view('Panel/tickets',['tickets' => $tickets ]);
+//        return view('Panel/itckets',['tickets' => $tickets ]);
         return $this->ticket_generator($tickets);
 
     }
@@ -136,7 +136,6 @@ class TicketController extends AdminController
 
         $pdf->Output('ticket.pdf', 'D');
 
-        return redirect(route('adminPanel'));
 
 
     }

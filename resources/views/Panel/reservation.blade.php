@@ -34,6 +34,26 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
 
+    <script>
+        function isMeliCodeValid(code,passengerBody) {
+            $.ajax({
+                method: 'GET',
+                url: '/admin/isMeliCodeValid/'+code,
+                contentType : false,
+                processData: false
+            }).done(function (data) {
+                console.log(data);
+                if (data == 'invalid')
+                    sessionStorage.setItem('statusKodeMeliError', 'true');
+                else
+                    sessionStorage.setItem('statusKodeMeliError', 'false');
+
+                $('#defaultForm').bootstrapValidator('revalidateField', $('#'+ passengerBody + ' #doc-id'));
+            })
+
+        }
+    </script>
+
     <script src="/assets/js/reservation.js"></script>
 
     {{--persianDatepicker--}}
@@ -46,27 +66,6 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
     {{--<script src="/assets/js/custom.js"></script>--}}
 
 
-    <script>
-        function isMeliCodeValid(code,passengerBody) {
-            $.ajax({
-                method: 'GET',
-                url: '/admin/isMeliCodeValid/'+code,
-                contentType : false,
-                processData: false,
-            }).done(function (data) {
-                console.log(data);
-                if (data == 'invalid')
-                    sessionStorage.setItem('statusKodeMeliError', 'true');
-                else
-                    sessionStorage.setItem('statusKodeMeliError', 'false');
-
-
-                $('#defaultForm').bootstrapValidator('revalidateField', $('#'+ passengerBody + ' #doc-id'));
-
-
-            })
-        }
-    </script>
 
 
 </head>
