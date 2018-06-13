@@ -12,8 +12,10 @@ Route::group(['middleware'=>'auth:web','prefix'=>'admin'],function (){
     $this->get('getFlight','FlightController@getFlight')->name('getFlight');
     $this->post('getFlight2','FlightController@getFlight2' )->name('getFlight2');
     $this->get('getFlight3','FlightController@getFlight3' )->name('getFlight3');
+//    $this->get('getFlight3/{response:|}','FlightController@getFlight3' )->name('getFlight3');
 
     $this->get('reservation','ReserveController@reservation' )->name('reservation');
+//    $this->get('reservation/{id}','ReserveController@reservation' )->name('reservation');
     $this->post('reserve','ReserveController@reserve' )->name('reserve');
     $this->get('unReserve','ReserveController@unReserve' )->name('unReserve');
     $this->get('reserved','ReserveController@reserved' )->name('reserved');
