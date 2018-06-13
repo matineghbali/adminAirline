@@ -19,60 +19,19 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
 
     <link rel="stylesheet" href="/assets/css/bootstrapValidator.css">
-    <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/assets/js/bootstrapValidator.js"></script>
-    <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/assets/js/jquery.jqprint-0.3.js"></script>
 
-    {{--persianDatepicker--}}
-    {{--<script type="text/javascript" src="/assets/js/jquery-1.10.2.js"></script>--}}
-    <script type="text/javascript" src="/assets/js/persianDatepicker.min.js"></script>
-
+    {{--<script src="/assets/js/bootstrap.min.js"></script>--}}
 
     {{--js for toggleButton--}}
     <script src="/assets/js/jquery.metisMenu.js"></script>
-    {{--<script src="/assets/js/custom.js"></script>--}}
-
-    <script type="text/javascript" src="/assets/js/printThis.js"></script>
+    <script src="/assets/js/custom.js"></script>
 
     <script type='text/javascript'>
-
-        $(document).ready(function () {
-            $('#print').on('click', function() {
-                $('#printable').printThis({
-                    header: "<h1>مشخصات بلیت</h1>"
-                });
-            });
-
-            // $('#print').on('click', function() {
-            //     $("#printable").print({
-            //         globalStyles: false,
-            //         mediaPrint: false,
-            //         stylesheet: "http://fonts.googleapis.com/css?family=Inconsolata",
-            //         iframe: false,
-            //         noPrintSelector: ".avoid-this",
-            //         append: "Matin<br/>",
-            //         prepend: "<br/>eqbali",
-            //         manuallyCopyFormValues: true,
-            //         deferred: $.Deferred(),
-            //         timeout: 250,
-            //         title: null,
-            //         doctype: '<!doctype html>',
-            //
-            //
-            //         debug: true,
-            //         importCSS: false,
-            //         importStyle: false,
-            //         printDelay: 5000,
-            //         removeScripts: true
-            //
-            //
-            //
-            //     });
-            // });
-
-
-        });
+        function Print() {
+               $('#printable').jqprint();
+        }
     </script>
 
 </head>
@@ -124,6 +83,7 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
     </nav>
     <!-- /. NAV SIDE  -->
+
     <div id="page-wrapper" >
         <div id="page-inner">
             <div class="row">
@@ -294,11 +254,9 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
-
                 </div>
+
 
                 <div class="row" style="margin-top: 50px">
                     <div class="col-sm-5">
@@ -329,36 +287,18 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="passengerBtn" >
-                                    <button class="btn btn-block btn-primary" id="print" type="button">چاپ</button>
+                                    <button class="btn btn-block btn-primary" onclick="Print()" id="print" type="button">چاپ</button>
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
+
                 </div>
 
             </div>
         </div>
-
-        <!-- /. PAGE INNER  -->
     </div>
-    <!-- /. PAGE WRAPPER  -->
 </div>
-<!-- /. WRAPPER  -->
-
-
-
-{{--<script>--}}
-    {{--var prtContent = document.getElementById("#page-inner");--}}
-    {{--var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');--}}
-    {{--WinPrint.document.write(prtContent.innerHTML);--}}
-    {{--WinPrint.document.close();--}}
-    {{--WinPrint.focus();--}}
-    {{--WinPrint.print();--}}
-    {{--WinPrint.close();--}}
-{{--</script>--}}
-
 
 
 </body>

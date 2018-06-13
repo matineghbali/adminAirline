@@ -577,12 +577,7 @@ $(document).ready(function() {
         $('#'+ passengerBody + ' #fname').val($myRow[2]);
         $('#'+ passengerBody + ' #lname').val($myRow[3]);
         $('#'+ passengerBody + ' #doc-id').val($myRow[4]);
-        // var passengerBody=$(this).parents('.passengerBody').attr('id');
         isMeliCodeValid($('#'+ passengerBody + ' #doc-id').val(),passengerBody);
-
-        // $(document).on("input", '#'+ passengerBody + ' #doc-id', function() {
-        //     alert($('#'+ passengerBody + ' #doc-id').val());
-        // });
 
         $('#'+ passengerBody + ' .datepicker').val($myRow[5]);
 
