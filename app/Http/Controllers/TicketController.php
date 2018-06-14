@@ -26,9 +26,8 @@ class TicketController extends AdminController
             'ticketInfo' => session('ticketResponse')
         ];
 
-        $count=session('passengerCount');
 
-        for ($i=0;$i<$count;$i++){
+        for ($i=0;$i<count($passenger);$i++){
             Ticket::create([
                 'passenger_id' => $passenger[$i]['id'],
                 'flight_id' => session('flight_id'),
@@ -44,9 +43,10 @@ class TicketController extends AdminController
 
         $this->unReserve();
 
+        $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID'];
         session(['ticket_id' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID']]);
 
-//        session()->forget('flight_id');
+        session()->forget('flight_id');
 
         return redirect(route('tickets'));
 
