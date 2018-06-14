@@ -13,6 +13,8 @@ class ReserveController extends AdminController
 
     public function reservation()
     {
+
+//        $flight=Flight:find($id)->get();
         return view('Panel/reservation',['data'=>session('data')]);
     }
 
@@ -27,6 +29,9 @@ class ReserveController extends AdminController
     }
 
     public function reserve(Request $request){
+        //idye flight ro befrestam be in
+        //        $flight=Flight:find($id)->get();
+
 //        $request=[
 //            'birthday'
 //            =>
@@ -83,7 +88,10 @@ class ReserveController extends AdminController
 
 //        search flight again because may change the number of passengers
         $sessionArray=session('data');
+
 //      session()->forget('data');
+
+        //update flight table for number adt ina
         $sessionArray['passengerNumber']=$Number[0];
         $sessionArray['ADTNumber']=$Number[1];
         $sessionArray['CHDNumber']=$Number[2];
@@ -116,6 +124,7 @@ class ReserveController extends AdminController
         }
         else
             $sessionArray['INFPrice']=0;
+        //updatee flight table for price adt ina
 
         $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
 
@@ -177,6 +186,7 @@ class ReserveController extends AdminController
 
 
 
+        //info from table
         $html="<div class=\"row\">
                 <div class=\"col-md-12\">
                     <div class=\"row\">
@@ -353,6 +363,7 @@ class ReserveController extends AdminController
 
     public function reserved(){
 
+        //gereftane idye passneger va flight
         $count=count(session('dataForPayment')['passenger']);
 
         $TravelerInfo[]='';

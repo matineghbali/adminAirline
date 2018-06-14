@@ -48,6 +48,7 @@ class FlightController extends AdminController
     }
 
     public function getFlight3(){
+//        public function getFlight3($response){
 
         $err='false';
         // ارورهای ولیدیشن
@@ -189,6 +190,28 @@ class FlightController extends AdminController
                     $dateTime=explode('T',$DepartureDateTime);
                     $time=explode(':',$dateTime[1]);
 
+                    //create flight table
+                    //fieldash copiye session data
+//                    $flight=Flight::create([
+//                        'DepartureAirport'=>$ticket['flightInfo']['DepartureAirport'],
+//                        'ArrivalAirport'=>$ticket['flightInfo']['ArrivalAirport'],
+//                        'DepartureDateTime'=>$ticket['flightInfo']['DepartureDateTimeEN'],
+//                        'ArrivalDateTime'=>$ticket['flightInfo']['ArrivalDateTimeEN'],
+//                        'AvailableSeatQuantity'=>$ticket['flightInfo']['AvailableSeatQuantity'],
+//                        'FlightNumber'=>$ticket['flightInfo']['FlightNumber'],
+//                        'FareBasisCode'=>$ticket['flightInfo']['FareBasisCode'],
+//                        'MarketingAirline'=>$ticket['flightInfo']['MarketingAirlineEN'],
+//                        'cabinType'=>$ticket['flightInfo']['cabinTypeEN'],
+//                        'AirEquipType'=>$ticket['flightInfo']['AirEquipType'],
+//                        'passengerNumber'=>$ticket['flightInfo']['passengerNumber'],
+//                        'price'=>$ticket['flightInfo']['price'],
+//                        'ADTPrice'=>$ticket['flightInfo']['ADTPrice'],
+//                        'CHDPrice'=>$ticket['flightInfo']['CHDPrice'],
+//                        'INFPrice'=>$ticket['flightInfo']['INFPrice'],
+//                    ]);
+                    //payine etelaate in jadvalo bargardunam na session
+
+
                     session(['data'=>[
 
                         'DepartureAirport' => $DepartureAirport,
@@ -227,8 +250,6 @@ class FlightController extends AdminController
                         'ADTPrice'=>$price['ADT'][0],
                         'CHDPrice'=>$price['CHD'][0],
                         'INFPrice'=>$price['INF'][0],
-
-
 
                     ]]);
 
