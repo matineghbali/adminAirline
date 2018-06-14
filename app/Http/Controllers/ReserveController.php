@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Flight;
 use App\Passenger;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,8 +15,11 @@ class ReserveController extends AdminController
     public function reservation()
     {
 
-//        $flight=Flight:find($id)->get();
-        return view('Panel/reservation',['data'=>session('data')]);
+
+        $flight=Flight::find(session('flight_id'));
+        $dateTime=explode('T',$flight['DepartureDateTime']);
+        $time=explode(':',$dateTime[1]);
+        return view('Panel/reservation',['data'=>$flight,'date'=>$dateTime[0],'time'=>$time[0].":".$time[1]]);
     }
 
     public function getPriceOfPassenger($type,$INFPrice,$CHDPrice,$ADTPrice){
@@ -29,8 +33,7 @@ class ReserveController extends AdminController
     }
 
     public function reserve(Request $request){
-        //idye flight ro befrestam be in
-        //        $flight=Flight:find($id)->get();
+        $flight=Flight::find(session('flight_id'));
 
 //        $request=[
 //            'birthday'
@@ -61,11 +64,11 @@ class ReserveController extends AdminController
 //            =>
 //            "3.1.1.1"
 //        ];
-
-        $customer['name']=$request['customer_name'];
-        $customer['email']=$request['customer_email'];
-        $customer['tel']=$request['customer_tel'];
-
+        session(['customer'=>[
+            'name'=>$request['customer_name'],
+            'email'=>$request['customer_email'],
+            'tel'=>$request['customer_tel'],
+        ]]);
         $gender=explode(',' , $request['gender']);
         $fname=explode(',' , $request['fname']);
         $lname=explode(',' , $request['lname']);
@@ -86,23 +89,18 @@ class ReserveController extends AdminController
         }
 
 
-//        search flight again because may change the number of passengers
-        $sessionArray=session('data');
-
-//      session()->forget('data');
-
-        //update flight table for number adt ina
-        $sessionArray['passengerNumber']=$Number[0];
-        $sessionArray['ADTNumber']=$Number[1];
-        $sessionArray['CHDNumber']=$Number[2];
-        $sessionArray['INFNumber']=$Number[3];
+        $NumberPassenger['passengerNumber']=$Number[0];
+        $NumberPassenger['ADTNumber']=$Number[1];
+        $NumberPassenger['CHDNumber']=$Number[2];
+        $NumberPassenger['INFNumber']=$Number[3];
 
 
         //again request for search api,for get price of passengerType that may added in reservation page:)
-        $response=$this->ApiForSearchFlight($sessionArray['DepartureAirport'],$sessionArray['ArrivalAirport'],$sessionArray['DepartureDateTimeEN'],
-            $sessionArray['ADTNumber'],$sessionArray['CHDNumber'],$sessionArray['INFNumber']);
+        $response=$this->ApiForSearchFlight($flight['DepartureAirport'],$flight['ArrivalAirport'],$flight['DepartureDateTime'],
+            $NumberPassenger['ADTNumber'],$NumberPassenger['CHDNumber'],$NumberPassenger['INFNumber']);
 
 
+        //set price
         foreach ($response['PricedItineraries'][0]["AirItineraryPricingInfo"]["PTC_FareBreakdowns"] as $prices){
             $price[$prices["PassengerTypeQuantity"]['Code']]=
                 [$prices["PassengerFare"]['TotalFare']['Amount']/$prices["PassengerTypeQuantity"]
@@ -110,23 +108,40 @@ class ReserveController extends AdminController
         }
 
         if (array_key_exists('ADT',$price)){
-            $sessionArray['ADTPrice']=$price['ADT'][0];
+            $NumberPassenger['ADTPrice']=$price['ADT'][0];
         }
         else
-            $sessionArray['ADTPrice']=0;
+            $NumberPassenger['ADTPrice']=0;
         if (array_key_exists('CHD',$price)){
-            $sessionArray['CHDPrice']=$price['CHD'][0];
+            $NumberPassenger['CHDPrice']=$price['CHD'][0];
         }
         else
-            $sessionArray['CHDPrice']=0;
+            $NumberPassenger['CHDPrice']=0;
         if (array_key_exists('INF',$price)){
-            $sessionArray['INFPrice']=$price['INF'][0];
+            $NumberPassenger['INFPrice']=$price['INF'][0];
         }
         else
-            $sessionArray['INFPrice']=0;
-        //updatee flight table for price adt ina
+            $NumberPassenger['INFPrice']=0;
 
-        $sessionArray['price']=$response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'];
+        /////////
+
+
+        $flight->update([
+            'user_id'=>Auth::user()->id,
+            'passengerNumber'=>$Number[0],
+            'ADTNumber'=>$Number[1],
+            'CHDNumber'=>$Number[2],
+            'INFNumber'=>$Number[3],
+            'ADTPrice'=>$NumberPassenger['ADTPrice'],
+            'CHDPrice'=>$NumberPassenger['CHDPrice'],
+            'INFPrice'=>$NumberPassenger['INFPrice'],
+            'price' => $response['PricedItineraries'][0]["AirItineraryPricingInfo"]["ItinTotalFare"]["TotalFare"]['Amount'],
+        ]);
+
+        $dateTime=explode('T',$flight['DepartureDateTime']);
+        $time=explode(':',$dateTime[1]);
+        $time=$time[0].":".$time[1];
+
 
 
 
@@ -156,7 +171,7 @@ class ReserveController extends AdminController
                     'lname'=>$lname[$i],
                     'doc_id'=>$doc_id[$i],
                     'birthday'=>$birthday[$i],
-                    'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
+                    'price'=> $this->getPriceOfPassenger($type[$i],$NumberPassenger['INFPrice'],$NumberPassenger['CHDPrice'],$NumberPassenger['ADTPrice']),
                     'reserve'=>1
 
                 ]);
@@ -170,20 +185,13 @@ class ReserveController extends AdminController
                     'lname'=>$lname[$i],
                     'doc_id'=>$doc_id[$i],
                     'birthday'=>$birthday[$i],
-                    'price'=> $this->getPriceOfPassenger($type[$i],$sessionArray['INFPrice'],$sessionArray['CHDPrice'],$sessionArray['ADTPrice']),
+                    'price'=> $this->getPriceOfPassenger($type[$i],$NumberPassenger['INFPrice'],$NumberPassenger['CHDPrice'],$NumberPassenger['ADTPrice']),
                     'reserve'=>1
                 ]);
             }
         };
 
         $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
-
-
-        session(['dataForPayment' => ['data'=>$sessionArray,'passenger'=>$passenger,'customer'=>$customer] ]);
-        session(['data'=>session('dataForPayment')['data']]) ;
-
-
-
 
 
         //info from table
@@ -193,35 +201,35 @@ class ReserveController extends AdminController
                         <div class=\"col-sm-12\" >
                         
                         
-                            <div class=\"panelTitle\">اطلاعات بلیت ".CodeToCity($sessionArray['DepartureAirport'])." به
-                             ".CodeToCity($sessionArray['ArrivalAirport'])." ". $sessionArray['DepartureDate']."</div>
+                            <div class=\"panelTitle\">اطلاعات بلیت ".CodeToCity($flight['DepartureAirport'])." به
+                             ".CodeToCity($flight['ArrivalAirport'])." ". toPersianNum(jdate($dateTime[0])->format('%d %B، %Y'))."</div>
 
 
                             <div class=\"panel\">
                                 <div class=\"row panelContent\" >
                                     <div class=\"col-md-3\">
-                                        <h3>".$sessionArray['DepartureTime']."</h3>
-                                        <span>".CodeToCity($sessionArray['DepartureAirport']) . " " .CodeToCity($sessionArray['ArrivalAirport'])."</span>
+                                        <h3>".$time."</h3>
+                                        <span>".CodeToCity($flight['DepartureAirport']) . " " .CodeToCity($flight['ArrivalAirport'])."</span>
                                     </div>
                                     <div class=\"col-md-2\" style=\"padding-top: 20px\">
-                                        <span class=\"text-muted\" >هواپیمایی ".$sessionArray['MarketingAirlineFA']."</span>
+                                        <span class=\"text-muted\" >هواپیمایی ".$flight['MarketingAirlineFA']."</span>
                                     </div>
                                     <div class=\"col-md-2\">
                                         <ul>
-                                            <li>هواپیما: <b>".$sessionArray['AirEquipType']."</b></li>
-                                            <li>شماره پرواز: <b>".toPersianNum($sessionArray['FlightNumber'])."</b></li>
+                                            <li>هواپیما: <b>".$flight['AirEquipType']."</b></li>
+                                            <li>شماره پرواز: <b>".toPersianNum($flight['FlightNumber'])."</b></li>
                                         </ul>
                                     </div>
                                     <div class=\"col-md-2\">
                                         <ul>
                                             <li>پرواز  <b>چارتر </b></li>
-                                            <li>کلاس پروازی: <b>".$sessionArray['cabinTypeFA']."</b></li>
+                                            <li>کلاس پروازی: <b>".$flight['cabinTypeFA']."</b></li>
                                         </ul>
 
                                     </div>
                                     <div class=\"col-md-3\">
-                                        <h3>".toPersianNum($sessionArray['passengerNumber'])." نفر </h3>
-                                        <span>".toPersianNum($sessionArray['price'])." تومان</span>
+                                        <h3>".toPersianNum($flight['passengerNumber'])." نفر </h3>
+                                        <span>".toPersianNum($flight['price'])." تومان</span>
                                     </div>
 
                                 </div>
@@ -238,15 +246,15 @@ class ReserveController extends AdminController
                                     <div class=\"row passengerInfo \" style=\"padding: 10px\">
                                         <div class=\"col-sm-4\">
                                             <span>نام:</span>
-                                            ".$customer['name']."
+                                            ". session('customer')['name']."
                                         </div>
                                         <div class=\"col-sm-4\">
                                             <span>ایمیل:</span>
-                                            ".$customer['email']."
+                                            ". session('customer')['email']."
                                         </div>
                                         <div class=\"col-sm-4\">
                                             <span>شماره موبایل:</span>
-                                            ".toPersianNum($customer['tel'])."
+                                            ".toPersianNum(session('customer')['tel'])."
                                         </div>
                                     </div>
 
@@ -309,7 +317,7 @@ class ReserveController extends AdminController
                                                         ".toPersianNum($passenger[$i]['birthday'])."
                                                     </td>
                                                     <td>
-                                                        ".toPersianNum($sessionArray[$passenger[$i]['type'].'Price'])."
+                                                        ".toPersianNum($flight[$passenger[$i]['type'].'Price'])."
                                                     </td>
 
                                                 </tr>";
@@ -363,8 +371,10 @@ class ReserveController extends AdminController
 
     public function reserved(){
 
-        //gereftane idye passneger va flight
-        $count=count(session('dataForPayment')['passenger']);
+        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
+        $flight=Flight::find(session('flight_id'));
+
+        $count=count($passenger);
 
         $TravelerInfo[]='';
 
@@ -374,19 +384,19 @@ class ReserveController extends AdminController
                 [
                     "PersonName"=> [
                         "NamePrefix"=> null,
-                        "GivenName"=> session('dataForPayment')['passenger'][$i]['fname'],
-                        "Surname"=> session('dataForPayment')['passenger'][$i]['lname']
+                        "GivenName"=> $passenger[$i]['fname'],
+                        "Surname"=> $passenger[$i]['lname']
                     ],
                     "Telephone"=> [
                         "CountryAccessCode"=> null,
                         "AreaCityCode"=> null,
-                        "PhoneNumber"=> session('dataForPayment')['customer']['tel']
+                        "PhoneNumber"=> session('customer')['tel']
                     ],
                     "Email"=> [
-                        "Value"=> session('dataForPayment')['customer']['email']
+                        "Value"=> session('customer')['email']
                     ],
                     "Document"=> [
-                        "DocID"=> session('dataForPayment')['passenger'][$i]['doc_id'],
+                        "DocID"=> $passenger[$i]['doc_id'],
                         "DocType"=> 5,
                         "ExpireDate"=> "2020-03-27T13:51:40",
                         "DocIssueCountry"=> "IR",
@@ -394,8 +404,8 @@ class ReserveController extends AdminController
                         "DocHolderNationality"=> "IR"
                     ],
                     "Gender"=> 0,
-                    "BirthDate"=> $this->DateFormatOfAPI(session('dataForPayment')['passenger'][$i]['birthday']),
-                    "PassengerTypeCode"=> session('dataForPayment')['passenger'][$i]['type'],
+                    "BirthDate"=> $this->DateFormatOfAPI($passenger[$i]['birthday']),
+                    "PassengerTypeCode"=> $passenger[$i]['type'],
                     "AccompaniedByInfantInd"=> true
                 ] ;
         }
@@ -425,21 +435,21 @@ class ReserveController extends AdminController
                         "FlightSegment" => [
                             [
                                 "DepartureAirport" => [
-                                    "LocationCode" => session('dataForPayment')['data']['DepartureAirport'],
+                                    "LocationCode" => $flight['DepartureAirport'],
                                     "Terminal" => null
                                 ],
                                 "ArrivalAirport" => [
-                                    "LocationCode" => session('dataForPayment')['data']['ArrivalAirport'],
+                                    "LocationCode" => $flight['ArrivalAirport'],
                                     "Terminal" => null
                                 ],
                                 "Equipment" => null,
-                                "DepartureDateTime" => session('dataForPayment')['data']['DepartureDateTimeEN'],
-                                "ArrivalDateTime" => session('dataForPayment')['data']['ArrivalDateTimeEN'],
+                                "DepartureDateTime" => $flight['DepartureDateTime'],
+                                "ArrivalDateTime" => $flight['ArrivalDateTime'],
                                 "StopQuantity" => null,
                                 "RPH" => 0,
                                 "MarketingAirline" => null,
-                                "FlightNumber" => session('dataForPayment')['data']['FlightNumber'],
-                                "FareBasisCode" => session('dataForPayment')['data']['FareBasisCode'],
+                                "FlightNumber" => $flight['FlightNumber'],
+                                "FareBasisCode" => $flight['FareBasisCode'],
                                 "CabinType" => null,
                                 "ResBookDesigCode" => null,
                                 "Comment" => null,
@@ -459,7 +469,7 @@ class ReserveController extends AdminController
                     [
                         "PaymentAmount" => [
                             "CurrencyCode" => "IRR",
-                            "Amount" => session('dataForPayment')['data']['price']
+                            "Amount" => $flight['price']
                         ]
                     ]
                 ]
@@ -507,20 +517,12 @@ class ReserveController extends AdminController
             $response=$response['AirReservation']['BookingReferenceID']['ID'];
             $status='Success';
         }
-        $this->unReserve();
         return ['response' => $response,'status' => $status];
     }
 
 
-    public function unReserve(){
-        $passengers=Auth::user()->passengers()->whereReserve(1)->get();
-        foreach ($passengers as $passenger){
-            $passenger->update([
-                'reserve'=>0
-            ]);
 
-        }
-    }
+
 
 //    end of reserve flight
 

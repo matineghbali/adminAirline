@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Flight;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class FlightController extends AdminController
@@ -32,30 +34,30 @@ class FlightController extends AdminController
             'DestinationLocation' => 'required'
         ]);
         if ($validation->fails())
-            session(['Errors'=>$validation->errors()]);
+            $response=['data'=>$validation->errors(),'type'=>'Errors'];
         elseif (($request['INF']+$request['ADT']+$request['CHD'])>9)
-            session(['PassengerNumERR'=>"تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید"]);
-
+            $response=['data'=>"تعداد مسافرها نمی تواند بیشتر از 9 باشد، درصورت نیاز تعداد بیشتر جداگانه صادر کنید",'type'=>'PassengerNumERR'];
         elseif ($request['INF']>$request['ADT'])
-            session(['PassengerNumERR'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد"]);
-
+            $response=['data'=>"تعداد نوزاد نمی تواند بیشتر از بزرگسال باشد",'type'=>'PassengerNumERR'];
         else{
             $response=$this->ApiForSearchFlight($request['OriginLocation'],$request['DestinationLocation'],$this->DateFormatOfAPI($request['DepartureDateTime']),
                 $request['ADT'],$request['CHD'],$request['INF']);
+            $response=['data'=>$response,'type'=>'response'];
 
-            session(['Response'=>['response'=>$response]]);
+
         }
+        return $this->getFlight3($response);
+
     }
 
-    public function getFlight3(){
-//        public function getFlight3($response){
+    public function getFlight3($response){
 
         $err='false';
         // ارورهای ولیدیشن
         $html='';
-        if (session()->has('Errors'))       //error haye validation
+        if ($response['type']=='Errors')       //error haye validation
         {
-            $error=session('Errors');
+            $error=$response['data'];
             if ($error->first('DepartureDateTime'))
                 $html='<script>SweetAlert({   title: "ارور",   text: "'.$error->first('DepartureDateTime').'",type: "error", confirmButtonText: "باشه"})</script>';
             elseif ($error->first('OriginLocation'))
@@ -66,32 +68,32 @@ class FlightController extends AdminController
         }
 
         //اارور های تعداد مسافران
-        elseif (session()->has('PassengerNumERR')){
-            $error=session('PassengerNumERR');
+        elseif ($response['type']=='PassengerNumERR'){
+            $error=$response['data'];
             $html='<script>SweetAlert({   title: "ارور",   text: "'.$error.'",type: "error", confirmButtonText: "باشه"})</script>';
             $err='true';
         }
         //ارورهای سرور
         else{
-            $myRes=session('Response');
+            $myRes=$response['data'];
 
-            if ($myRes['response']['Errors']!=null){
-                if($myRes['response']['Errors'][0]['Code'] =="IpNotTrustedException")
+            if ($myRes['Errors']!=null){
+                if($myRes['Errors'][0]['Code'] =="IpNotTrustedException")
                     $response= 'IP معتبر نیست!';
                 else
-                    $response=$myRes['response']['Errors'][0]['ShortText'];
+                    $response=$myRes['Errors'][0]['ShortText'];
                 $html='<script>SweetAlert({   title: "ارور",   text: "'.$response.'",type: "error", confirmButtonText: "باشه"})</script>';
                 $err='true';
             }
 
-            else if($myRes['response']['PricedItineraries'] == null){
+            else if($myRes['PricedItineraries'] == null){
                 $html='<script>SweetAlert({   title: "ارور",   text: "چنین پروازی وجود ندارد",type: "error", confirmButtonText: "باشه"})</script>';
                 $err='true';
 
             }
             else {
                 $html='';
-                $responses = $myRes['response'];
+                $responses = $myRes;
 
 
                 foreach($responses['PricedItineraries'] as $response){
@@ -190,68 +192,59 @@ class FlightController extends AdminController
                     $dateTime=explode('T',$DepartureDateTime);
                     $time=explode(':',$dateTime[1]);
 
-                    //create flight table
-                    //fieldash copiye session data
-//                    $flight=Flight::create([
-//                        'DepartureAirport'=>$ticket['flightInfo']['DepartureAirport'],
-//                        'ArrivalAirport'=>$ticket['flightInfo']['ArrivalAirport'],
-//                        'DepartureDateTime'=>$ticket['flightInfo']['DepartureDateTimeEN'],
-//                        'ArrivalDateTime'=>$ticket['flightInfo']['ArrivalDateTimeEN'],
-//                        'AvailableSeatQuantity'=>$ticket['flightInfo']['AvailableSeatQuantity'],
-//                        'FlightNumber'=>$ticket['flightInfo']['FlightNumber'],
-//                        'FareBasisCode'=>$ticket['flightInfo']['FareBasisCode'],
-//                        'MarketingAirline'=>$ticket['flightInfo']['MarketingAirlineEN'],
-//                        'cabinType'=>$ticket['flightInfo']['cabinTypeEN'],
-//                        'AirEquipType'=>$ticket['flightInfo']['AirEquipType'],
-//                        'passengerNumber'=>$ticket['flightInfo']['passengerNumber'],
-//                        'price'=>$ticket['flightInfo']['price'],
-//                        'ADTPrice'=>$ticket['flightInfo']['ADTPrice'],
-//                        'CHDPrice'=>$ticket['flightInfo']['CHDPrice'],
-//                        'INFPrice'=>$ticket['flightInfo']['INFPrice'],
-//                    ]);
-                    //payine etelaate in jadvalo bargardunam na session
+                    if (session()->has('flight_id')){
+                        $flight=Flight::find(session('flight_id'));
+                        $flight->update([
+                            'user_id'=>Auth::user()->id,
+                            'DepartureAirport'=>$DepartureAirport,
+                            'ArrivalAirport'=>$ArrivalAirport,
+                            'DepartureDateTime'=>$DepartureDateTime,
+                            'ArrivalDateTime'=>$ArrivalDateTime,
+                            'AvailableSeatQuantity'=>$AvailableSeatQuantity,
+                            'FlightNumber'=>$FlightNumber,
+                            'FareBasisCode'=>$FareBasisCode,
+                            'MarketingAirlineEN' => $MarketingAirlineEN,
+                            'MarketingAirlineFA' => $MarketingAirlineFA,
+                            'cabinTypeEN' => $cabinTypeEN,
+                            'cabinTypeFA' => $cabinTypeFA,
+                            'AirEquipType'=>$AirEquipType,
+                            'passengerNumber'=>$passengerNumber,
+                            'price'=>$ItinTotalFare,
+                            'ADTPrice'=>$price['ADT'][0],
+                            'CHDPrice'=>$price['CHD'][0],
+                            'INFPrice'=>$price['INF'][0],
+                            'ADTNumber'=>$ADTNumber,
+                            'CHDNumber'=>$CHDNumber,
+                            'INFNumber'=>$INFNumber,
+                        ]);
 
-
-                    session(['data'=>[
-
-                        'DepartureAirport' => $DepartureAirport,
-                        'ArrivalAirport' => $ArrivalAirport,
-
-                        'DepartureDateTimeEN' => $DepartureDateTime,
-                        'ArrivalDateTimeEN' => $ArrivalDateTime,
-                        'DepartureDateTimeFA' => toPersianNum(jdate($DepartureDateTime)->format('%d %B، %Y H:i')),
-                        'ArrivalDateTimeFA' => toPersianNum(jdate($ArrivalDateTime)->format('%d %B، %Y H:i')),
-
-                        'DepartureDate' => toPersianNum(jdate($dateTime[0])->format('%A	%d	%B	%Y	')) ,
-                        'DepartureTime' => toPersianNum($time[0].':'.$time[1]),
-
-                        'AvailableSeatQuantity' => $AvailableSeatQuantity,
-
-                        'FlightNumber' => $FlightNumber,
-
-                        'FareBasisCode' => $FareBasisCode,
-
-                        'MarketingAirlineEN' => $MarketingAirlineEN,
-                        'MarketingAirlineFA' => $MarketingAirlineFA,
-
-                        'cabinTypeEN' => $cabinTypeEN,
-                        'cabinTypeFA' => $cabinTypeFA,
-
-                        'AirEquipType'=>$AirEquipType,
-
-                        'passengerNumber'=>$passengerNumber,
-
-                        'price'=>$ItinTotalFare,
-
-                        'ADTNumber'=>$ADTNumber,
-                        'CHDNumber'=>$CHDNumber,
-                        'INFNumber'=>$INFNumber,
-
-                        'ADTPrice'=>$price['ADT'][0],
-                        'CHDPrice'=>$price['CHD'][0],
-                        'INFPrice'=>$price['INF'][0],
-
-                    ]]);
+                    }
+                    else{
+                        $flight= Flight::create([
+                            'user_id'=>Auth::user()->id,
+                            'DepartureAirport'=>$DepartureAirport,
+                            'ArrivalAirport'=>$ArrivalAirport,
+                            'DepartureDateTime'=>$DepartureDateTime,
+                            'ArrivalDateTime'=>$ArrivalDateTime,
+                            'AvailableSeatQuantity'=>$AvailableSeatQuantity,
+                            'FlightNumber'=>$FlightNumber,
+                            'FareBasisCode'=>$FareBasisCode,
+                            'MarketingAirlineEN' => $MarketingAirlineEN,
+                            'MarketingAirlineFA' => $MarketingAirlineFA,
+                            'cabinTypeEN' => $cabinTypeEN,
+                            'cabinTypeFA' => $cabinTypeFA,
+                            'AirEquipType'=>$AirEquipType,
+                            'passengerNumber'=>$passengerNumber,
+                            'price'=>$ItinTotalFare,
+                            'ADTPrice'=>$price['ADT'][0],
+                            'CHDPrice'=>$price['CHD'][0],
+                            'INFPrice'=>$price['INF'][0],
+                            'ADTNumber'=>$ADTNumber,
+                            'CHDNumber'=>$CHDNumber,
+                            'INFNumber'=>$INFNumber,
+                        ]);
+                        session(['flight_id'=>$flight->id]);
+                    }
 
 
                     $Departure=explode('T',$DepartureDateTime);
@@ -265,9 +258,9 @@ class FlightController extends AdminController
 
 
 
-
-
-                    $html.="<div class='row'>
+                    $html.="
+                            
+                            <div class='row'>
                                 <div id=\"divContent\" class=\"col-sm-12\" style=\"padding:15px;margin-top: 10px;margin-bottom:10px;min-height: auto;border:1px solid #ddd;border-radius: 3px;overflow: auto\">
                                         <div id=\"div1\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch1\">$MarketingAirlineFA</h5>
@@ -278,7 +271,7 @@ class FlightController extends AdminController
                                         <div id=\"div2\" class=\"col-sm-4 col-xs-6\">
                                             <h5 id=\"ch2\">تاریخ پرواز</h5>
                                             <br>
-                                            <h5 id=\"ch22\">".session('data')['DepartureDateTimeFA']."</h5>
+                                            <h5 id=\"ch22\">".$DepartureDateTime."</h5>
                                         </div>
                                         <div id=\"div4\" class=\"col-sm-2 col-xs-6\">
                                             <h5 id=\"ch4\">ظرفیت</h5>
@@ -334,11 +327,11 @@ class FlightController extends AdminController
                                                                 $INF                                                     
                                                                 <tr>
                                                                   <th class=\"col-sm-5\">تاریخ پرواز</th>
-                                                                  <td class=\"col-sm-5\">".session('data')['DepartureDateTimeFA']."</td>
+                                                                  <td class=\"col-sm-5\">".$DepartureDateTime."</td>
                                                                 </tr>
                                                                 <tr>
                                                                   <th class=\"col-sm-5\">تاریخ رسیدن به مقصد</th>
-                                                                  <td class=\"col-sm-5\">".session('data')['ArrivalDateTimeFA']."</td>
+                                                                  <td class=\"col-sm-5\">".$ArrivalDateTime."</td>
                                                                 </tr>
                                                             </table>
     
@@ -371,8 +364,6 @@ class FlightController extends AdminController
 
             }
         }
-        session()->forget('dataForPayment');
-//        session()->forget('Response');
 
         return ['html'=>$html,'error'=>$err];
     }

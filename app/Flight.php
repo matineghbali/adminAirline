@@ -7,24 +7,34 @@ use Illuminate\Database\Eloquent\Model;
 class Flight extends Model
 {
     protected $fillable=[
+        'user_id',
+        'FlightNumber',
         'DepartureAirport',
         'ArrivalAirport',
         'DepartureDateTime',
         'ArrivalDateTime',
         'AvailableSeatQuantity',
-        'FlightNumber',
         'FareBasisCode',
-        'MarketingAirline',
-        'cabinType',
+        'MarketingAirlineEN',
+        'MarketingAirlineFA',
+        'cabinTypeEN',
+        'cabinTypeFA',
         'AirEquipType',
+        'passengerNumber',
         'price',
         'ADTPrice',
         'CHDPrice',
         'INFPrice',
-        'passengerNumber'
-    ];
+        'ADTNumber',
+        'CHDNumber',
+        'INFNumber',
+  ];
 
     public function tickets(){
         return $this->hasMany(Ticket::class);
+    }
+
+    public function user(){
+        return $this->belongsToMany(User::class);
     }
 }

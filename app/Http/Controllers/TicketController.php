@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flight;
+use App\Passenger;
 use App\Ticket;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -14,51 +15,38 @@ use TCPDF_FONTS;
 class TicketController extends AdminController
 {
 
+
     public function ticket(){
 
+        $passenger= Passenger::where('user_id',auth()->user()->id)->where('reserve',1)->latest()->get();
+
+//        $flight=Flight::find(session('flight_id'));
+
         $ticket=[
-            'flightInfo'=>session('dataForPayment')['data'],
-            'passenger'=>session('dataForPayment')['passenger'],
-            'customer'=>session('dataForPayment')['customer'],
             'ticketInfo' => session('ticketResponse')
         ];
 
-        $flight=Flight::create([
-            'DepartureAirport'=>$ticket['flightInfo']['DepartureAirport'],
-            'ArrivalAirport'=>$ticket['flightInfo']['ArrivalAirport'],
-            'DepartureDateTime'=>$ticket['flightInfo']['DepartureDateTimeEN'],
-            'ArrivalDateTime'=>$ticket['flightInfo']['ArrivalDateTimeEN'],
-            'AvailableSeatQuantity'=>$ticket['flightInfo']['AvailableSeatQuantity'],
-            'FlightNumber'=>$ticket['flightInfo']['FlightNumber'],
-            'FareBasisCode'=>$ticket['flightInfo']['FareBasisCode'],
-            'MarketingAirline'=>$ticket['flightInfo']['MarketingAirlineEN'],
-            'cabinType'=>$ticket['flightInfo']['cabinTypeEN'],
-            'AirEquipType'=>$ticket['flightInfo']['AirEquipType'],
-            'passengerNumber'=>$ticket['flightInfo']['passengerNumber'],
-            'price'=>$ticket['flightInfo']['price'],
-            'ADTPrice'=>$ticket['flightInfo']['ADTPrice'],
-            'CHDPrice'=>$ticket['flightInfo']['CHDPrice'],
-            'INFPrice'=>$ticket['flightInfo']['INFPrice'],
-        ]);
-
-        $count=count($ticket['passenger']);
+        $count=session('passengerCount');
 
         for ($i=0;$i<$count;$i++){
             Ticket::create([
-                'passenger_id' => $ticket['passenger'][$i]['id'],
-                'flight_id' => $flight['id'],
+                'passenger_id' => $passenger[$i]['id'],
+                'flight_id' => session('flight_id'),
                 'ticketNumber' => $ticket['ticketInfo']['AirReservation']['Ticketing'][$i]['TicketDocumentNbr'],
                 'dateBook' => $ticket['ticketInfo']['AirReservation']['DateBooked'],
                 'BookingReference' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID'],
-                'customer_name'=>$ticket['customer']['name'],
-                'customer_email'=>$ticket['customer']['email'],
-                'customer_tel'=>$ticket['customer']['tel'],
+                'customer_name'=>session('customer')['name'],
+                'customer_email'=>session('customer')['email'],
+                'customer_tel'=>session('customer')['tel'],
 
             ]);
         }
 
+        $this->unReserve();
 
         session(['ticket_id' => $ticket['ticketInfo']['AirReservation']['BookingReferenceID']['ID']]);
+
+//        session()->forget('flight_id');
 
         return redirect(route('tickets'));
 
@@ -68,7 +56,6 @@ class TicketController extends AdminController
 
     public function tickets(){
         $tickets=Ticket::where('BookingReference',session('ticket_id'))->get();
-//        return view('Panel/itckets',['tickets' => $tickets ]);
         return $this->ticket_generator($tickets);
 
     }

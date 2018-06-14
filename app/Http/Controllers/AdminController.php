@@ -24,6 +24,7 @@ class AdminController extends Controller
     public $date="false";
 
     public function index(){
+
         return view('Panel/panel');
 
     }
@@ -31,6 +32,20 @@ class AdminController extends Controller
     public function editProfileInfo(){
        return view('Panel.editProfile');
     }
+
+
+    public function unReserve(){
+        $passengers=Auth::user()->passengers()->whereReserve(1)->get();
+        foreach ($passengers as $passenger){
+            $passenger->update([
+                'reserve'=>0
+            ]);
+
+        }
+    }
+
+
+
 
     public function updateProfileInfo(Request $request,$id){
         $validator=Validator::make($request->all(), [
@@ -232,7 +247,7 @@ class AdminController extends Controller
             return 'قشم ایر';
         else if ($MarketingAirlineEN=="MERAJ")
             return 'معراج';
-        else if ($MarketingAirlineEN=="TABAN")
+        else if ($MarketingAirlineEN=="TABAN" || $MarketingAirlineEN=="Taban")
             return 'تابان ایر';
         else if ($MarketingAirlineEN=="ZAGROS")
             return 'زاگرس';

@@ -74,16 +74,7 @@
                     headers: {
                         'X_CSRF-TOKEN': _token
                     }
-                }).done(function (data) {
-                    console.log(data);
-                    $.ajax({
-                        method: 'get',
-                        url: '/admin/getFlight3',
-                        data: formData,
-                        contentType : false,
-                        processData: false
-
-                    }).done(function (response) {
+                }).done(function (response) {
                         console.log(response);
                         if (response['error']=='false'){
                             $('#searchBoxContent').hide();
@@ -102,9 +93,7 @@
 
                         $('#searchResult').html(response['html']);
 
-                    });//end function of ajax2
-
-                });//end function of ajax1
+                });//end function of ajax
 
             });//end form submit
 

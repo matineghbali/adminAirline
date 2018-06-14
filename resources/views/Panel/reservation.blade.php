@@ -158,11 +158,11 @@ require_once __DIR__ . '/../../../app/Http/Function/funnction.php';
 
                                 {{--flight info--}}
                                 <div class="panelTitle">اطلاعات بلیت {{CodeToCity($data['DepartureAirport'])}} به {{CodeToCity($data['ArrivalAirport'])}}
-                                    {{$data['DepartureDate']}}</div>
+                                    {{toPersianNum(jdate($date)->format('%d %B، %Y'))}}</div>
                                 <div class="panel">
                                     <div class="row panelContent" >
                                         <div class="col-md-3">
-                                            <h3>{{$data['DepartureTime']}}</h3>
+                                            <h3>{{$time}}</h3>
                                             <span>{{CodeToCity($data['DepartureAirport'])}}  {{CodeToCity($data['ArrivalAirport'])}}</span>
                                         </div>
                                         <div class="col-md-2" style="padding-top: 20px">

@@ -31,5 +31,10 @@ class User extends Authenticatable
         return $this->hasMany(Passenger::class );
     }
 
+    public function flights(){
+        return $this->hasMany(Flight::class );
+    }
+
+
 
 }
