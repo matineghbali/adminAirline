@@ -44,8 +44,6 @@ class FlightController extends AdminController
                 $request['ADT'],$request['CHD'],$request['INF']);
 
             session(['Response'=>['response'=>$response]]);
-
-
         }
     }
 
